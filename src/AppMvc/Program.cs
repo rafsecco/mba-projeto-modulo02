@@ -1,4 +1,4 @@
-using AppMvc.Data;
+using Application.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
