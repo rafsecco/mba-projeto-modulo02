@@ -11,9 +11,9 @@ namespace Application.Data
         {
         }
 
-        private DbSet<Category> Categories { get; }
-        private DbSet<Seller> Sellers { get; }
-        private DbSet<Product> Products { get; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Seller> Sellers { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
