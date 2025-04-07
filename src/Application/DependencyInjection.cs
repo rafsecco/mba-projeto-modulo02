@@ -1,5 +1,7 @@
 ﻿using Application.Data;
+using Application.Domain.Entities;
 using FluentValidation;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,5 +52,33 @@ public static class DependencyInjection
                 options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
+    }
+
+    public static void SeedData(this IApplicationBuilder builder)
+    {
+        using var scope = builder.ApplicationServices.CreateScope();
+        var dbcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+        // if (!dbcontext.Database.EnsureCreated()) return;
+
+        dbcontext.Database.Migrate();
+
+        var identityUser = new IdentityUser
+        {
+            Email = "user@email.com",
+            UserName = "user@email.com",
+        };
+
+        var result = userManager.CreateAsync(identityUser, "Dev@123").GetAwaiter().GetResult();
+        if (result.Succeeded)
+        {
+            var seller = new Seller
+            {
+                UserId = Guid.Parse(identityUser.Id)
+            };
+            dbcontext.Sellers.AddAsync(seller).GetAwaiter().GetResult();
+            dbcontext.SaveChangesAsync().GetAwaiter().GetResult();
+        }
     }
 }

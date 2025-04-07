@@ -15,9 +15,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Guid?>
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public LoginCommandHandler(SignInManager<IdentityUser> signInManager)
+    public LoginCommandHandler(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     public async Task<Guid?> Handle(LoginCommand request, CancellationToken cancellationToken)

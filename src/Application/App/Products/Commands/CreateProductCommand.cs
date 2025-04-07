@@ -10,7 +10,6 @@ public class CreateProductCommand : IRequest<int>
 {
     public int CategoryId { get; set; }
 
-    //TODO: pegar o id do vendedor logado
     [JsonIgnore]
     public Guid SellerId { get; set; }
 
@@ -64,12 +63,12 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(p => p.Price)
             .GreaterThan(0);
         RuleFor(p => p.StockQuantity)
-            .GreaterThanOrEqualTo(0);
+            .GreaterThan(0);
         RuleFor(p => p.ImageUrl)
             .NotEmpty();
         RuleFor(p => p.CategoryId)
-            .GreaterThanOrEqualTo(0);
-        RuleFor(p => p.SellerId)
-            .NotEmpty();
+            .GreaterThan(0);
+        //RuleFor(p => p.SellerId)
+        //    .NotEmpty();
     }
 }

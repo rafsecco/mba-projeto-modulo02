@@ -1,4 +1,3 @@
-using System.Runtime.Intrinsics;
 using Api.Models;
 using Application;
 using FluentValidation.AspNetCore;
@@ -22,7 +21,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo{Title = "Online store", Version = "v1", });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Online store", Version = "v1", });
     //configuracao para o Swagger utilizar o jwt token
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
@@ -74,6 +73,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
+app.SeedData();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
