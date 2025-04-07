@@ -13,17 +13,20 @@ namespace Api.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private IHostEnvironment _hostingEnvironment;
 
-    public ProductsController(IMediator mediator)
+    public ProductsController(IMediator mediator, IHostEnvironment hostingEnvironment)
     {
         _mediator = mediator;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<int>> Create([FromForm] CreateProductCommand command, CancellationToken cancellationToken)
     {
         var id = User.GetUserId();
         command.SellerId = id;
+
         return await _mediator.Send(command, cancellationToken);
     }
 

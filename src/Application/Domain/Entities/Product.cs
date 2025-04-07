@@ -15,9 +15,6 @@ namespace Application.Domain.Entities
 
         public string Description { get; set; }
 
-        [NotMapped]
-        public IFormFile UploadImage { get; set; }
-
         public string Image { get; set; }
 
         public decimal Price { get; set; }

@@ -2,6 +2,8 @@
 using Application.Domain.Entities;
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
 
 namespace Application.App.Products.Commands;
@@ -13,22 +15,23 @@ public class CreateProductCommand : IRequest<int>
     [JsonIgnore]
     public Guid SellerId { get; set; }
 
-    public string Name { get; set; }
-    public string Description { get; set; }
+    public IFormFile UploadImage { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int StockQuantity { get; set; }
-
-    //TODO: verificar como fazer o upload da imagem
-    public string ImageUrl { get; set; }
 }
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
 {
     private readonly ApplicationDbContext _dbContext;
+    private IHostEnvironment _hostingEnvironment;
 
-    public CreateProductCommandHandler(ApplicationDbContext dbContext)
+    public CreateProductCommandHandler(ApplicationDbContext dbContext, IHostEnvironment hostingEnvironment)
     {
         _dbContext = dbContext;
+        _hostingEnvironment = hostingEnvironment;
     }
 
     public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
@@ -41,8 +44,25 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             Description = request.Description,
             Price = request.Price,
             Stock = request.StockQuantity,
-            Image = request.ImageUrl
         };
+
+        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "uploads");
+        var exists = Directory.Exists(uploads);
+
+        if (!exists)
+            Directory.CreateDirectory(uploads);
+
+        if (request.UploadImage != null)
+        {
+            var extension = request.UploadImage.FileName.Split('.');
+            var filename = $"{Guid.NewGuid()}.{extension[1]}";
+            var filePath = Path.Combine(uploads, filename);
+            using (Stream fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await request.UploadImage.CopyToAsync(fileStream, cancellationToken);
+                product.Image = filename;
+            }
+        }
 
         await _dbContext.Products.AddAsync(product, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
@@ -64,11 +84,7 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .GreaterThan(0);
         RuleFor(p => p.StockQuantity)
             .GreaterThan(0);
-        RuleFor(p => p.ImageUrl)
-            .NotEmpty();
         RuleFor(p => p.CategoryId)
             .GreaterThan(0);
-        //RuleFor(p => p.SellerId)
-        //    .NotEmpty();
     }
 }
