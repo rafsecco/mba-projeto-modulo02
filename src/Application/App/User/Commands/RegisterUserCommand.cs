@@ -8,7 +8,6 @@ namespace Application.App.User.Commands;
 
 public class RegisterUserCommand : IRequest
 {
-    public string UserName { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
 }
@@ -29,7 +28,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand>
         var identityUser = new IdentityUser
         {
             Email = request.Email,
-            UserName = request.UserName,
+            UserName = request.Email,
         };
 
         var result = await _userManager.CreateAsync(identityUser, request.Password);
@@ -52,7 +51,6 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
     public RegisterUserCommandValidator(UserManager<IdentityUser> userManager)
     {
         _userManager = userManager;
-        RuleFor(c => c.UserName).NotEmpty().MaximumLength(100);
         RuleFor(c => c.Email)
             .NotEmpty()
             .EmailAddress();
