@@ -1,5 +1,6 @@
 using Api.Models;
 using Application;
+using Application.Configuration;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddApplicationServices(builder.Configuration);
+builder.AddApplicationServices();
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = false);
 builder.Services
     .AddFluentValidationAutoValidation()
@@ -73,14 +74,12 @@ builder.Services.AddAuthentication(options =>
 });
 
 var app = builder.Build();
-app.SeedData();
+app.UseDbMigrationHelper();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

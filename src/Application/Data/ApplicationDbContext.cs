@@ -19,6 +19,17 @@ namespace Application.Data
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
+            //HACK: pra não setar string como varchar(max)
+            foreach (var entityType in builder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(string) && property.GetColumnType() == null)
+                    {
+                        property.SetColumnType("varchar(1000)");
+                    }
+                }
+            }
         }
     }
 }

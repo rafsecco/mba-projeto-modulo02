@@ -1,10 +1,8 @@
-﻿using Application.Data;
-using Application.Domain.Entities;
+﻿using Application.Configuration;
+using Application.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -12,28 +10,26 @@ namespace Application;
 
 public static class DependencyInjection
 {
-    private const string AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
-
-    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
+    public static void AddApplicationServices(this WebApplicationBuilder builder)
     {
-        services.AddCommands();
-        services.AddDatabase(configuration);
+        builder.AddCommands();
+        builder.AddDatabase();
     }
 
-    private static void AddCommands(this IServiceCollection services)
+    private static void AddCommands(this WebApplicationBuilder builder)
     {
-        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-        services.AddMediatR(configuration => configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+        builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+        builder.Services.AddMediatR(configuration =>
+            configuration.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
     }
 
-    private static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
+    private static void AddDatabase(this WebApplicationBuilder builder)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-        services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
-        services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.AddDatabaseSelector();
 
-        services.AddDefaultIdentity<IdentityUser>(options =>
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+        builder.Services.AddDefaultIdentity<IdentityUser>(options =>
             {
                 // Password settings
                 //options.Password.RequireDigit = true;
@@ -43,7 +39,7 @@ public static class DependencyInjection
                 //options.Password.RequireLowercase = true;
                 //options.Password.RequiredUniqueChars = 6;
 
-                options.User.AllowedUserNameCharacters = AllowedUserNameCharacters;
+                //options.User.AllowedUserNameCharacters = AllowedUserNameCharacters;
 
                 //options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
                 //options.Lockout.MaxFailedAccessAttempts = 3;
@@ -52,33 +48,5 @@ public static class DependencyInjection
                 options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
-    }
-
-    public static void SeedData(this IApplicationBuilder builder)
-    {
-        using var scope = builder.ApplicationServices.CreateScope();
-        var dbcontext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
-
-        // if (!dbcontext.Database.EnsureCreated()) return;
-
-        dbcontext.Database.Migrate();
-
-        var identityUser = new IdentityUser
-        {
-            Email = "user@email.com",
-            UserName = "user@email.com",
-        };
-
-        var result = userManager.CreateAsync(identityUser, "Dev@123").GetAwaiter().GetResult();
-        if (result.Succeeded)
-        {
-            var seller = new Seller
-            {
-                UserId = Guid.Parse(identityUser.Id)
-            };
-            dbcontext.Sellers.AddAsync(seller).GetAwaiter().GetResult();
-            dbcontext.SaveChangesAsync().GetAwaiter().GetResult();
-        }
     }
 }
