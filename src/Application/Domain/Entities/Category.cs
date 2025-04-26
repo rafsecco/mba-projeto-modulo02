@@ -1,4 +1,7 @@
-﻿namespace Application.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Core.Domain.Entities
 {
     public class Category
     {
