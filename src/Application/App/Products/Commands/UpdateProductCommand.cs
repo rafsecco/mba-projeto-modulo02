@@ -1,8 +1,8 @@
-﻿using Application.Data;
+﻿using Core.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.App.Products.Commands;
+namespace Core.App.Products.Commands;
 
 public class UpdateProductCommand : IRequest<Unit>
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Application.Domain.Entities
+namespace Core.Domain.Entities
 {
     public class Product
     {

@@ -1,6 +1,6 @@
-﻿using Application.App.Categories.Commands;
-using Application.App.Categories.Queries;
-using Application.Domain.Entities;
+﻿using Core.App.Categories.Commands;
+using Core.App.Categories.Queries;
+using Core.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

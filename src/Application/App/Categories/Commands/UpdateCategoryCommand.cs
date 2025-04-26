@@ -1,9 +1,9 @@
-﻿using Application.Data;
+﻿using Core.Data;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.App.Categories.Commands;
+namespace Core.App.Categories.Commands;
 
 public class UpdateCategoryCommand : IRequest
 {

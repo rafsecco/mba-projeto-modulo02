@@ -1,7 +1,7 @@
 ﻿using Api.Extensions;
-using Application.App.Products.Commands;
-using Application.App.Products.Queries;
-using Application.Domain.Entities;
+using Core.App.Products.Commands;
+using Core.App.Products.Queries;
+using Core.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

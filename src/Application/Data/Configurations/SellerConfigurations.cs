@@ -1,8 +1,8 @@
-﻿using Application.Domain.Entities;
+﻿using Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Application.Data.Configurations
+namespace Core.Data.Configurations
 {
     public class SellerConfigurations : IEntityTypeConfiguration<Seller>
     {

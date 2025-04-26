@@ -1,10 +1,10 @@
-﻿using Application.Data;
-using Application.Domain.Entities;
+﻿using Core.Data;
+using Core.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.App.Products.Queries;
+namespace Core.App.Products.Queries;
 
 public class GetProductsByCategory : IRequest<List<Product>>
 {

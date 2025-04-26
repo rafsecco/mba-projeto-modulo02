@@ -1,4 +1,4 @@
-﻿namespace Application.Domain.Entities
+﻿namespace Core.Domain.Entities
 {
     public class Seller
     {

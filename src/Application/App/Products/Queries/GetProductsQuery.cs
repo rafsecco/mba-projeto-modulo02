@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Data;
-using Application.Domain.Entities;
+using Core.Data;
+using Core.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace Application.App.Products.Queries
+namespace Core.App.Products.Queries
 {
     public class GetProductsQuery : IRequest<List<Product>>
     {

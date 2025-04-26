@@ -1,9 +1,9 @@
-﻿using Application.Data;
-using Application.Domain.Entities;
+﻿using Core.Data;
+using Core.Domain.Entities;
 using FluentValidation;
 using MediatR;
 
-namespace Application.App.Categories.Commands;
+namespace Core.App.Categories.Commands;
 
 public class CreateCategoryCommand : IRequest<int>
 {

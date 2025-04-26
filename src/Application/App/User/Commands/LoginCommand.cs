@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.App.User.Commands;
+namespace Core.App.User.Commands;
 
 public class LoginCommand : IRequest<Guid?>
 {

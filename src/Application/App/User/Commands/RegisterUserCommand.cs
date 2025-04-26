@@ -1,10 +1,10 @@
-﻿using Application.Data;
-using Application.Domain.Entities;
+﻿using Core.Data;
+using Core.Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
-namespace Application.App.User.Commands;
+namespace Core.App.User.Commands;
 
 public class RegisterUserCommand : IRequest
 {

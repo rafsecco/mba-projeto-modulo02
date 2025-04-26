@@ -1,6 +1,6 @@
 using Api.Models;
-using Application;
-using Application.Configuration;
+using Core;
+using Core.Configuration;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;

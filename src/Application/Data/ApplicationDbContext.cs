@@ -1,9 +1,9 @@
-﻿using Application.Domain.Entities;
+﻿using Core.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace Application.Data
+namespace Core.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

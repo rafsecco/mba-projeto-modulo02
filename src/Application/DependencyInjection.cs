@@ -1,12 +1,12 @@
-﻿using Application.Configuration;
-using Application.Data;
+﻿using Core.Configuration;
+using Core.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace Application;
+namespace Core;
 
 public static class DependencyInjection
 {

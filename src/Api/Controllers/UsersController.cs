@@ -1,5 +1,5 @@
 using Api.Models;
-using Application.App.User.Commands;
+using Core.App.User.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

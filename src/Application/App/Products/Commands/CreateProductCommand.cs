@@ -1,12 +1,12 @@
-﻿using Application.Data;
-using Application.Domain.Entities;
+﻿using Core.Data;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using System.Text.Json.Serialization;
+using Core.Domain.Entities;
 
-namespace Application.App.Products.Commands;
+namespace Core.App.Products.Commands;
 
 public class CreateProductCommand : IRequest<int>
 {
