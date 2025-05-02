@@ -9,7 +9,7 @@ namespace Core.Data.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             builder.HasKey(p => p.Id);
-            builder.Property(c => c.Id).HasColumnType("integer").ValueGeneratedOnAdd();
+            //builder.Property(c => c.Id).HasColumnType("integer").ValueGeneratedOnAdd();
             builder.Property(p => p.Name).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Description).IsRequired().HasMaxLength(300);
 
@@ -20,6 +20,8 @@ namespace Core.Data.Configurations
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
+
+            builder.Ignore(p => p.UploadImage);
         }
     }
 }

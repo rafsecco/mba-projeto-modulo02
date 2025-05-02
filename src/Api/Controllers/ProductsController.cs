@@ -1,8 +1,6 @@
 ﻿using Api.Extensions;
-using Core.App.Products.Commands;
-using Core.App.Products.Queries;
 using Core.Domain.Entities;
-using MediatR;
+using Core.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,35 +10,34 @@ namespace Api.Controllers;
 [Route("[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly IMediator _mediator;
-    private IHostEnvironment _hostingEnvironment;
+    private readonly IProductService _service;
 
-    public ProductsController(IMediator mediator, IHostEnvironment hostingEnvironment)
+    public ProductsController(IProductService service)
     {
-        _mediator = mediator;
-        _hostingEnvironment = hostingEnvironment;
+        _service = service;
     }
 
     [HttpPost]
-    public async Task<ActionResult<int>> Create([FromForm] CreateProductCommand command, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> Create([FromForm] Product product, CancellationToken cancellationToken)
     {
         var id = User.GetUserId();
-        command.SellerId = id;
+        product.SellerId = id;
 
-        return await _mediator.Send(command, cancellationToken);
+        return await _service.CreateAsync(product, cancellationToken);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(UpdateProductCommand command, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update([Bind("Name, Description, Price, StockQuantity, CategoryId, SellerId")] Product product, CancellationToken cancellationToken)
     {
-        await _mediator.Send(command, cancellationToken);
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+        await _service.UpdateAsync(product, cancellationToken);
         return NoContent();
     }
 
     [HttpDelete]
-    public async Task<IActionResult> Remove(int id, CancellationToken cancellationToken)
+    public async Task<IActionResult> Remove(Guid id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new RemoveProductCommand { Id = id }, cancellationToken);
+        await _service.DeleteAsync(id, cancellationToken);
         return NoContent();
     }
 
@@ -48,20 +45,20 @@ public class ProductsController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<List<Product>>> Get(CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetProductsQuery(), cancellationToken);
+        return await _service.GetAsync(cancellationToken);
     }
 
     [HttpGet("{id}")]
     [AllowAnonymous]
-    public async Task<ActionResult<Product>> Find(int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<Product>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetProductQuery { Id = id }, cancellationToken);
+        return await _service.GetByIdAsync(id, cancellationToken);
     }
 
     [HttpGet("{categoryId}/categoryId")]
     [AllowAnonymous]
-    public async Task<ActionResult<List<Product>>> GetByCategoryId(int categoryId, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<Product>>> GetByCategoryId(Guid categoryId, CancellationToken cancellationToken)
     {
-        return await _mediator.Send(new GetProductsByCategory { CategoryId = categoryId }, cancellationToken);
+        return await _service.GetByCategoryIdAsync(categoryId, cancellationToken);
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Core.Configuration;
 using Core.Data;
+using Core.Data.Repositories;
+using Core.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -14,6 +16,7 @@ public static class DependencyInjection
     {
         builder.AddCommands();
         builder.AddDatabase();
+        builder.AddRepositoriesAndServices();
     }
 
     private static void AddCommands(this WebApplicationBuilder builder)
@@ -48,5 +51,15 @@ public static class DependencyInjection
                 options.User.RequireUniqueEmail = true;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>();
+    }
+
+    private static void AddRepositoriesAndServices(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+        builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+        builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<IUserService, UserService>();
     }
 }

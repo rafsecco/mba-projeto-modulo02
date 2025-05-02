@@ -69,7 +69,6 @@ public static class DbMigrationHelpers
         {
             Name = "Alimento",
             Description = "Categoria destinada para produtos do tipo alimento",
-            Deleted = false
         };
 
         await context.Categories.AddAsync(category);
@@ -85,7 +84,6 @@ public static class DbMigrationHelpers
             Description = "Arroz da marca x",
             Price = 25.80m,
             Stock = 100,
-            Deleted = false,
             Image = "uploads/",
 
             SellerId = Guid.Parse(identityUser.Id),
@@ -98,7 +96,6 @@ public static class DbMigrationHelpers
             Description = "Feijão da marca x",
             Price = 15.20m,
             Stock = 100,
-            Deleted = false,
             Image = "uploads/",
 
             SellerId = Guid.Parse(identityUser.Id),

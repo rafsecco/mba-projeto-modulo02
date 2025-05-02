@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Application.Migrations
+namespace Core.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250408013016_Initial")]
+    [Migration("20250501235945_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -25,16 +25,11 @@ namespace Application.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Application.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -51,19 +46,14 @@ namespace Application.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Application.Domain.Entities.Product", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -97,14 +87,11 @@ namespace Application.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Application.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Seller", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Deleted")
-                        .HasColumnType("bit");
 
                     b.HasKey("UserId");
 
@@ -313,15 +300,15 @@ namespace Application.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Application.Domain.Entities.Product", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("Application.Domain.Entities.Category", "Category")
+                    b.HasOne("Core.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Application.Domain.Entities.Seller", "Seller")
+                    b.HasOne("Core.Domain.Entities.Seller", "Seller")
                         .WithMany("Products")
                         .HasForeignKey("SellerId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -383,12 +370,12 @@ namespace Application.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Application.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Application.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Seller", b =>
                 {
                     b.Navigation("Products");
                 });

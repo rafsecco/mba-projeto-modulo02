@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Application.Migrations
+namespace Core.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
@@ -54,11 +54,9 @@ namespace Application.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    Description = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,8 +67,7 @@ namespace Application.Migrations
                 name: "Sellers",
                 columns: table => new
                 {
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -187,16 +184,14 @@ namespace Application.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
                     Description = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false),
                     Image = table.Column<string>(type: "varchar(1000)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    Deleted = table.Column<bool>(type: "bit", nullable: false)
+                    Stock = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -1,6 +1,6 @@
 using Api.Models;
-using Core.App.User.Commands;
-using MediatR;
+using Core.Services;
+using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -15,30 +15,31 @@ namespace Api.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly IMediator _mediator;
+        private readonly IUserService _userService;
         private readonly JwtSettings _jwtSettings;
 
-        public UsersController(IMediator mediator, IOptions<JwtSettings> jwtSettings)
+        public UsersController(IOptions<JwtSettings> jwtSettings, IUserService userService)
         {
-            _mediator = mediator;
+            _userService = userService;
+
             _jwtSettings = jwtSettings.Value;
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Register(RegisterUserCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(UserViewModel userViewModel, CancellationToken cancellationToken)
         {
-            await _mediator.Send(command, cancellationToken);
+            await _userService.RegisterAsync(userViewModel, cancellationToken);
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPost("login")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> Login(LoginCommand command, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login(UserViewModel userViewModel, CancellationToken cancellationToken)
         {
-            var userId = await _mediator.Send(command, cancellationToken);
+            var userId = await _userService.LoginAsync(userViewModel, cancellationToken);
             if (userId.HasValue)
             {
                 return Ok(new { token = GeneratesJwt(userId.Value) });

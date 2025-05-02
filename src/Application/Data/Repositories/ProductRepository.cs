@@ -1,0 +1,33 @@
+﻿using Core.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace Core.Data.Repositories
+{
+    public class ProductRepository : Repository<Product>, IProductRepository
+    {
+        public ProductRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
+
+        public async Task<bool> HasProductsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Products
+                .AnyAsync(p => p.CategoryId == categoryId, cancellationToken);
+        }
+
+        public async Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
+        {
+            return await _dbContext.Products
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync(cancellationToken);
+        }
+    }
+
+    public interface IProductRepository : IRepository<Product>
+
+    {
+        public Task<bool> HasProductsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
+
+        public Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
+    }
+}
