@@ -47,8 +47,8 @@ public static class DbMigrationHelpers
 
         var identityUser = new IdentityUser
         {
-            Email = "dev@email.com",
-            UserName = "dev@email.com"
+            Email = "dev@mail.com",
+            UserName = "dev@mail.com"
         };
 
         var result = userManager.CreateAsync(identityUser, "Dev@123").GetAwaiter().GetResult();
@@ -84,7 +84,7 @@ public static class DbMigrationHelpers
             Description = "Arroz da marca x",
             Price = 25.80m,
             Stock = 100,
-            Image = "uploads/",
+            Image = "",
 
             SellerId = Guid.Parse(identityUser.Id),
             CategoryId = category.Id
@@ -96,7 +96,7 @@ public static class DbMigrationHelpers
             Description = "Feijão da marca x",
             Price = 15.20m,
             Stock = 100,
-            Image = "uploads/",
+            Image = "",
 
             SellerId = Guid.Parse(identityUser.Id),
             CategoryId = category.Id
