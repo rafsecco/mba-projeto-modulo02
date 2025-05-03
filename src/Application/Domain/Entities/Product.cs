@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -7,7 +6,6 @@ namespace Core.Domain.Entities
 {
     public class Product : Entity
     {
-        [JsonIgnore]
         public Guid SellerId { get; set; }
 
         public Guid CategoryId { get; set; }
@@ -22,12 +20,7 @@ namespace Core.Domain.Entities
         [Display(Name = "Descrição")]
         public string Description { get; set; }
 
-        [JsonIgnore]
         public string Image { get; set; }
-
-        [NotMapped]
-        [Display(Name = "Imagem")]
-        public IFormFile? UploadImage { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
         [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]

@@ -1,5 +1,6 @@
 ﻿using Core.Data.Repositories;
 using Core.Domain.Entities;
+using Core.ViewModels;
 
 namespace Core.Services;
 
@@ -24,13 +25,24 @@ public class CategoryService : ICategoryService
         return await _categoryRepository.GetByIdAsync(id, cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(Category category, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken)
     {
+        var category = new Category
+        {
+            Name = createCategoryViewModel.Name,
+            Description = createCategoryViewModel.Description
+        };
+
         return await _categoryRepository.CreateAsync(category, cancellationToken);
     }
 
-    public async Task UpdateAsync(Category category, CancellationToken cancellationToken)
+    public async Task UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken)
     {
+        var category = await _categoryRepository.GetByIdAsync(updateCategoryViewModel.Id, cancellationToken);
+        if (category is null) throw new Exception("Categoria não encontrada");
+        category.Name = updateCategoryViewModel.Name ?? category.Name;
+        category.Description = updateCategoryViewModel.Description ?? category.Description;
+
         await _categoryRepository.UpdateAsync(category, cancellationToken);
     }
 
@@ -48,9 +60,9 @@ public interface ICategoryService
 
     public Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    public Task<Guid> CreateAsync(Category category, CancellationToken cancellationToken);
+    public Task<Guid> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken);
 
-    public Task UpdateAsync(Category category, CancellationToken cancellationToken);
+    public Task UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken);
 
     public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

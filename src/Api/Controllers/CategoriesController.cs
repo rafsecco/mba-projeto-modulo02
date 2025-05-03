@@ -1,7 +1,6 @@
-﻿using Core.Data.Repositories;
-using Core.Domain.Entities;
+﻿using Core.Domain.Entities;
 using Core.Services;
-using MediatR;
+using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,20 +18,20 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Category), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateAsync([Bind("Name,Description")] Category category, CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    public async Task<IActionResult> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
-        await _service.CreateAsync(category, cancellationToken);
+        var id = await _service.CreateAsync(createCategoryViewModel, cancellationToken);
 
-        return Ok(category);
+        return Ok(id);
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync([Bind("Name,Description")] Category category, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
-        await _service.UpdateAsync(category, cancellationToken);
+        await _service.UpdateAsync(updateCategoryViewModel, cancellationToken);
         return NoContent();
     }
 

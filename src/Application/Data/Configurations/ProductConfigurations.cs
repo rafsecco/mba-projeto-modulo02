@@ -20,8 +20,6 @@ namespace Core.Data.Configurations
             builder.HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId);
-
-            builder.Ignore(p => p.UploadImage);
         }
     }
 }

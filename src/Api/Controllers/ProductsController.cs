@@ -1,6 +1,7 @@
 ﻿using Api.Extensions;
 using Core.Domain.Entities;
 using Core.Services;
+using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,19 +19,18 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create([FromForm] Product product, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> Create([FromForm] CreateProductViewModel createProductViewModel, CancellationToken cancellationToken)
     {
-        var id = User.GetUserId();
-        product.SellerId = id;
+        var userId = User.GetUserId();
 
-        return await _service.CreateAsync(product, cancellationToken);
+        return await _service.CreateAsync(createProductViewModel, userId, cancellationToken);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([Bind("Name, Description, Price, StockQuantity, CategoryId, SellerId")] Product product, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
-        await _service.UpdateAsync(product, cancellationToken);
+        await _service.UpdateAsync(updateProductViewModel, cancellationToken);
         return NoContent();
     }
 
