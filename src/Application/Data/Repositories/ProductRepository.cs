@@ -12,6 +12,7 @@ namespace Core.Data.Repositories
         public async Task<bool> HasProductsByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
         {
             return await _dbContext.Products
+                .AsNoTracking()
                 .AnyAsync(p => p.CategoryId == categoryId, cancellationToken);
         }
 

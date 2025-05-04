@@ -40,7 +40,7 @@ namespace Core.Data.Repositories
 
         public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            return await _dbSet.FindAsync(id, cancellationToken);
+            return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
 
         public void Dispose()
