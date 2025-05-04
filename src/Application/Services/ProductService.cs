@@ -32,7 +32,7 @@ public class ProductService : IProductService
         return await _productRepository.GetByCategoryIdAsync(categoryId, cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken, string? path = null)
     {
         var product = new Product
         {
@@ -45,7 +45,7 @@ public class ProductService : IProductService
         };
         if (createProductViewModel.UploadImage != null)
         {
-            await AddImage(product, createProductViewModel.UploadImage, cancellationToken);
+            await AddImage(product, createProductViewModel.UploadImage, path, cancellationToken);
         }
 
         return await _productRepository.CreateAsync(product, cancellationToken);
@@ -69,9 +69,11 @@ public class ProductService : IProductService
         await _productRepository.DeleteAsync(id, cancellationToken);
     }
 
-    private async Task AddImage(Product product, IFormFile uploadImage, CancellationToken cancellationToken)
+    private async Task AddImage(Product product, IFormFile uploadImage, string? path, CancellationToken cancellationToken)
     {
-        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, "uploads");
+        const string imagesFolder = "images";
+        var fullPath = !string.IsNullOrEmpty(path) ? path + "/" + imagesFolder : imagesFolder;
+        var uploads = Path.Combine(_hostingEnvironment.ContentRootPath, fullPath);
         var exists = Directory.Exists(uploads);
 
         if (!exists)
@@ -95,7 +97,7 @@ public interface IProductService
 
     public Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
 
-    public Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken);
+    public Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken, string? path = null);
 
     public Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken);
 

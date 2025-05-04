@@ -33,7 +33,7 @@ public static class DbMigrationHelpers
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-        if (env.IsDevelopment() || env.IsEnvironment("Docker") || env.IsStaging())
+        if (env.IsDevelopment() || env.IsStaging())
         {
             await context.Database.MigrateAsync();
             await EnsureSeedProducts(context, userManager);
@@ -68,7 +68,7 @@ public static class DbMigrationHelpers
         var category = new Category
         {
             Name = "Alimento",
-            Description = "Categoria destinada para produtos do tipo alimento",
+            Description = "Categoria destinada para produtos do tipo alimento"
         };
 
         await context.Categories.AddAsync(category);
