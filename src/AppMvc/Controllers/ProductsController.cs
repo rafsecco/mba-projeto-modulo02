@@ -1,13 +1,13 @@
-﻿//using Core.Extensions;
-
-using Core.Services;
+﻿using Core.Services;
 using Core.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 
 namespace AppMvc.Controllers;
 
+[Authorize]
 public class ProductsController : Controller
 {
     private readonly ICategoryService _categoryService;
@@ -19,12 +19,14 @@ public class ProductsController : Controller
         _categoryService = categoryService;
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var products = await _productService.GetAsync(cancellationToken);
         return View(products);
     }
 
+    [AllowAnonymous]
     public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
@@ -51,7 +53,7 @@ public class ProductsController : Controller
         if (ModelState.IsValid)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            await _productService.CreateAsync(createProductViewModel, Guid.Parse(userId), cancellationToken);
+            await _productService.CreateAsync(createProductViewModel, Guid.Parse(userId), cancellationToken, "wwwroot");
             return RedirectToAction(nameof(Index));
         }
 
