@@ -1,10 +1,15 @@
+using Core;
+using Core.Configuration;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.AddApplicationServices();
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
+app.UseDbMigrationHelper();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
