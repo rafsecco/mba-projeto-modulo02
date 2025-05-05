@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 using System.Reflection;
 
 namespace Core;
@@ -17,6 +18,7 @@ public static class DependencyInjection
         builder.AddCommands();
         builder.AddDatabase();
         builder.AddRepositoriesAndServices();
+        AddCulture();
     }
 
     private static void AddCommands(this WebApplicationBuilder builder)
@@ -61,5 +63,12 @@ public static class DependencyInjection
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IProductService, ProductService>();
         builder.Services.AddScoped<IUserService, UserService>();
+    }
+
+    private static void AddCulture()
+    {
+        var cultureInfo = new CultureInfo("pt-BR");
+        CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+        CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
     }
 }

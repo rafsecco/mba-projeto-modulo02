@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Core.Extensions;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -20,10 +21,12 @@ namespace Core.Domain.Entities
         [Display(Name = "Descrição")]
         public string Description { get; set; }
 
+        [Display(Name = "Imagem")]
         public string Image { get; set; }
 
+        [Currency]
         [Required(ErrorMessage = "O campo {0} é obrigatório")]
-        [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
+        [Range(0.00, 9999.00, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
         [Display(Name = "Preço")]
         public decimal Price { get; set; }
 

@@ -34,7 +34,7 @@
                 <img src="~/images/@item.Image" alt="" style="width: 70px; height: 100px" />
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                    @item.Price.ToString("C")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Stock)
