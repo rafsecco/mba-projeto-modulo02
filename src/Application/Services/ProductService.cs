@@ -29,7 +29,8 @@ public class ProductService : IProductService
 
     public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _productRepository.GetByIdAsync(id, cancellationToken);
+        var product = await _productRepository.GetByIdAsync(id, cancellationToken);
+        return IsUserOwner(product) ? product : null;
     }
 
     public async Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
@@ -60,8 +61,10 @@ public class ProductService : IProductService
     {
         var product = await _productRepository.GetByIdAsync(updateProductViewModel.Id, cancellationToken);
         if (product is null) throw new Exception("Produto não encontrado");
-        var allowed = AllowActionAsync(product);
-        if (!allowed) return;
+
+        if (!IsUserOwner(product))
+            throw new UnauthorizedAccessException("Ação não permitida.");
+
         product.Name = updateProductViewModel.Name ?? product.Name;
         product.Description = updateProductViewModel.Description ?? product.Description;
         product.Price = updateProductViewModel.Price ?? product.Price;
@@ -72,8 +75,11 @@ public class ProductService : IProductService
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var allowed = await AllowActionAsync(id);
-        if (allowed) await _productRepository.DeleteAsync(id, cancellationToken);
+        var product = await _productRepository.GetByIdAsync(id, cancellationToken);
+        if (!IsUserOwner(product))
+            throw new UnauthorizedAccessException("Ação não permitida.");
+
+        await _productRepository.DeleteAsync(id, cancellationToken);
     }
 
     private async Task AddImage(Product product, IFormFile uploadImage, string? path, CancellationToken cancellationToken)
@@ -95,13 +101,7 @@ public class ProductService : IProductService
         }
     }
 
-    private async Task<bool> AllowActionAsync(Guid productId)
-    {
-        var product = await _productRepository.GetByIdAsync(productId, CancellationToken.None);
-        return product != null && product.SellerId == _currentUserId;
-    }
-
-    private bool AllowActionAsync(Product product)
+    private bool IsUserOwner(Product? product)
     {
         return product != null && product.SellerId == _currentUserId;
     }
@@ -109,12 +109,11 @@ public class ProductService : IProductService
     private Guid GetCurrentUserId()
     {
         var user = _httpContextAccessor.HttpContext?.User;
-        if (user.Identity.IsAuthenticated == false) return Guid.Empty;
-          
+        if (user?.Identity?.IsAuthenticated != true)
+            return Guid.Empty;
 
         var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-        if (string.IsNullOrEmpty(userId))
+        if (string.IsNullOrWhiteSpace(userId))
             throw new Exception("Usuário não encontrado");
 
         return Guid.Parse(userId);
