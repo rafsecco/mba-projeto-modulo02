@@ -53,7 +53,7 @@ public class ProductsController : Controller
         if (ModelState.IsValid)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            await _productService.CreateAsync(createProductViewModel, Guid.Parse(userId), cancellationToken, "wwwroot");
+            await _productService.CreateAsync(createProductViewModel, cancellationToken, "wwwroot");
             return RedirectToAction(nameof(Index));
         }
 

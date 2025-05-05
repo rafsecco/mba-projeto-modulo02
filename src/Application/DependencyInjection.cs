@@ -19,6 +19,7 @@ public static class DependencyInjection
         builder.AddDatabase();
         builder.AddRepositoriesAndServices();
         AddCulture();
+        builder.Services.AddHttpContextAccessor();
     }
 
     private static void AddCommands(this WebApplicationBuilder builder)

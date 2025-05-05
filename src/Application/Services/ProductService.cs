@@ -3,6 +3,7 @@ using Core.Domain.Entities;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace Core.Services;
 
@@ -10,16 +11,20 @@ public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
     private IHostEnvironment _hostingEnvironment;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly Guid _currentUserId;
 
-    public ProductService(IProductRepository productRepository, IHostEnvironment hostingEnvironment)
+    public ProductService(IProductRepository productRepository, IHostEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor)
     {
         _productRepository = productRepository;
         _hostingEnvironment = hostingEnvironment;
+        _httpContextAccessor = httpContextAccessor;
+        _currentUserId = GetCurrentUserId();
     }
 
     public async Task<List<Product>> GetAsync(CancellationToken cancellationToken)
     {
-        return await _productRepository.GetAsync(cancellationToken);
+        return await _productRepository.GetBySellerIdAsync(_currentUserId, cancellationToken);
     }
 
     public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
@@ -32,7 +37,7 @@ public class ProductService : IProductService
         return await _productRepository.GetByCategoryIdAsync(categoryId, cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken, string? path = null)
+    public async Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, CancellationToken cancellationToken, string? path = null)
     {
         var product = new Product
         {
@@ -41,7 +46,7 @@ public class ProductService : IProductService
             Price = createProductViewModel.Price,
             Stock = createProductViewModel.Stock,
             CategoryId = createProductViewModel.CategoryId,
-            SellerId = sellerId
+            SellerId = _currentUserId
         };
         if (createProductViewModel.UploadImage != null)
         {
@@ -55,7 +60,8 @@ public class ProductService : IProductService
     {
         var product = await _productRepository.GetByIdAsync(updateProductViewModel.Id, cancellationToken);
         if (product is null) throw new Exception("Produto não encontrado");
-
+        var allowed = AllowActionAsync(product);
+        if (!allowed) return;
         product.Name = updateProductViewModel.Name ?? product.Name;
         product.Description = updateProductViewModel.Description ?? product.Description;
         product.Price = updateProductViewModel.Price ?? product.Price;
@@ -66,7 +72,8 @@ public class ProductService : IProductService
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _productRepository.DeleteAsync(id, cancellationToken);
+        var allowed = await AllowActionAsync(id);
+        if (allowed) await _productRepository.DeleteAsync(id, cancellationToken);
     }
 
     private async Task AddImage(Product product, IFormFile uploadImage, string? path, CancellationToken cancellationToken)
@@ -87,6 +94,28 @@ public class ProductService : IProductService
             product.Image = filename;
         }
     }
+
+    private async Task<bool> AllowActionAsync(Guid productId)
+    {
+        var product = await _productRepository.GetByIdAsync(productId, CancellationToken.None);
+        return product != null && product.SellerId == _currentUserId;
+    }
+
+    private bool AllowActionAsync(Product product)
+    {
+        return product != null && product.SellerId == _currentUserId;
+    }
+
+    private Guid GetCurrentUserId()
+    {
+        var user = _httpContextAccessor.HttpContext?.User;
+        var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        if (string.IsNullOrEmpty(userId))
+            throw new Exception("Usuário não encontrado");
+
+        return Guid.Parse(userId);
+    }
 }
 
 public interface IProductService
@@ -97,7 +126,7 @@ public interface IProductService
 
     public Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
 
-    public Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, Guid sellerId, CancellationToken cancellationToken, string? path = null);
+    public Task<Guid> CreateAsync(CreateProductViewModel createProductViewModel, CancellationToken cancellationToken, string? path = null);
 
     public Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken);
 

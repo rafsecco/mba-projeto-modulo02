@@ -49,9 +49,11 @@ namespace Api.Controllers
 
         private string GeneratesJwt(Guid userId)
         {
+            var id = userId.ToString();
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Sid, userId.ToString())
+                new Claim(ClaimTypes.Sid, id),
+                new Claim(ClaimTypes.NameIdentifier,id)
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
