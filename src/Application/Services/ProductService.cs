@@ -109,7 +109,10 @@ public class ProductService : IProductService
     private Guid GetCurrentUserId()
     {
         var user = _httpContextAccessor.HttpContext?.User;
-        var userId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (user.Identity.IsAuthenticated == false) return Guid.Empty;
+          
+
+        var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         if (string.IsNullOrEmpty(userId))
             throw new Exception("Usuário não encontrado");
