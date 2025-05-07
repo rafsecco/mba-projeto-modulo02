@@ -24,6 +24,19 @@ public class ProductRepository : Repository<Product>, IProductRepository
             .ToListAsync(cancellationToken);
     }
 
+    public override Task<List<Product>> GetAsync(CancellationToken cancellationToken)
+    {
+        return _dbContext.Products.Include(p => p.Category).ToListAsync(cancellationToken);
+    }
+
+    public override async Task<Product> FindAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Products
+            .Include(p => p.Category)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+    }
+
     public async Task<List<Product>> GetBySellerIdAsync(Guid sellerId, CancellationToken cancellationToken)
     {
         return await _dbContext.Products.Where(p => p.SellerId == sellerId).ToListAsync(cancellationToken);

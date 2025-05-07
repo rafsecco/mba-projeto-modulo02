@@ -49,10 +49,11 @@ public class ProductsController : ControllerBase
         return await _service.GetAsync(cancellationToken);
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<ActionResult<Product>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _service.GetByIdAsync(id, cancellationToken);
+        return await _service.FindAsync(id, cancellationToken);
     }
 
     [AllowAnonymous]

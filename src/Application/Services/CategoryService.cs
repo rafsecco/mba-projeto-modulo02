@@ -20,9 +20,9 @@ public class CategoryService : ICategoryService
         return await _categoryRepository.GetAsync(cancellationToken);
     }
 
-    public async Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Category> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _categoryRepository.GetByIdAsync(id, cancellationToken);
+        return await _categoryRepository.FindAsync(id, cancellationToken);
     }
 
     public async Task<Guid> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ public class CategoryService : ICategoryService
 
     public async Task UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken)
     {
-        var category = await _categoryRepository.GetByIdAsync(updateCategoryViewModel.Id, cancellationToken);
+        var category = await _categoryRepository.FindAsync(updateCategoryViewModel.Id, cancellationToken);
         if (category is null) throw new Exception("Categoria não encontrada");
         category.Name = updateCategoryViewModel.Name ?? category.Name;
         category.Description = updateCategoryViewModel.Description ?? category.Description;
@@ -63,7 +63,7 @@ public interface ICategoryService
 {
     public Task<List<Category>> GetAsync(CancellationToken cancellationToken);
 
-    public Task<Category> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    public Task<Category> FindAsync(Guid id, CancellationToken cancellationToken);
 
     public Task<Guid> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken);
 

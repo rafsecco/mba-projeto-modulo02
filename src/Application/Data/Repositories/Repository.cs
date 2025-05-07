@@ -38,7 +38,7 @@ namespace Core.Data.Repositories
             return await _dbSet.ToListAsync(cancellationToken);
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+        public virtual async Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _dbSet.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
@@ -59,6 +59,6 @@ namespace Core.Data.Repositories
 
         public Task<List<TEntity>> GetAsync(CancellationToken cancellationToken);
 
-        public Task<TEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+        public Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken);
     }
 }

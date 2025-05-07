@@ -55,6 +55,6 @@ public class CategoriesController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult<Category>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _service.GetByIdAsync(id, cancellationToken);
+        return await _service.FindAsync(id, cancellationToken);
     }
 }

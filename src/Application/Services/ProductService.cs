@@ -36,10 +36,9 @@ public class ProductService : IProductService
         return await _productRepository.GetBySellerIdAsync(_currentUserId, cancellationToken);
     }
 
-    public async Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<Product> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(id, cancellationToken);
-        return IsUserOwner(product) ? product : null;
+        return await _productRepository.FindAsync(id, cancellationToken);
     }
 
     public async Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
@@ -72,7 +71,7 @@ public class ProductService : IProductService
 
     public async Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(updateProductViewModel.Id, cancellationToken);
+        var product = await _productRepository.FindAsync(updateProductViewModel.Id, cancellationToken);
         if (product is null) throw new Exception("Produto não encontrado");
 
         if (!IsUserOwner(product))
@@ -88,7 +87,7 @@ public class ProductService : IProductService
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await _productRepository.GetByIdAsync(id, cancellationToken);
+        var product = await _productRepository.FindAsync(id, cancellationToken);
         if (!IsUserOwner(product))
             throw new UnauthorizedAccessException("Ação não permitida.");
 
@@ -120,7 +119,7 @@ public interface IProductService
 
     Task<List<Product>> GetBySellerId(CancellationToken cancellationToken);
 
-    Task<Product> GetByIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<Product> FindAsync(Guid id, CancellationToken cancellationToken);
 
     Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken);
 

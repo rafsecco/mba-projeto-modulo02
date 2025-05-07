@@ -20,5 +20,5 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
 public interface ICategoryRepository : IRepository<Category>
 
 {
-    Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
+    Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
 }

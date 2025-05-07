@@ -27,7 +27,7 @@ public class CategoriesController : Controller
     {
         if (id == null) return NotFound();
 
-        var category = await _categoryService.GetByIdAsync(id.Value, cancellationToken);
+        var category = await _categoryService.FindAsync(id.Value, cancellationToken);
 
         if (category == null) return NotFound();
 
@@ -57,7 +57,7 @@ public class CategoriesController : Controller
     {
         if (id == null) return NotFound();
 
-        var category = await _categoryService.GetByIdAsync(id.Value, cancellationToken);
+        var category = await _categoryService.FindAsync(id.Value, cancellationToken);
         if (category == null) return NotFound();
 
         var updateCategoryViewModel = new UpdateCategoryViewModel
@@ -90,7 +90,7 @@ public class CategoriesController : Controller
     {
         if (id == null) return NotFound();
 
-        var category = await _categoryService.GetByIdAsync(id.Value, cancellationToken);
+        var category = await _categoryService.FindAsync(id.Value, cancellationToken);
         if (category == null) return NotFound();
 
         return View(category);
@@ -101,7 +101,7 @@ public class CategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categoryService.GetByIdAsync(id, cancellationToken);
+        var category = await _categoryService.FindAsync(id, cancellationToken);
         if (category != null) await _categoryService.DeleteAsync(id, cancellationToken);
 
         return RedirectToAction(nameof(Index));

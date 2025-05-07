@@ -31,7 +31,7 @@ public class ProductsController : Controller
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.GetByIdAsync(id.Value, cancellationToken);
+        var product = await _productService.FindAsync(id.Value, cancellationToken);
         if (product is null) return NotFound();
 
         return View(product);
@@ -67,7 +67,7 @@ public class ProductsController : Controller
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.GetByIdAsync(id.Value, cancellationToken);
+        var product = await _productService.FindAsync(id.Value, cancellationToken);
         if (product == null) return NotFound();
 
         var productViewModel = new UpdateProductViewModel
@@ -104,7 +104,7 @@ public class ProductsController : Controller
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.GetByIdAsync(id.Value, cancellationToken);
+        var product = await _productService.FindAsync(id.Value, cancellationToken);
         if (product == null) return NotFound();
 
         return View(product);
@@ -115,7 +115,7 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
-        var product = await _productService.GetByIdAsync(id, cancellationToken);
+        var product = await _productService.FindAsync(id, cancellationToken);
         if (product != null) await _productService.DeleteAsync(id, cancellationToken);
 
         return RedirectToAction(nameof(Index));
