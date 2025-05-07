@@ -22,7 +22,7 @@ public class ProductsController : Controller
     [AllowAnonymous]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var products = await _productService.GetAsync(cancellationToken);
+        var products = await _productService.GetBySellerId(cancellationToken);
         return View(products);
     }
 
@@ -69,9 +69,6 @@ public class ProductsController : Controller
 
         var product = await _productService.GetByIdAsync(id.Value, cancellationToken);
         if (product == null) return NotFound();
-        //var categories = await _categoryService.GetAsync(cancellationToken);
-        //ViewData["CategoryId"] = new SelectList(categories, "Id", "Name", product.CategoryId);
-        //ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId", product.SellerId);
 
         var productViewModel = new UpdateProductViewModel
         {

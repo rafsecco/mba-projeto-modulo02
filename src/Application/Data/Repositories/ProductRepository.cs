@@ -19,6 +19,7 @@ public class ProductRepository : Repository<Product>, IProductRepository
     public async Task<List<Product>> GetByCategoryIdAsync(Guid categoryId, CancellationToken cancellationToken)
     {
         return await _dbContext.Products
+            .Include(p => p.Category)
             .Where(p => p.CategoryId == categoryId)
             .ToListAsync(cancellationToken);
     }

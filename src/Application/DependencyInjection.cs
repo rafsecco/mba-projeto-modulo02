@@ -2,6 +2,7 @@
 using Core.Data;
 using Core.Data.Repositories;
 using Core.Services;
+using Core.Utils;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -20,6 +21,7 @@ public static class DependencyInjection
         builder.AddRepositoriesAndServices();
         AddCulture();
         builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<Upload>();
     }
 
     private static void AddCommands(this WebApplicationBuilder builder)

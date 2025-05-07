@@ -42,6 +42,7 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<ActionResult<List<Product>>> Get(CancellationToken cancellationToken)
     {
@@ -54,6 +55,7 @@ public class ProductsController : ControllerBase
         return await _service.GetByIdAsync(id, cancellationToken);
     }
 
+    [AllowAnonymous]
     [HttpGet("{categoryId}/categoryId")]
     public async Task<ActionResult<List<Product>>> GetByCategoryId(Guid categoryId, CancellationToken cancellationToken)
     {

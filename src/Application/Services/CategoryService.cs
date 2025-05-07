@@ -52,6 +52,11 @@ public class CategoryService : ICategoryService
         if (!hasProducts) await _categoryRepository.DeleteAsync(id, cancellationToken);
         return !hasProducts;
     }
+
+    public async Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
+    {
+        return await _categoryRepository.IsValidCategoryAsync(categoryId, cancellationToken);
+    }
 }
 
 public interface ICategoryService
@@ -65,4 +70,6 @@ public interface ICategoryService
     public Task UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken);
 
     public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
+
+    Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
 }
