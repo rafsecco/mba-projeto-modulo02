@@ -4,10 +4,10 @@
 
 Bem-vindo ao repositório do projeto **Mini loja virtual**. Este projeto é uma entrega do MBA DevXpert Full Stack .NET e é referente ao módulo **Introdução ao Desenvolvimento ASP.NET Core**.
 
-Desenvolver uma aplicação web básica usando conceitos do Módulo 1 (C#,
+Desenvolvimento de  uma aplicação web básica utilizando conceitos do Módulo 1 (C#,
 ASP.NET Core MVC, SQL, EF Core, APIs REST) para gestão simplificada de
 produtos e categorias em um formato tipo e-commerce marketplace.
-Descreva livremente mais detalhes do seu projeto aqui.
+
 
 ### **Autor**
 - **Karollainny Teles**
@@ -16,10 +16,10 @@ Descreva livremente mais detalhes do seu projeto aqui.
 
 O projeto consiste em:
 
-- **Aplicação MVC:** Interface web para interação com o blog. (Esta parte não foi concluída)
-- **API RESTful:** Exposição dos recursos do blog para integração com outras aplicações ou desenvolvimento de front-ends alternativos.
-- **Autenticação e Autorização:** Implementação de controle de acesso, diferenciando administradores e usuários comuns.
-- **Acesso a Dados:** Implementação de acesso ao banco de dados através de ORM.
+- **Aplicação MVC:** Interface web para interação com a loja. 
+- **API RESTful:** Exposição dos recursos da loja para integração com outras aplicações ou desenvolvimento de front-ends alternativos.
+- **Autenticação e Autorização:** Autenticação via JWT na API e via Cookies pela interface.
+- **Acesso a Dados:** Implementação de acesso ao banco de dados através do EF Core.
 
 ## **3. Tecnologias Utilizadas**
 
@@ -45,7 +45,7 @@ A estrutura do projeto é organizada da seguinte forma:
 - src/
   - AppMvc/ - Projeto MVC
   - Api/ - API RESTful
-  - Application/ - Modelos de Dados, Configuração do EF Core e casos de uso.
+  - Core/ - Modelos de Dados, Configuração do EF Core e casos de uso.
 - README.md - Arquivo de Documentação do Projeto
 - FEEDBACK.md - Arquivo para Consolidação dos Feedbacks
 - .gitignore - Arquivo de Ignoração do Git
