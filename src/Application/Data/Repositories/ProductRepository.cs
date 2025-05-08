@@ -24,9 +24,9 @@ public class ProductRepository : Repository<Product>, IProductRepository
             .ToListAsync(cancellationToken);
     }
 
-    public override Task<List<Product>> GetAsync(CancellationToken cancellationToken)
+    public override async Task<List<Product>> GetAsync(CancellationToken cancellationToken)
     {
-        return _dbContext.Products.Include(p => p.Category).ToListAsync(cancellationToken);
+        return await _dbContext.Products.Include(p => p.Category).ToListAsync(cancellationToken);
     }
 
     public override async Task<Product> FindAsync(Guid id, CancellationToken cancellationToken)

@@ -37,10 +37,9 @@ namespace Core.Domain.Entities
 
         [NotMapped]
         [JsonIgnore]
-        public Seller Seller;
+        public Seller Seller { get; set; }
 
         [NotMapped]
-        [JsonIgnore]
-        public Category Category;
+        public Category Category { get; set; }
     }
 }

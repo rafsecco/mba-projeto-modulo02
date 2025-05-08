@@ -20,7 +20,8 @@ public class CategoriesController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    public async Task<IActionResult> CreateAsync(CreateCategoryViewModel createCategoryViewModel, CancellationToken cancellationToken)
+    public async Task<IActionResult> CreateAsync(CreateCategoryViewModel createCategoryViewModel,
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         var id = await _service.CreateAsync(createCategoryViewModel, cancellationToken);
@@ -29,7 +30,8 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel,
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         await _service.UpdateAsync(updateCategoryViewModel, cancellationToken);
@@ -44,17 +46,23 @@ public class CategoriesController : ControllerBase
         return BadRequest("Não é possível excluir a categoria, pois existem produtos vinculados a ela.");
     }
 
-    [HttpGet]
     [AllowAnonymous]
+    [HttpGet]
+    [ProducesResponseType(typeof(List<Category>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Category>>> GetAsync(CancellationToken cancellationToken)
     {
-        return await _service.GetAsync(cancellationToken);
+        var categories = await _service.GetAsync(cancellationToken);
+        return Ok(categories);
     }
 
-    [HttpGet("{id}")]
     [AllowAnonymous]
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Category), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Category>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _service.FindAsync(id, cancellationToken);
+        var category = await _service.FindAsync(id, cancellationToken);
+        if (category == null) return NotFound();
+        return Ok(category);
     }
 }

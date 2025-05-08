@@ -67,8 +67,8 @@ public static class DbMigrationHelpers
 
         var category = new Category
         {
-            Name = "Alimento",
-            Description = "Categoria destinada para produtos do tipo alimento"
+            Name = "Flores",
+            Description = "Categoria destinada para produtos do tipo flores"
         };
 
         await context.Categories.AddAsync(category);
@@ -80,8 +80,8 @@ public static class DbMigrationHelpers
 
         await context.Products.AddAsync(new Product
         {
-            Name = "Arroz",
-            Description = "Arroz da marca x",
+            Name = "Rosa",
+            Description = "Produto do tipo flores ",
             Price = 25.80m,
             Stock = 100,
             Image = "",
@@ -92,10 +92,10 @@ public static class DbMigrationHelpers
 
         await context.Products.AddAsync(new Product
         {
-            Name = "Feijão",
-            Description = "Feijão da marca x",
+            Name = "Rosa variação",
+            Description = "Produto do tipo flores",
             Price = 15.20m,
-            Stock = 100,
+            Stock = 150,
             Image = "",
 
             SellerId = Guid.Parse(identityUser.Id),

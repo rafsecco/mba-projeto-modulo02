@@ -20,7 +20,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create([FromForm] CreateProductViewModel createProductViewModel, CancellationToken cancellationToken)
+    public async Task<ActionResult<Guid>> Create([FromForm] CreateProductViewModel createProductViewModel,
+        CancellationToken cancellationToken)
     {
         var userId = User.GetUserId();
 
@@ -28,7 +29,8 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
+    public async Task<IActionResult> Update(UpdateProductViewModel updateProductViewModel,
+        CancellationToken cancellationToken)
     {
         if (!ModelState.IsValid) return BadRequest(ModelState);
         await _service.UpdateAsync(updateProductViewModel, cancellationToken);
@@ -44,22 +46,34 @@ public class ProductsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
+    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Product>>> Get(CancellationToken cancellationToken)
     {
-        return await _service.GetAsync(cancellationToken);
+        var result = await _service.GetAsync(cancellationToken);
+        return Ok(result);
     }
 
     [AllowAnonymous]
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Product>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        return await _service.FindAsync(id, cancellationToken);
+        var product = await _service.FindAsync(id, cancellationToken);
+
+        if (product == null)
+            return NotFound();
+
+        return Ok(product);
     }
 
     [AllowAnonymous]
     [HttpGet("{categoryId}/categoryId")]
+    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Product>>> GetByCategoryId(Guid categoryId, CancellationToken cancellationToken)
     {
-        return await _service.GetByCategoryIdAsync(categoryId, cancellationToken);
+        var products = await _service.GetByCategoryIdAsync(categoryId, cancellationToken);
+
+        return Ok(products);
     }
 }
