@@ -25,7 +25,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> Register([FromBody] UserViewModel userViewModel,
@@ -34,7 +34,7 @@ public class UsersController : ControllerBase
         var userId = await _userService.RegisterAsync(userViewModel, cancellationToken);
 
         if (userId.HasValue)
-            return StatusCode(StatusCodes.Status201Created);
+            return StatusCode(StatusCodes.Status201Created, userId);
 
         return Problem("Erro ao registrar usuário");
     }

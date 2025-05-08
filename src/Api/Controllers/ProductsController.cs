@@ -1,5 +1,4 @@
-﻿using Api.Extensions;
-using Core.Domain.Entities;
+﻿using Core.Domain.Entities;
 using Core.Services;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -20,28 +19,58 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Guid>> Create([FromForm] CreateProductViewModel createProductViewModel,
         CancellationToken cancellationToken)
     {
-        var userId = User.GetUserId();
-
-        return await _service.CreateAsync(createProductViewModel, cancellationToken);
+        try
+        {
+            var productId = await _service.CreateAsync(createProductViewModel, cancellationToken);
+            return StatusCode(StatusCodes.Status201Created, productId);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update(UpdateProductViewModel updateProductViewModel,
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update([FromBody] UpdateProductViewModel updateProductViewModel,
         CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-        await _service.UpdateAsync(updateProductViewModel, cancellationToken);
-        return NoContent();
+        try
+        {
+            await _service.UpdateAsync(updateProductViewModel, cancellationToken);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Remove(Guid id, CancellationToken cancellationToken)
     {
-        await _service.DeleteAsync(id, cancellationToken);
-        return NoContent();
+        try
+        {
+            await _service.DeleteAsync(id, cancellationToken);
+            return NoContent();
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
     }
 
     [AllowAnonymous]

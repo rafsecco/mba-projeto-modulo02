@@ -52,7 +52,7 @@ public class ProductService : IProductService
         var isValidCategory =
             await _categoryRepository.IsValidCategoryAsync(createProductViewModel.CategoryId, cancellationToken);
         if (!isValidCategory)
-            throw new Exception("Categoria inválida");
+            throw new KeyNotFoundException("Categoria inválida");
 
         var product = new Product
         {
@@ -72,7 +72,7 @@ public class ProductService : IProductService
     public async Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
     {
         var product = await _productRepository.FindAsync(updateProductViewModel.Id, cancellationToken);
-        if (product is null) throw new Exception("Produto não encontrado");
+        if (product is null) throw new KeyNotFoundException("Produto não encontrado");
 
         if (!IsUserOwner(product))
             throw new UnauthorizedAccessException("Ação não permitida.");

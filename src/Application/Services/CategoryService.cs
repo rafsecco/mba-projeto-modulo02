@@ -39,7 +39,7 @@ public class CategoryService : ICategoryService
     public async Task UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel, CancellationToken cancellationToken)
     {
         var category = await _categoryRepository.FindAsync(updateCategoryViewModel.Id, cancellationToken);
-        if (category is null) throw new Exception("Categoria não encontrada");
+        if (category is null) throw new KeyNotFoundException("Categoria não encontrada");
         category.Name = updateCategoryViewModel.Name ?? category.Name;
         category.Description = updateCategoryViewModel.Description ?? category.Description;
 

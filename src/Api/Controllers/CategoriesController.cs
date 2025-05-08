@@ -19,26 +19,35 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateAsync(CreateCategoryViewModel createCategoryViewModel,
         CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
         var id = await _service.CreateAsync(createCategoryViewModel, cancellationToken);
 
-        return Ok(id);
+        return StatusCode(StatusCodes.Status201Created, id);
     }
 
     [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel,
         CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-        await _service.UpdateAsync(updateCategoryViewModel, cancellationToken);
-        return NoContent();
+        try
+        {
+            await _service.UpdateAsync(updateCategoryViewModel, cancellationToken);
+            return NoContent();
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
 
     [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
         var succeed = await _service.DeleteAsync(id, cancellationToken);
