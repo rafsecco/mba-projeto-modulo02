@@ -18,7 +18,8 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var products = await _productService.GetAsync(cancellationToken);
+        var products = await _productService.GetBySellerId(cancellationToken);
+        ViewData["IsHome"] = true;
         return View(products);
     }
 

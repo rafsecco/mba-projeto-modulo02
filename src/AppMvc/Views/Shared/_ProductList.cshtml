@@ -1,4 +1,8 @@
 ﻿@model IEnumerable<Core.Domain.Entities.Product>
+@{
+    var isHome = ViewData["IsHome"] as bool? ?? false;
+}
+
 @if (!Model.Any())
 {
     <div class="alert alert-info text-center mt-4">
@@ -48,11 +52,14 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.Stock)
                 </td>
-                <td>
+                @if (!isHome)
+                {
+                    <td>
                         <a asp-action="Details" class="btn btn-warning" asp-route-id="@item.Id"><span class="fa fa-search"></span></a> |
                         <a asp-action="Edit" class="btn btn-info" asp-route-id="@item.Id"><span class="fa fa-pencil"></span></a> |
                         <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id"><span class="fa fa-trash"></span></a>
-                </td>
+                    </td>
+                }
             </tr>
         }
         </tbody>
