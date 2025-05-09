@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Exclusão";
 }
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
 
 <h2>Excluir categoria</h2>
 

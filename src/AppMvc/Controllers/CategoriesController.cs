@@ -102,8 +102,12 @@ public class CategoriesController : Controller
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
         var category = await _categoryService.FindAsync(id, cancellationToken);
-        if (category != null) await _categoryService.DeleteAsync(id, cancellationToken);
-
+       var result= await _categoryService.DeleteAsync(id, cancellationToken);
+       if (!result)
+       {
+           TempData["Error"] = "Não é possível excluir a categoria, pois existem produtos vinculados a ela.";
+           return RedirectToAction(nameof(Delete), new { id });
+       }
         return RedirectToAction(nameof(Index));
     }
 }

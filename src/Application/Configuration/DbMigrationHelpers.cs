@@ -84,7 +84,7 @@ public static class DbMigrationHelpers
             Description = "Produto do tipo flores ",
             Price = 25.80m,
             Stock = 100,
-            Image = "",
+            Image = "21.png",
 
             SellerId = Guid.Parse(identityUser.Id),
             CategoryId = category.Id
@@ -96,7 +96,7 @@ public static class DbMigrationHelpers
             Description = "Produto do tipo flores",
             Price = 15.20m,
             Stock = 150,
-            Image = "",
+            Image = "23.png",
 
             SellerId = Guid.Parse(identityUser.Id),
             CategoryId = category.Id
