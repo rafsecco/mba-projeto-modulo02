@@ -1,27 +1,17 @@
 ﻿@model Core.ViewModels.UpdateProductViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edição";
 }
 
-<h1>Edit</h1>
+<h2>Edição de produto</h2>
 
-<h4>Product</h4>
+<h4>Dados do produto @Model.Name</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-           @*  <div class="form-group">
-                <label asp-for="SellerId" class="control-label"></label>
-                <select asp-for="SellerId" class="form-control" asp-items="ViewBag.SellerId"></select>
-                <span asp-validation-for="SellerId" class="text-danger"></span>
-            </div> *@
-          @*   <div class="form-group">
-                <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -32,11 +22,6 @@
                 <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-           @*  <div class="form-group">
-                <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
-                <span asp-validation-for="Image" class="text-danger"></span>
-            </div> *@
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
                 <input asp-for="Price" class="form-control" />
@@ -49,14 +34,11 @@
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Editar" class="btn btn-info" />
+                <a asp-action="Index" class="btn btn-warning">Voltar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

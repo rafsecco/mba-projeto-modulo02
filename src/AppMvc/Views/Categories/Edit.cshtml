@@ -1,12 +1,12 @@
 ﻿@model Core.ViewModels.UpdateCategoryViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edição";
 }
 
-<h1>Edit</h1>
+<h2>Edição de categoria</h2>
 
-<h4>Category</h4>
+<h4>Dados da categoria @Model.Name</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,14 +24,11 @@
             </div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Editar" class="btn btn-info" />
+                <a asp-action="Index" class="btn btn-warning">Voltar</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
