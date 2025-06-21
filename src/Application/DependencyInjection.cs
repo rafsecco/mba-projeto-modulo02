@@ -1,4 +1,4 @@
-﻿using Core.Configuration;
+using Core.Configuration;
 using Core.Data;
 using Core.Data.Repositories;
 using Core.Services;
@@ -55,6 +55,7 @@ public static class DependencyInjection
                 options.SignIn.RequireConfirmedEmail = false;
                 options.User.RequireUniqueEmail = true;
             })
+			.AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>();
     }
 
