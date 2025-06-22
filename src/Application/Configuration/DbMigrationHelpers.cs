@@ -115,10 +115,10 @@ public static class DbMigrationHelpers
 		await CreateRoleAsync(roleManager, "Vendedor");
 		await CreateRoleAsync(roleManager, "Cliente");
 
-		await AddRoleClaimAsync(roleManager, "Admin", new Claim("Produtos", "AD,VI,ED,EX"));
-		await AddRoleClaimAsync(roleManager, "Admin", new Claim("Categorias", "AD,VI,ED,EX"));
-		await AddRoleClaimAsync(roleManager, "Vendedor", new Claim("Produtos", "AD,VI,ED,EX"));
-		await AddRoleClaimAsync(roleManager, "Cliente", new Claim("Produtos", "VI"));
+		await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Produtos", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Categorias", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Vendedor", new Claim("Produtos", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Cliente", new Claim("Produtos", "VI"));
 	}
 
 	private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
@@ -130,7 +130,7 @@ public static class DbMigrationHelpers
 		await roleManager.CreateAsync(role);
 	}
 
-	private static async Task AddRoleClaimAsync(RoleManager<IdentityRole> roleManager, string roleName, Claim claim)
+	private static async Task AddRoleClaimAsync(, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, string roleName, Claim claim)
 	{
 		var role = await roleManager.FindByNameAsync(roleName);
 		if (role == null)
@@ -140,6 +140,26 @@ public static class DbMigrationHelpers
 		if (existingClaims.Any(c => c.Type == claim.Type && c.Value == claim.Value))
 			return;
 
-		await roleManager.AddClaimAsync(role, claim);
+		var roleClaim = new IdentityRoleClaim<string>
+		{
+			RoleId = role.Id,
+			ClaimType = claim.Type,
+			ClaimValue = claim.Value
+		};
+
+		var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+		if (environmentName == Environments.Development)
+		{
+			roleClaim.Id = GetNextDevId(context);
+		}
+
+		context.RoleClaims.Add(roleClaim);
+		await context.SaveChangesAsync();
+	}
+
+	private static int GetNextDevId(ApplicationDbContext context)
+	{
+		var maxId = context.RoleClaims.Any() ? context.RoleClaims.Max(c => c.Id) : 0;
+		return maxId + 1;
 	}
 }
