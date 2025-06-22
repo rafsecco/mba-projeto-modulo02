@@ -130,7 +130,7 @@ public static class DbMigrationHelpers
 		await roleManager.CreateAsync(role);
 	}
 
-	private static async Task AddRoleClaimAsync(, ApplicationDbContext context, RoleManager<IdentityRole> roleManager, string roleName, Claim claim)
+	private static async Task AddRoleClaimAsync(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, string roleName, Claim claim)
 	{
 		var role = await roleManager.FindByNameAsync(roleName);
 		if (role == null)
