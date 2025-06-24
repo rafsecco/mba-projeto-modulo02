@@ -40,6 +40,6 @@ namespace Core.Domain.Entities
         public Seller Seller { get; set; }
 
         [NotMapped]
-        public Category Category { get; set; }
+        public Categoria Category { get; set; }
     }
 }

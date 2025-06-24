@@ -11,7 +11,7 @@ namespace Core.Data
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Categoria> Categories { get; set; }
         public DbSet<Seller> Sellers { get; set; }
         public DbSet<Product> Products { get; set; }
 

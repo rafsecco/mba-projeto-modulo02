@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Data.Repositories;
 
-public class CategoryRepository : Repository<Category>, ICategoryRepository
+public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
 {
-    public CategoryRepository(ApplicationDbContext dbContext) : base(dbContext)
+    public CategoriaRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
     }
 
@@ -17,7 +17,7 @@ public class CategoryRepository : Repository<Category>, ICategoryRepository
     }
 }
 
-public interface ICategoryRepository : IRepository<Category>
+public interface ICategoriaRepository : IRepository<Categoria>
 
 {
     Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken);

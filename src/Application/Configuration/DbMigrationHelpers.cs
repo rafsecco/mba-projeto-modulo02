@@ -65,10 +65,10 @@ public static class DbMigrationHelpers
         if (context.Categories.Any())
             return;
 
-        var category = new Category
+        var category = new Categoria
         {
-            Name = "Flores",
-            Description = "Categoria destinada para produtos do tipo flores"
+            Nome = "Flores",
+            Descricao = "Categoria destinada para produtos do tipo flores"
         };
 
         await context.Categories.AddAsync(category);

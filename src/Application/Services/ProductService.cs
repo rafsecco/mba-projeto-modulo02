@@ -10,18 +10,18 @@ namespace Core.Services;
 
 public class ProductService : IProductService
 {
-    private readonly ICategoryRepository _categoryRepository;
+    private readonly ICategoriaRepository _categoriaRepository;
     private readonly Guid _currentUserId;
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IProductRepository _productRepository;
     private readonly Upload _upload;
 
     public ProductService(IProductRepository productRepository, IHostEnvironment hostingEnvironment,
-        IHttpContextAccessor httpContextAccessor, ICategoryRepository categoryRepository, Upload upload)
+        IHttpContextAccessor httpContextAccessor, ICategoriaRepository categoriaRepository, Upload upload)
     {
         _productRepository = productRepository;
         _httpContextAccessor = httpContextAccessor;
-        _categoryRepository = categoryRepository;
+        _categoriaRepository = categoriaRepository;
         _upload = upload;
         _currentUserId = GetCurrentUserId();
     }
@@ -50,7 +50,7 @@ public class ProductService : IProductService
         CancellationToken cancellationToken, string? path = null)
     {
         var isValidCategory =
-            await _categoryRepository.IsValidCategoryAsync(createProductViewModel.CategoryId, cancellationToken);
+            await _categoriaRepository.IsValidCategoryAsync(createProductViewModel.CategoryId, cancellationToken);
         if (!isValidCategory)
             throw new KeyNotFoundException("Categoria inválida");
 

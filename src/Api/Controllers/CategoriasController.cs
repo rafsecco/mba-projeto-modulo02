@@ -9,21 +9,21 @@ namespace Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class CategoriesController : ControllerBase
+public class CategoriasController : ControllerBase
 {
-    private readonly ICategoryService _service;
+    private readonly ICategoriaService _service;
 
-    public CategoriesController(ICategoryService service)
+    public CategoriasController(ICategoriaService service)
     {
         _service = service;
     }
 
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateAsync(CreateCategoryViewModel createCategoryViewModel,
+    public async Task<IActionResult> CreateAsync(CriaCategoriaViewModel criaCategoriaViewModel,
         CancellationToken cancellationToken)
     {
-        var id = await _service.CreateAsync(createCategoryViewModel, cancellationToken);
+        var id = await _service.CreateAsync(criaCategoriaViewModel, cancellationToken);
 
         return StatusCode(StatusCodes.Status201Created, id);
     }
@@ -31,12 +31,12 @@ public class CategoriesController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAsync(UpdateCategoryViewModel updateCategoryViewModel,
+    public async Task<IActionResult> UpdateAsync(AtualizaCategoriaViewModel atualizaCategoriaViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _service.UpdateAsync(updateCategoryViewModel, cancellationToken);
+            await _service.UpdateAsync(atualizaCategoriaViewModel, cancellationToken);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
@@ -57,8 +57,8 @@ public class CategoriesController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    [ProducesResponseType(typeof(List<Category>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Category>>> GetAsync(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(List<Categoria>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Categoria>>> GetAsync(CancellationToken cancellationToken)
     {
         var categories = await _service.GetAsync(cancellationToken);
         return Ok(categories);
@@ -66,9 +66,9 @@ public class CategoriesController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(Category), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Categoria), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Category>> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult<Categoria>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
         var category = await _service.FindAsync(id, cancellationToken);
         if (category == null) return NotFound();

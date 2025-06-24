@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Core.Domain.Entities.Category>
+﻿@model IEnumerable<Core.Domain.Entities.Categoria>
 
 @{
     ViewData["Title"] = "Index";
@@ -21,10 +21,10 @@ else
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th></th>
         </tr>
@@ -34,10 +34,10 @@ else
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Nome)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @Html.DisplayFor(modelItem => item.Descricao)
                 </td>
                 <td>
                     <a asp-action="Details" class="btn btn-warning" asp-route-id="@item.Id"><span class="fa fa-search"></span></a> |

@@ -10,13 +10,13 @@ namespace AppMvc.Controllers;
 [Authorize]
 public class ProductsController : Controller
 {
-    private readonly ICategoryService _categoryService;
+    private readonly ICategoriaService _categoriaService;
     private readonly IProductService _productService;
 
-    public ProductsController(IProductService productService, ICategoryService categoryService)
+    public ProductsController(IProductService productService, ICategoriaService categoriaService)
     {
         _productService = productService;
-        _categoryService = categoryService;
+        _categoriaService = categoriaService;
     }
 
     [AllowAnonymous]
@@ -39,7 +39,7 @@ public class ProductsController : Controller
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
-        var categories = await _categoryService.GetAsync(cancellationToken);
+        var categories = await _categoriaService.GetAsync(cancellationToken);
         ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
         //ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId");
         return View();
@@ -57,7 +57,7 @@ public class ProductsController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        var categories = await _categoryService.GetAsync(cancellationToken);
+        var categories = await _categoriaService.GetAsync(cancellationToken);
         ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
 
         return View(createProductViewModel);

@@ -18,7 +18,7 @@ namespace Core.Data.Configurations
                 .HasForeignKey(p => p.SellerId);
 
             builder.HasOne(p => p.Category)
-                .WithMany(c => c.Products)
+                .WithMany(c => c.Produtos)
                 .HasForeignKey(p => p.CategoryId);
         }
     }
