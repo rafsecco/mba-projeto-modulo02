@@ -453,3 +453,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Local Database
+*.db
+*.db*

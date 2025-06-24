@@ -36,7 +36,7 @@ public class UsersController : ControllerBase
         if (userId.HasValue)
             return StatusCode(StatusCodes.Status201Created, userId);
 
-        return Problem("Erro ao registrar usu·rio");
+        return Problem("Erro ao registrar usu√°rio");
     }
 
     [HttpPost("login")]
@@ -53,11 +53,7 @@ public class UsersController : ControllerBase
     private string GeneratesJwt(Guid userId)
     {
         var id = userId.ToString();
-        var claims = new List<Claim>
-        {
-            new(ClaimTypes.Sid, id),
-            new(ClaimTypes.NameIdentifier, id)
-        };
+		var claims = User.Claims.ToList();
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
