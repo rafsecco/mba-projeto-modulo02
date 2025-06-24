@@ -1,4 +1,4 @@
-﻿using Core.Data;
+using Core.Data;
 using Core.Domain.Entities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Security.Claims;
 
 namespace Core.Configuration;
 
@@ -32,13 +33,16 @@ public static class DbMigrationHelpers
 
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+		var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-        if (env.IsDevelopment() || env.IsStaging())
+		if (env.IsDevelopment() || env.IsStaging())
         {
-            await context.Database.MigrateAsync();
-            await EnsureSeedProducts(context, userManager);
+			await context.Database.MigrateAsync();
+			await EnsureSeedProducts(context, userManager);
         }
-    }
+
+		await EnsureSeedAccessProfile(context, roleManager);
+	}
 
     private static async Task EnsureSeedProducts(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
@@ -104,4 +108,58 @@ public static class DbMigrationHelpers
 
         await context.SaveChangesAsync();
     }
+
+	private static async Task EnsureSeedAccessProfile(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
+	{
+		await CreateRoleAsync(roleManager, "Admin");
+		await CreateRoleAsync(roleManager, "Vendedor");
+		await CreateRoleAsync(roleManager, "Cliente");
+
+		await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Produtos", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Categorias", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Vendedor", new Claim("Produtos", "AD,VI,ED,EX"));
+		await AddRoleClaimAsync(context, roleManager, "Cliente", new Claim("Produtos", "VI"));
+	}
+
+	private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
+	{
+		if (await roleManager.RoleExistsAsync(roleName))
+			return;
+
+		var role = new IdentityRole(roleName);
+		await roleManager.CreateAsync(role);
+	}
+
+	private static async Task AddRoleClaimAsync(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, string roleName, Claim claim)
+	{
+		var role = await roleManager.FindByNameAsync(roleName);
+		if (role == null)
+			return;
+
+		var existingClaims = await roleManager.GetClaimsAsync(role);
+		if (existingClaims.Any(c => c.Type == claim.Type && c.Value == claim.Value))
+			return;
+
+		var roleClaim = new IdentityRoleClaim<string>
+		{
+			RoleId = role.Id,
+			ClaimType = claim.Type,
+			ClaimValue = claim.Value
+		};
+
+		var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+		if (environmentName == Environments.Development)
+		{
+			roleClaim.Id = GetNextDevId(context);
+		}
+
+		context.RoleClaims.Add(roleClaim);
+		await context.SaveChangesAsync();
+	}
+
+	private static int GetNextDevId(ApplicationDbContext context)
+	{
+		var maxId = context.RoleClaims.Any() ? context.RoleClaims.Max(c => c.Id) : 0;
+		return maxId + 1;
+	}
 }
