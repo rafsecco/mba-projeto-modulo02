@@ -51,27 +51,27 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "Categorias",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false)
+                    Nome = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sellers",
+                name: "Vendedores",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sellers", x => x.UserId);
+                    table.PrimaryKey("PK_Vendedores", x => x.UserId);
                 });
 
             migrationBuilder.CreateTable(
@@ -181,31 +181,31 @@ namespace Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
+                name: "Produtos",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    SellerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false),
-                    Image = table.Column<string>(type: "varchar(1000)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Stock = table.Column<int>(type: "int", nullable: false)
+                    VendedorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoriaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Nome = table.Column<string>(type: "varchar(1000)", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "varchar(1000)", maxLength: 300, nullable: false),
+                    Imagem = table.Column<string>(type: "varchar(1000)", nullable: false),
+                    Preco = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Estoque = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
+                        name: "FK_Produtos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Products_Sellers_SellerId",
-                        column: x => x.SellerId,
-                        principalTable: "Sellers",
+                        name: "FK_Produtos_Vendedores_VendedorId",
+                        column: x => x.VendedorId,
+                        principalTable: "Vendedores",
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,14 +250,14 @@ namespace Core.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
-                table: "Products",
-                column: "CategoryId");
+                name: "IX_Produtos_CategoriaId",
+                table: "Produtos",
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_SellerId",
-                table: "Products",
-                column: "SellerId");
+                name: "IX_Produtos_VendedorId",
+                table: "Produtos",
+                column: "VendedorId");
         }
 
         /// <inheritdoc />
@@ -279,7 +279,7 @@ namespace Core.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "Produtos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -288,10 +288,10 @@ namespace Core.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Categorias");
 
             migrationBuilder.DropTable(
-                name: "Sellers");
+                name: "Vendedores");
         }
     }
 }

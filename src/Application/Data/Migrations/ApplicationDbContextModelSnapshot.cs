@@ -22,69 +22,69 @@ namespace Core.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Core.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Categoria", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(1000)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("varchar(1000)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categorias");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Produto", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid>("CategoriaId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("varchar(1000)");
 
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(1000)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<Guid>("SellerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Stock")
+                    b.Property<int>("Estoque")
                         .HasColumnType("int");
 
+                    b.Property<string>("Imagem")
+                        .IsRequired()
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<decimal>("Preco")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<Guid>("VendedorId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoriaId");
 
-                    b.HasIndex("SellerId");
+                    b.HasIndex("VendedorId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Produtos");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Vendedor", b =>
                 {
                     b.Property<Guid>("UserId")
                         .ValueGeneratedOnAdd()
@@ -92,7 +92,7 @@ namespace Core.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Sellers");
+                    b.ToTable("Vendedores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -297,23 +297,23 @@ namespace Core.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Product", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Produto", b =>
                 {
-                    b.HasOne("Core.Domain.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
+                    b.HasOne("Core.Domain.Entities.Categoria", "Categoria")
+                        .WithMany("Produtos")
+                        .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Domain.Entities.Seller", "Seller")
-                        .WithMany("Products")
-                        .HasForeignKey("SellerId")
+                    b.HasOne("Core.Domain.Entities.Vendedor", "Vendedor")
+                        .WithMany("Produtos")
+                        .HasForeignKey("VendedorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("Categoria");
 
-                    b.Navigation("Seller");
+                    b.Navigation("Vendedor");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -367,14 +367,14 @@ namespace Core.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Category", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Categoria", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Produtos");
                 });
 
-            modelBuilder.Entity("Core.Domain.Entities.Seller", b =>
+            modelBuilder.Entity("Core.Domain.Entities.Vendedor", b =>
                 {
-                    b.Navigation("Products");
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }
