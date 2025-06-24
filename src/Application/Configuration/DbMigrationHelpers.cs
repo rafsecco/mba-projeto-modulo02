@@ -58,11 +58,11 @@ public static class DbMigrationHelpers
         var result = userManager.CreateAsync(identityUser, "Dev@123").GetAwaiter().GetResult();
         if (!result.Succeeded) return;
 
-        var seller = new Seller
+        var vendedor = new Vendedor
         {
             UserId = Guid.Parse(identityUser.Id)
         };
-        await context.Vendedores.AddAsync(seller);
+        await context.Vendedores.AddAsync(vendedor);
 
         await context.SaveChangesAsync();
 

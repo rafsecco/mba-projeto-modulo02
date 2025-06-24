@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Core.Data.Configurations
 {
-    public class SellerConfigurations : IEntityTypeConfiguration<Seller>
+    public class VendedorConfigurations : IEntityTypeConfiguration<Vendedor>
     {
-        public void Configure(EntityTypeBuilder<Seller> builder)
+        public void Configure(EntityTypeBuilder<Vendedor> builder)
         {
             builder.HasKey(s => s.UserId);
         }

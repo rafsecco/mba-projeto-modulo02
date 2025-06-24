@@ -12,7 +12,7 @@ namespace Core.Data
         }
 
         public DbSet<Categoria> Categorias { get; set; }
-        public DbSet<Seller> Vendedores { get; set; }
+        public DbSet<Vendedor> Vendedores { get; set; }
         public DbSet<Produto> Produtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)

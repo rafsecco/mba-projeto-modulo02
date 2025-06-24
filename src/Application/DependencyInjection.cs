@@ -63,10 +63,10 @@ public static class DependencyInjection
     {
         builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
         builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
-        builder.Services.AddScoped<ISellerRepository, SellerRepository>();
+        builder.Services.AddScoped<IVendedorRepository, VendedorRepository>();
         builder.Services.AddScoped<ICategoriaService, CategoriaService>();
         builder.Services.AddScoped<IProdutoService, ProdutoService>();
-		builder.Services.AddScoped<ISellerService, SellerService>();
+		builder.Services.AddScoped<IVendedorService, VendedorService>();
 		builder.Services.AddScoped<IUserService, UserService>();
     }
 

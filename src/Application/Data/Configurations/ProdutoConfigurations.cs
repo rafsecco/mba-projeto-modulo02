@@ -14,7 +14,7 @@ namespace Core.Data.Configurations
             builder.Property(p => p.Descricao).IsRequired().HasMaxLength(300);
 
             builder.HasOne(p => p.Vendedor)
-                .WithMany(s => s.Products)
+                .WithMany(s => s.Produtos)
                 .HasForeignKey(p => p.VendedorId);
 
             builder.HasOne(p => p.Categoria)

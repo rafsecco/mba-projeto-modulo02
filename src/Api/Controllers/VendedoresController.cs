@@ -10,25 +10,25 @@ namespace Api.Controllers;
 [Authorize(Roles = "Admin")]
 public class VendedoresController : ControllerBase
 {
-	private readonly ISellerService _sellerService;
+    private readonly IVendedorService _vendedorService;
 
-	public VendedoresController(ISellerService sellerService)
-	{
-		_sellerService = sellerService;
-	}
+    public VendedoresController(IVendedorService vendedorService)
+    {
+        _vendedorService = vendedorService;
+    }
 
-	[HttpGet]
-	[ProducesResponseType(StatusCodes.Status200OK)]
-	[ProducesResponseType(StatusCodes.Status404NotFound)]
-	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
-	[ProducesResponseType(StatusCodes.Status403Forbidden)]
-	public async Task<ActionResult<List<Seller>>> Get(CancellationToken cancellationToken)
-	{
-		List<Seller>? resultado = await _sellerService.GetAsync(cancellationToken);
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<List<Vendedor>>> Get(CancellationToken cancellationToken)
+    {
+        List<Vendedor>? resultado = await _vendedorService.GetAsync(cancellationToken);
 
-		if (resultado == null)
-			return NotFound();
+        if (resultado == null)
+            return NotFound();
 
-		return Ok(resultado);
-	}
+        return Ok(resultado);
+    }
 }
