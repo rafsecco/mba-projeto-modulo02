@@ -27,11 +27,11 @@ public class CategoriasController : Controller
     {
         if (id == null) return NotFound();
 
-        var category = await _categoriaService.FindAsync(id.Value, cancellationToken);
+        var categoria = await _categoriaService.FindAsync(id.Value, cancellationToken);
 
-        if (category == null) return NotFound();
+        if (categoria == null) return NotFound();
 
-        return View(category);
+        return View(categoria);
     }
 
     public IActionResult Create()
@@ -41,59 +41,59 @@ public class CategoriasController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(CriaCategoriaViewModel criaCategoriaViewModel,
+    public async Task<IActionResult> Create(CreateCategoriaViewModel createCategoriaViewModel,
         CancellationToken cancellationToken)
     {
         if (ModelState.IsValid)
         {
-            await _categoriaService.CreateAsync(criaCategoriaViewModel, cancellationToken);
+            await _categoriaService.CreateAsync(createCategoriaViewModel, cancellationToken);
             return RedirectToAction(nameof(Index));
         }
 
-        return View(criaCategoriaViewModel);
+        return View(createCategoriaViewModel);
     }
 
     public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
-        var category = await _categoriaService.FindAsync(id.Value, cancellationToken);
-        if (category == null) return NotFound();
+        var categoria = await _categoriaService.FindAsync(id.Value, cancellationToken);
+        if (categoria == null) return NotFound();
 
-        var updateCategoryViewModel = new AtualizaCategoriaViewModel
+        var updateCategoryViewModel = new UpdateCategoriaViewModel
         {
-            Id = category.Id,
-            Name = category.Nome,
-            Description = category.Descricao
+            Id = categoria.Id,
+            Nome = categoria.Nome,
+            Descricao = categoria.Descricao
         };
         return View(updateCategoryViewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, AtualizaCategoriaViewModel atualizaCategoriaViewModel,
+    public async Task<IActionResult> Edit(Guid id, UpdateCategoriaViewModel updateCategoriaViewModel,
         CancellationToken cancellationToken)
     {
-        if (id != atualizaCategoriaViewModel.Id) return NotFound();
+        if (id != updateCategoriaViewModel.Id) return NotFound();
 
         if (ModelState.IsValid)
         {
-            await _categoriaService.UpdateAsync(atualizaCategoriaViewModel, cancellationToken);
+            await _categoriaService.UpdateAsync(updateCategoriaViewModel, cancellationToken);
 
             return RedirectToAction(nameof(Index));
         }
 
-        return View(atualizaCategoriaViewModel);
+        return View(updateCategoriaViewModel);
     }
 
     public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
-        var category = await _categoriaService.FindAsync(id.Value, cancellationToken);
-        if (category == null) return NotFound();
+        var categoria = await _categoriaService.FindAsync(id.Value, cancellationToken);
+        if (categoria == null) return NotFound();
 
-        return View(category);
+        return View(categoria);
     }
 
     [HttpPost]
@@ -101,7 +101,6 @@ public class CategoriasController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _categoriaService.FindAsync(id, cancellationToken);
         var result = await _categoriaService.DeleteAsync(id, cancellationToken);
         if (!result)
         {

@@ -9,16 +9,16 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
     {
     }
 
-    public async Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
+    public async Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken)
     {
-        return await _dbContext.Categories
+        return await _dbContext.Categorias
             .AsNoTracking()
-            .AnyAsync(p => p.Id == categoryId, cancellationToken);
+            .AnyAsync(p => p.Id == categoriaId, cancellationToken);
     }
 }
 
 public interface ICategoriaRepository : IRepository<Categoria>
 
 {
-    Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
+    Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken);
 }

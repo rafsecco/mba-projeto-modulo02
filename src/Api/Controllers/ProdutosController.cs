@@ -9,11 +9,11 @@ namespace Api.Controllers;
 [ApiController]
 [Route("[controller]")]
 [Authorize]
-public class ProductsController : ControllerBase
+public class ProdutosController : ControllerBase
 {
-    private readonly IProductService _service;
+    private readonly IProdutoService _service;
 
-    public ProductsController(IProductService service)
+    public ProdutosController(IProdutoService service)
     {
         _service = service;
     }
@@ -21,13 +21,13 @@ public class ProductsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Guid>> Create([FromForm] CreateProductViewModel createProductViewModel,
+    public async Task<ActionResult<Guid>> Create([FromForm] CreateProdutoViewModel createProdutoViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            var productId = await _service.CreateAsync(createProductViewModel, cancellationToken);
-            return StatusCode(StatusCodes.Status201Created, productId);
+            var produtoId = await _service.CreateAsync(createProdutoViewModel, cancellationToken);
+            return StatusCode(StatusCodes.Status201Created, produtoId);
         }
         catch (UnauthorizedAccessException ex)
         {
@@ -75,8 +75,8 @@ public class ProductsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet]
-    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Product>>> Get(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(List<Produto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Produto>>> Get(CancellationToken cancellationToken)
     {
         var result = await _service.GetAsync(cancellationToken);
         return Ok(result);
@@ -84,25 +84,25 @@ public class ProductsController : ControllerBase
 
     [AllowAnonymous]
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Product>> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult<Produto>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        var product = await _service.FindAsync(id, cancellationToken);
+        var produto = await _service.FindAsync(id, cancellationToken);
 
-        if (product == null)
+        if (produto == null)
             return NotFound();
 
-        return Ok(product);
+        return Ok(produto);
     }
 
     [AllowAnonymous]
-    [HttpGet("{categoryId}/categoryId")]
-    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Product>>> GetByCategoryId(Guid categoryId, CancellationToken cancellationToken)
+    [HttpGet("{categoriaId}/categoriaId")]
+    [ProducesResponseType(typeof(List<Produto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Produto>>> GetByCategoryId(Guid categoriaId, CancellationToken cancellationToken)
     {
-        var products = await _service.GetByCategoryIdAsync(categoryId, cancellationToken);
+        var produtos = await _service.GetByCategoriaIdAsync(categoriaId, cancellationToken);
 
-        return Ok(products);
+        return Ok(produtos);
     }
 }

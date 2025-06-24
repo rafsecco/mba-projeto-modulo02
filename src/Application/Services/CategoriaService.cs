@@ -7,12 +7,12 @@ namespace Core.Services;
 public class CategoriaService : ICategoriaService
 {
     private readonly ICategoriaRepository _categoriaRepository;
-    private readonly IProductRepository _productRepository;
+    private readonly IProdutoRepository _produtoRepository;
 
-    public CategoriaService(ICategoriaRepository categoriaRepository, IProductRepository productRepository)
+    public CategoriaService(ICategoriaRepository categoriaRepository, IProdutoRepository produtoRepository)
     {
         _categoriaRepository = categoriaRepository;
-        _productRepository = productRepository;
+        _produtoRepository = produtoRepository;
     }
 
     public async Task<List<Categoria>> GetAsync(CancellationToken cancellationToken)
@@ -25,37 +25,37 @@ public class CategoriaService : ICategoriaService
         return await _categoriaRepository.FindAsync(id, cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(CriaCategoriaViewModel criaCategoriaViewModel, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(CreateCategoriaViewModel createCategoriaViewModel, CancellationToken cancellationToken)
     {
-        var category = new Categoria
+        var categoria = new Categoria
         {
-            Nome = criaCategoriaViewModel.Name,
-            Descricao = criaCategoriaViewModel.Description
+            Nome = createCategoriaViewModel.Nome,
+            Descricao = createCategoriaViewModel.Descricao
         };
 
-        return await _categoriaRepository.CreateAsync(category, cancellationToken);
+        return await _categoriaRepository.CreateAsync(categoria, cancellationToken);
     }
 
-    public async Task UpdateAsync(AtualizaCategoriaViewModel atualizaCategoriaViewModel, CancellationToken cancellationToken)
+    public async Task UpdateAsync(UpdateCategoriaViewModel updateCategoriaViewModel, CancellationToken cancellationToken)
     {
-        var category = await _categoriaRepository.FindAsync(atualizaCategoriaViewModel.Id, cancellationToken);
-        if (category is null) throw new KeyNotFoundException("Categoria não encontrada");
-        category.Nome = atualizaCategoriaViewModel.Name ?? category.Nome;
-        category.Descricao = atualizaCategoriaViewModel.Description ?? category.Descricao;
+        var categoria = await _categoriaRepository.FindAsync(updateCategoriaViewModel.Id, cancellationToken);
+        if (categoria is null) throw new KeyNotFoundException("Categoria não encontrada");
+        categoria.Nome = updateCategoriaViewModel.Nome ?? categoria.Nome;
+        categoria.Descricao = updateCategoriaViewModel.Descricao ?? categoria.Descricao;
 
-        await _categoriaRepository.UpdateAsync(category, cancellationToken);
+        await _categoriaRepository.UpdateAsync(categoria, cancellationToken);
     }
 
     public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var hasProducts = await _productRepository.HasProductsByCategoryIdAsync(id, cancellationToken);
-        if (!hasProducts) await _categoriaRepository.DeleteAsync(id, cancellationToken);
-        return !hasProducts;
+        var hasProdutos = await _produtoRepository.HasProdutosByCategoriaIdAsync(id, cancellationToken);
+        if (!hasProdutos) await _categoriaRepository.DeleteAsync(id, cancellationToken);
+        return !hasProdutos;
     }
 
-    public async Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken)
+    public async Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken)
     {
-        return await _categoriaRepository.IsValidCategoryAsync(categoryId, cancellationToken);
+        return await _categoriaRepository.IsValidCategoryAsync(categoriaId, cancellationToken);
     }
 }
 
@@ -65,11 +65,11 @@ public interface ICategoriaService
 
     public Task<Categoria> FindAsync(Guid id, CancellationToken cancellationToken);
 
-    public Task<Guid> CreateAsync(CriaCategoriaViewModel criaCategoriaViewModel, CancellationToken cancellationToken);
+    public Task<Guid> CreateAsync(CreateCategoriaViewModel createCategoriaViewModel, CancellationToken cancellationToken);
 
-    public Task UpdateAsync(AtualizaCategoriaViewModel atualizaCategoriaViewModel, CancellationToken cancellationToken);
+    public Task UpdateAsync(UpdateCategoriaViewModel updateCategoriaViewModel, CancellationToken cancellationToken);
 
     public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
 
-    Task<bool> IsValidCategoryAsync(Guid categoryId, CancellationToken cancellationToken);
+    Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken);
 }

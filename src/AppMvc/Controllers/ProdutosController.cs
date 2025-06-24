@@ -8,22 +8,22 @@ using System.Security.Claims;
 namespace AppMvc.Controllers;
 
 [Authorize]
-public class ProductsController : Controller
+public class ProdutosController : Controller
 {
     private readonly ICategoriaService _categoriaService;
-    private readonly IProductService _productService;
+    private readonly IProdutoService _produtoService;
 
-    public ProductsController(IProductService productService, ICategoriaService categoriaService)
+    public ProdutosController(IProdutoService produtoService, ICategoriaService categoriaService)
     {
-        _productService = productService;
+        _produtoService = produtoService;
         _categoriaService = categoriaService;
     }
 
     [AllowAnonymous]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var products = await _productService.GetBySellerId(cancellationToken);
-        return View(products);
+        var produtos = await _produtoService.GetByVendedorId(cancellationToken);
+        return View(produtos);
     }
 
     [AllowAnonymous]
@@ -31,10 +31,10 @@ public class ProductsController : Controller
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.FindAsync(id.Value, cancellationToken);
-        if (product is null) return NotFound();
+        var produto = await _produtoService.FindAsync(id.Value, cancellationToken);
+        if (produto is null) return NotFound();
 
-        return View(product);
+        return View(produto);
     }
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
@@ -48,35 +48,35 @@ public class ProductsController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
-        CreateProductViewModel createProductViewModel, CancellationToken cancellationToken)
+        CreateProdutoViewModel createProdutoViewModel, CancellationToken cancellationToken)
     {
         if (ModelState.IsValid)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)!.Value;
-            await _productService.CreateAsync(createProductViewModel, cancellationToken, "wwwroot");
+            await _produtoService.CreateAsync(createProdutoViewModel, cancellationToken, "wwwroot");
             return RedirectToAction(nameof(Index));
         }
 
         var categories = await _categoriaService.GetAsync(cancellationToken);
         ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
 
-        return View(createProductViewModel);
+        return View(createProdutoViewModel);
     }
 
     public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.FindAsync(id.Value, cancellationToken);
-        if (product == null) return NotFound();
+        var produto = await _produtoService.FindAsync(id.Value, cancellationToken);
+        if (produto == null) return NotFound();
 
         var productViewModel = new UpdateProductViewModel
         {
-            Id = product.Id,
-            Name = product.Name,
-            Description = product.Description,
-            Price = product.Price,
-            Stock = product.Stock
+            Id = produto.Id,
+            Name = produto.Nome,
+            Description = produto.Descricao,
+            Price = produto.Preco,
+            Stock = produto.Estoque
         };
         return View(productViewModel);
     }
@@ -84,30 +84,30 @@ public class ProductsController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Guid id,
-        UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
+        UpdateProductViewModel updateProdutoViewModel, CancellationToken cancellationToken)
     {
-        if (id != updateProductViewModel.Id) return NotFound();
+        if (id != updateProdutoViewModel.Id) return NotFound();
 
         if (ModelState.IsValid)
         {
-            await _productService.UpdateAsync(updateProductViewModel, cancellationToken);
+            await _produtoService.UpdateAsync(updateProdutoViewModel, cancellationToken);
 
             return RedirectToAction(nameof(Index));
         }
 
         //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", product.CategoryId);
         //ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId", product.SellerId);
-        return View(updateProductViewModel);
+        return View(updateProdutoViewModel);
     }
 
     public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
-        var product = await _productService.FindAsync(id.Value, cancellationToken);
-        if (product == null) return NotFound();
+        var produto = await _produtoService.FindAsync(id.Value, cancellationToken);
+        if (produto == null) return NotFound();
 
-        return View(product);
+        return View(produto);
     }
 
     [HttpPost]
@@ -115,8 +115,8 @@ public class ProductsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
-        var product = await _productService.FindAsync(id, cancellationToken);
-        if (product != null) await _productService.DeleteAsync(id, cancellationToken);
+        var produto = await _produtoService.FindAsync(id, cancellationToken);
+        if (produto != null) await _produtoService.DeleteAsync(id, cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }

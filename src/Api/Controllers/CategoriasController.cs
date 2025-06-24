@@ -20,10 +20,10 @@ public class CategoriasController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateAsync(CriaCategoriaViewModel criaCategoriaViewModel,
+    public async Task<IActionResult> CreateAsync(CreateCategoriaViewModel createCategoriaViewModel,
         CancellationToken cancellationToken)
     {
-        var id = await _service.CreateAsync(criaCategoriaViewModel, cancellationToken);
+        var id = await _service.CreateAsync(createCategoriaViewModel, cancellationToken);
 
         return StatusCode(StatusCodes.Status201Created, id);
     }
@@ -31,12 +31,12 @@ public class CategoriasController : ControllerBase
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAsync(AtualizaCategoriaViewModel atualizaCategoriaViewModel,
+    public async Task<IActionResult> UpdateAsync(UpdateCategoriaViewModel updateCategoriaViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _service.UpdateAsync(atualizaCategoriaViewModel, cancellationToken);
+            await _service.UpdateAsync(updateCategoriaViewModel, cancellationToken);
             return NoContent();
         }
         catch (KeyNotFoundException ex)
@@ -70,8 +70,8 @@ public class CategoriasController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Categoria>> FindAsync(Guid id, CancellationToken cancellationToken)
     {
-        var category = await _service.FindAsync(id, cancellationToken);
-        if (category == null) return NotFound();
-        return Ok(category);
+        var categoria = await _service.FindAsync(id, cancellationToken);
+        if (categoria == null) return NotFound();
+        return Ok(categoria);
     }
 }

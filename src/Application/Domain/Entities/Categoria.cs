@@ -18,6 +18,6 @@ namespace Core.Domain.Entities
 
         [NotMapped]
         [JsonIgnore]
-        public List<Product>? Produtos { get; set; }
+        public List<Produto>? Produtos { get; set; }
     }
 }

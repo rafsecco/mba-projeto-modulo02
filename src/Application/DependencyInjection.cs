@@ -61,11 +61,11 @@ public static class DependencyInjection
 
     private static void AddRepositoriesAndServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+        builder.Services.AddScoped<IProdutoRepository, ProdutoRepository>();
         builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
         builder.Services.AddScoped<ISellerRepository, SellerRepository>();
         builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<IProdutoService, ProdutoService>();
 		builder.Services.AddScoped<ISellerService, SellerService>();
 		builder.Services.AddScoped<IUserService, UserService>();
     }

@@ -8,19 +8,19 @@ namespace AppMvc.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IProductService _productService;
+    private readonly IProdutoService _produtoService;
 
-    public HomeController(ILogger<HomeController> logger, IProductService productService)
+    public HomeController(ILogger<HomeController> logger, IProdutoService produtoService)
     {
         _logger = logger;
-        _productService = productService;
+        _produtoService = produtoService;
     }
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var products = await _productService.GetBySellerId(cancellationToken);
+        var produtos = await _produtoService.GetByVendedorId(cancellationToken);
         ViewData["IsHome"] = true;
-        return View(products);
+        return View(produtos);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -14,14 +14,14 @@ public class SellerRepository : ISellerRepository
 
     public async Task<Guid> CreateAsync(Seller seller, CancellationToken cancellationToken)
     {
-        await _dbContext.Sellers.AddAsync(seller, cancellationToken);
+        await _dbContext.Vendedores.AddAsync(seller, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return seller.UserId;
     }
 
 	public Task<List<Seller>> GetAsync(CancellationToken cancellationToken)
 	{
-		var retorno = _dbContext.Sellers.ToListAsync(cancellationToken);
+		var retorno = _dbContext.Vendedores.ToListAsync(cancellationToken);
 		return retorno;
 	}
 }

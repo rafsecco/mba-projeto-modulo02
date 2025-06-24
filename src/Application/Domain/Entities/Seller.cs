@@ -4,6 +4,6 @@
     {
         public Guid UserId { get; set; }
 
-        public List<Product>? Products;
+        public List<Produto>? Products;
     }
 }
