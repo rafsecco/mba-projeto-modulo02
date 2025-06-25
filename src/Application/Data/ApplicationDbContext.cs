@@ -11,9 +11,9 @@ namespace Core.Data
         {
         }
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Seller> Sellers { get; set; }
-        public DbSet<Product> Products { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Vendedor> Vendedores { get; set; }
+        public DbSet<Produto> Produtos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -13,7 +13,7 @@ public class Upload
         _hostingEnvironment = hostingEnvironment;
     }
 
-    public async Task AddImageAsync(Product product, IFormFile uploadImage, string? path,
+    public async Task AddImageAsync(Produto produto, IFormFile uploadImage, string? path,
         CancellationToken cancellationToken)
     {
         const string imagesFolder = "images";
@@ -29,7 +29,7 @@ public class Upload
         using (Stream fileStream = new FileStream(filePath, FileMode.Create))
         {
             await uploadImage.CopyToAsync(fileStream, cancellationToken);
-            product.Image = filename;
+            produto.Imagem = filename;
         }
     }
 }

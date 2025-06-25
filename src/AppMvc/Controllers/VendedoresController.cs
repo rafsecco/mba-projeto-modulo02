@@ -8,15 +8,15 @@ namespace AppMvc.Controllers;
 [Route("vendedores")]
 public class VendedoresController : Controller
 {
-	private readonly ISellerService _sellerService;
+	private readonly IVendedorService _vendedorService;
 
-	public VendedoresController(ISellerService sellerService)
+	public VendedoresController(IVendedorService vendedorService)
 	{
-		_sellerService = sellerService;
+		_vendedorService = vendedorService;
 	}
 
 	public async Task<IActionResult> Index(CancellationToken cancellationToken)
 	{
-		return View(await _sellerService.GetAsync(cancellationToken));
+		return View(await _vendedorService.GetAsync(cancellationToken));
 	}
 }

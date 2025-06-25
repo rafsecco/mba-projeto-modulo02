@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Core.Domain.Entities.Product>
+﻿@model IEnumerable<Core.Domain.Entities.Produto>
 @{
     var isHome = ViewData["IsHome"] as bool? ?? false;
 }
@@ -15,20 +15,21 @@ else
         <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Image)
+                @Html.DisplayNameFor(model => model.Imagem)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Price)
+                @Html.DisplayNameFor(model => model.Preco)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Stock)
+                @Html.DisplayNameFor(model => model.Estoque)
             </th>
+            <th>Ativo?</th>
             <th></th>
         </tr>
         </thead>
@@ -37,20 +38,28 @@ else
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
+                    @Html.DisplayFor(modelItem => item.Nome)
 
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @Html.DisplayFor(modelItem => item.Descricao)
                 </td>
                 <td>
-                    <img src="~/images/@item.Image" alt="" style="width: 70px; height: 100px"/>
+                    <img src="~/images/@item.Imagem" alt="" style="width: 70px; height: 100px"/>
                 </td>
                 <td>
-                    @item.Price.ToString("C")
+                    @item.Preco.ToString("C")
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Stock)
+                    @Html.DisplayFor(modelItem => item.Estoque)
+                </td>
+                <!-- Checkbox para ativar/desativar -->
+                <td>
+                    <form asp-action="ToggleStatus" method="post">
+                        <input type="hidden" name="id" value="@item.Id" />
+                        <input type="checkbox" name="ativo" value="true"
+                               onchange="this.form.submit()" @(item.Ativo ? "checked" : "") />
+                    </form>
                 </td>
                 @if (!isHome)
                 {

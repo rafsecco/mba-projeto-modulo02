@@ -9,13 +9,13 @@ public class UserService : IUserService
 {
     private readonly UserManager<IdentityUser> _userManager;
     private readonly SignInManager<IdentityUser> _signInManager;
-    private readonly ISellerRepository _sellerRepository;
+    private readonly IVendedorRepository _vendedorRepository;
 
-    public UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ISellerRepository sellerRepository)
+    public UserService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IVendedorRepository vendedorRepository)
     {
         _userManager = userManager;
         _signInManager = signInManager;
-        _sellerRepository = sellerRepository;
+        _vendedorRepository = vendedorRepository;
     }
 
     public async Task<Guid?> RegisterAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
@@ -29,11 +29,11 @@ public class UserService : IUserService
         var result = await _userManager.CreateAsync(identityUser, userViewModel.Password);
         if (result.Succeeded)
         {
-            var seller = new Seller
+            var vendedor = new Vendedor
             {
                 UserId = Guid.Parse(identityUser.Id)
             };
-            return await _sellerRepository.CreateAsync(seller, cancellationToken);
+            return await _vendedorRepository.CreateAsync(vendedor, cancellationToken);
         }
         return null;
     }
