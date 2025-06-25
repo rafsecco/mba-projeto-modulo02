@@ -77,11 +77,12 @@ public class ProdutoService : IProdutoService
         if (!IsUserOwner(produto))
             throw new UnauthorizedAccessException("Ação não permitida.");
 
-        produto.Nome = updateProductViewModel.Name ?? produto.Nome;
-        produto.Descricao = updateProductViewModel.Description ?? produto.Descricao;
-        produto.Preco = updateProductViewModel.Price ?? produto.Preco;
+        produto.Nome = updateProductViewModel.Nome ?? produto.Nome;
+        produto.Descricao = updateProductViewModel.Descricao ?? produto.Descricao;
+        produto.Preco = updateProductViewModel.Preco ?? produto.Preco;
+        produto.Estoque = updateProductViewModel.Estoque ?? produto.Estoque;
+        produto.Ativo = updateProductViewModel.Ativo;
 
-        produto.Estoque = updateProductViewModel.Stock ?? produto.Estoque;
         await _produtoRepository.UpdateAsync(produto, cancellationToken);
     }
 

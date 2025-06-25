@@ -1,4 +1,5 @@
 ﻿using Core.Extensions;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -34,6 +35,9 @@ namespace Core.Domain.Entities
         [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
         [Display(Name = "Quantidade")]
         public int Estoque { get; set; }
+
+        [DisplayName("Ativo?")]
+        public bool Ativo { get; set; } = true;
 
         [NotMapped]
         [JsonIgnore]

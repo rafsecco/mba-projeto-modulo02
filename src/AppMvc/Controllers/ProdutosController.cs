@@ -73,10 +73,12 @@ public class ProdutosController : Controller
         var productViewModel = new UpdateProductViewModel
         {
             Id = produto.Id,
-            Name = produto.Nome,
-            Description = produto.Descricao,
-            Price = produto.Preco,
-            Stock = produto.Estoque
+            Nome = produto.Nome,
+            Descricao = produto.Descricao,
+            Preco = produto.Preco,
+            Estoque = produto.Estoque,
+            Ativo = produto.Ativo
+
         };
         return View(productViewModel);
     }
@@ -117,6 +119,28 @@ public class ProdutosController : Controller
     {
         var produto = await _produtoService.FindAsync(id, cancellationToken);
         if (produto != null) await _produtoService.DeleteAsync(id, cancellationToken);
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoService.FindAsync(id, cancellationToken);
+        if (produto == null) return NotFound();
+
+        //produto.Ativo = ativo;
+        var productViewModel = new UpdateProductViewModel
+        {
+            Id = produto.Id,
+            //Nome = produto.Nome,
+            //Descricao = produto.Descricao,
+            //Preco = produto.Preco,
+            //Estoque = produto.Estoque,
+            Ativo = ativo
+
+        };
+        await _produtoService.UpdateAsync(productViewModel, cancellationToken); // ou o método que você usa
 
         return RedirectToAction(nameof(Index));
     }

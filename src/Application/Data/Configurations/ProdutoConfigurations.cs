@@ -12,6 +12,7 @@ namespace Core.Data.Configurations
             //builder.Property(c => c.Id).HasColumnType("integer").ValueGeneratedOnAdd();
             builder.Property(p => p.Nome).IsRequired().HasMaxLength(100);
             builder.Property(p => p.Descricao).IsRequired().HasMaxLength(300);
+            builder.Property(p => p.Ativo).HasDefaultValue(true);
 
             builder.HasOne(p => p.Vendedor)
                 .WithMany(s => s.Produtos)

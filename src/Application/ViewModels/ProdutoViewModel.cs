@@ -1,5 +1,6 @@
 ﻿using Core.Extensions;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Core.ViewModels;
@@ -11,20 +12,23 @@ public class UpdateProductViewModel
 
     [StringLength(100, MinimumLength = 2, ErrorMessage = "O campo {0} precisa ter entre {1} e {2} caracteres")]
     [Display(Name = "Nome")]
-    public string? Name { get; set; }
+    public string? Nome { get; set; }
 
     [StringLength(300, MinimumLength = 2, ErrorMessage = "O campo {0} precisa ter entre {1} e {2} caracteres")]
     [Display(Name = "Descrição")]
-    public string? Description { get; set; }
+    public string? Descricao { get; set; }
 
     [Currency]
     [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
     [Display(Name = "Preço")]
-    public decimal? Price { get; set; }
+    public decimal? Preco { get; set; }
 
     [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
     [Display(Name = "Quantidade")]
-    public int? Stock { get; set; }
+    public int? Estoque { get; set; }
+
+    [DisplayName("Ativo?")]
+    public bool Ativo { get; set; }
 }
 
 public class CreateProdutoViewModel
