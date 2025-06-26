@@ -60,8 +60,8 @@ public class CategoriasController : ControllerBase
     [ProducesResponseType(typeof(List<Categoria>), StatusCodes.Status200OK)]
     public async Task<ActionResult<List<Categoria>>> GetAsync(CancellationToken cancellationToken)
     {
-        var categories = await _service.GetAsync(cancellationToken);
-        return Ok(categories);
+        var categorias = await _service.GetAsync(cancellationToken);
+        return Ok(categorias);
     }
 
     [AllowAnonymous]

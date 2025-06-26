@@ -69,19 +69,19 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.CreateAsync(produto, cancellationToken);
     }
 
-    public async Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
+    public async Task UpdateAsync(UpdateProdutoViewModel updateProdutoViewModel, CancellationToken cancellationToken)
     {
-        var produto = await _produtoRepository.FindAsync(updateProductViewModel.Id, cancellationToken);
+        var produto = await _produtoRepository.FindAsync(updateProdutoViewModel.Id, cancellationToken);
         if (produto is null) throw new KeyNotFoundException("Produto não encontrado");
 
         if (!IsUserOwner(produto))
             throw new UnauthorizedAccessException("Ação não permitida.");
 
-        produto.Nome = updateProductViewModel.Nome ?? produto.Nome;
-        produto.Descricao = updateProductViewModel.Descricao ?? produto.Descricao;
-        produto.Preco = updateProductViewModel.Preco ?? produto.Preco;
-        produto.Estoque = updateProductViewModel.Estoque ?? produto.Estoque;
-        produto.Ativo = updateProductViewModel.Ativo;
+        produto.Nome = updateProdutoViewModel.Nome ?? produto.Nome;
+        produto.Descricao = updateProdutoViewModel.Descricao ?? produto.Descricao;
+        produto.Preco = updateProdutoViewModel.Preco ?? produto.Preco;
+        produto.Estoque = updateProdutoViewModel.Estoque ?? produto.Estoque;
+        produto.Ativo = updateProdutoViewModel.Ativo;
 
         await _produtoRepository.UpdateAsync(produto, cancellationToken);
     }
@@ -127,7 +127,7 @@ public interface IProdutoService
     Task<Guid> CreateAsync(CreateProdutoViewModel createProdutoViewModel, CancellationToken cancellationToken,
         string? path = null);
 
-    Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken);
+    Task UpdateAsync(UpdateProdutoViewModel updateProdutoViewModel, CancellationToken cancellationToken);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

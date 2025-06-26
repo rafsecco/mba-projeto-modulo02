@@ -8,14 +8,14 @@
 <hr />
 @{
     
-    var categories = ViewBag.CategoryId as SelectList;
+    var categorias = ViewBag.CategoriaId as SelectList;
 }
 
-@if (categories == null || !categories.Any())
+@if (categorias == null || !categorias.Any())
 {
     <div class="alert alert-warning">
         Não há categorias cadastradas.  
-        <a asp-area="" asp-controller="Categories" asp-action="Create">Crie uma categoria</a> para criar um produto.
+        <a asp-area="" asp-controller="Categorias" asp-action="Create">Crie uma categoria</a> para criar um produto.
     </div>
 }
 else
@@ -27,7 +27,7 @@ else
 
                 <div class="form-group">
                     <label asp-for="CategoriaId" class="control-label"></label>
-                    <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    <select asp-for="CategoriaId" class="form-control" asp-items="ViewBag.CategoriaId"></select>
                 </div>
                 <div class="form-group">
                     <label asp-for="Nome" class="control-label"></label>
