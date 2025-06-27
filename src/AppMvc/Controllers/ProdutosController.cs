@@ -39,8 +39,8 @@ public class ProdutosController : Controller
 
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
-        var categories = await _categoriaService.GetAsync(cancellationToken);
-        ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
+        var categorias = await _categoriaService.GetAsync(cancellationToken);
+        ViewData["CategoriaId"] = new SelectList(categorias, "Id", "Nome");
         //ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId");
         return View();
     }
@@ -57,8 +57,8 @@ public class ProdutosController : Controller
             return RedirectToAction(nameof(Index));
         }
 
-        var categories = await _categoriaService.GetAsync(cancellationToken);
-        ViewData["CategoryId"] = new SelectList(categories, "Id", "Name");
+        var categorias = await _categoriaService.GetAsync(cancellationToken);
+        ViewData["CategoryId"] = new SelectList(categorias, "Id", "Name");
 
         return View(createProdutoViewModel);
     }
@@ -70,7 +70,7 @@ public class ProdutosController : Controller
         var produto = await _produtoService.FindAsync(id.Value, cancellationToken);
         if (produto == null) return NotFound();
 
-        var productViewModel = new UpdateProductViewModel
+        var updateProdutoViewModel = new UpdateProdutoViewModel
         {
             Id = produto.Id,
             Nome = produto.Nome,
@@ -78,15 +78,14 @@ public class ProdutosController : Controller
             Preco = produto.Preco,
             Estoque = produto.Estoque,
             Ativo = produto.Ativo
-
         };
-        return View(productViewModel);
+        return View(updateProdutoViewModel);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Guid id,
-        UpdateProductViewModel updateProdutoViewModel, CancellationToken cancellationToken)
+        UpdateProdutoViewModel updateProdutoViewModel, CancellationToken cancellationToken)
     {
         if (id != updateProdutoViewModel.Id) return NotFound();
 
@@ -130,7 +129,7 @@ public class ProdutosController : Controller
         if (produto == null) return NotFound();
 
         //produto.Ativo = ativo;
-        var productViewModel = new UpdateProductViewModel
+        var updateProdutoViewModel = new UpdateProdutoViewModel
         {
             Id = produto.Id,
             //Nome = produto.Nome,
@@ -138,9 +137,8 @@ public class ProdutosController : Controller
             //Preco = produto.Preco,
             //Estoque = produto.Estoque,
             Ativo = ativo
-
         };
-        await _produtoService.UpdateAsync(productViewModel, cancellationToken); // ou o método que você usa
+        await _produtoService.UpdateAsync(updateProdutoViewModel, cancellationToken); // ou o método que você usa
 
         return RedirectToAction(nameof(Index));
     }

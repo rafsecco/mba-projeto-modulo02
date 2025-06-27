@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.ViewModels;
 
-public class UpdateProductViewModel
+public class UpdateProdutoViewModel
 {
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public Guid Id { get; set; }
@@ -35,8 +35,9 @@ public class CreateProdutoViewModel
 {
     public Guid CategoriaId { get; set; }
 
+    [Required(ErrorMessage = "O campo {0} é obrigatório")]
     [Display(Name = "Imagem")]
-    public IFormFile? ImagemUpload { get; set; }
+    public IFormFile ImagemUpload { get; set; }
 
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     [StringLength(100, MinimumLength = 2, ErrorMessage = "O campo {0} precisa ter entre {1} e {2} caracteres")]

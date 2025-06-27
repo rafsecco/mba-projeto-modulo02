@@ -39,12 +39,12 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update([FromBody] UpdateProductViewModel updateProductViewModel,
+    public async Task<IActionResult> Update([FromBody] UpdateProdutoViewModel updateProdutoViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _service.UpdateAsync(updateProductViewModel, cancellationToken);
+            await _service.UpdateAsync(updateProdutoViewModel, cancellationToken);
             return NoContent();
         }
         catch (UnauthorizedAccessException ex)
