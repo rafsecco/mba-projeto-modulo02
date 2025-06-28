@@ -36,6 +36,11 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.GetByVendedorIdAsync(_currentUserId, cancellationToken);
     }
 
+    public async Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _produtoRepository.GetAllAsync(cancellationToken);
+    }
+
     public async Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _produtoRepository.FindAsync(id, cancellationToken);
@@ -119,6 +124,8 @@ public interface IProdutoService
     Task<List<Produto>> GetAsync(CancellationToken cancellationToken);
 
     Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken);
+
+     Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
 
     Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken);
 
