@@ -41,7 +41,7 @@ public static class DbMigrationHelpers
             await EnsureSeedProducts(context, userManager);
         }
 
-        await EnsureSeedAccessProfile(context, roleManager);
+        await EnsureSeedAccessProfile(context, roleManager, userManager);
     }
 
     private static async Task EnsureSeedProducts(ApplicationDbContext context, UserManager<IdentityUser> userManager)
@@ -109,19 +109,79 @@ public static class DbMigrationHelpers
         await context.SaveChangesAsync();
     }
 
-    private static async Task EnsureSeedAccessProfile(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
-    {
-        await CreateRoleAsync(roleManager, "Admin");
-        await CreateRoleAsync(roleManager, "Vendedor");
-        await CreateRoleAsync(roleManager, "Cliente");
+	private static async Task EnsureSeedAccessProfile(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+	{
+		#region Definindo os roles e claims em um dicionário
+		var rolesWithClaims = new Dictionary<string, List<Claim>>
+		{
+			{ "Admin", new List<Claim>
+				{
+					new Claim("Produtos", "AD,VI,ED,EX"),
+					new Claim("Categorias", "AD,VI,ED,EX")
+				}
+			},
+			{ "Vendedor", new List<Claim>
+				{
+					new Claim("Produtos", "AD,VI,ED,EX")
+				}
+			},
+			{ "Cliente", new List<Claim>
+				{
+					new Claim("Produtos", "VI")
+				}
+			}
+		};
 
-        await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Produtos", "AD,VI,ED,EX"));
-        await AddRoleClaimAsync(context, roleManager, "Admin", new Claim("Categorias", "AD,VI,ED,EX"));
-        await AddRoleClaimAsync(context, roleManager, "Vendedor", new Claim("Produtos", "AD,VI,ED,EX"));
-        await AddRoleClaimAsync(context, roleManager, "Cliente", new Claim("Produtos", "VI"));
-    }
+		foreach (var role in rolesWithClaims)
+		{
+			await CreateRoleAsync(roleManager, role.Key);
 
-    private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
+			foreach (var claim in role.Value)
+			{
+				await AddRoleClaimAsync(context, roleManager, role.Key, claim);
+			}
+		}
+		#endregion
+
+		#region Criar usuário admin
+		var usuarioAdminIdentity = new IdentityUser
+		{
+			Email = "admin@mail.com",
+			UserName = "admin@mail.com"
+		};
+
+		var createUserResult = await userManager.CreateAsync(usuarioAdminIdentity, "Dev@123");
+
+		if (createUserResult.Succeeded)
+		{
+			var roleAdmin = await roleManager.FindByNameAsync("Admin");
+
+			if (roleAdmin != null)
+			{
+				var addToRoleResult = await userManager.AddToRoleAsync(usuarioAdminIdentity, "Admin");
+
+				if (addToRoleResult.Succeeded)
+				{
+					Console.WriteLine("Usuário admin adicionado à role Admin com sucesso.");
+				}
+				else
+				{
+					Console.WriteLine("Falha ao adicionar usuário à role Admin.");
+				}
+			}
+			else
+			{
+				Console.WriteLine("Role 'Admin' não encontrada.");
+			}
+		}
+		else
+		{
+			Console.WriteLine("Falha ao criar o usuário admin.");
+		}
+		#endregion
+	}
+
+	private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)
     {
         if (await roleManager.RoleExistsAsync(roleName))
             return;
