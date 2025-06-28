@@ -19,14 +19,12 @@ public class ProdutosController : Controller
         _categoriaService = categoriaService;
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         var produtos = await _produtoService.GetByVendedorId(cancellationToken);
         return View(produtos);
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
