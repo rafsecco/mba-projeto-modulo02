@@ -207,12 +207,6 @@ public static class DbMigrationHelpers
             ClaimValue = claim.Value
         };
 
-        var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        if (environmentName == Environments.Development)
-        {
-            roleClaim.Id = GetNextDevId(context);
-        }
-
         context.RoleClaims.Add(roleClaim);
         await context.SaveChangesAsync();
     }
