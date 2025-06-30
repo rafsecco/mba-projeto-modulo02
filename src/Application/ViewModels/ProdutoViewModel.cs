@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Core.ViewModels;
 
-public class UpdateProdutoViewModel
+public class AtualizaProdutoViewModel
 {
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
     public Guid Id { get; set; }
@@ -19,7 +19,6 @@ public class UpdateProdutoViewModel
     public string? Descricao { get; set; }
 
     [Currency]
-    [Range(1, 9999, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
     [Display(Name = "Preço")]
     public decimal? Preco { get; set; }
 
@@ -31,7 +30,7 @@ public class UpdateProdutoViewModel
     public bool Ativo { get; set; }
 }
 
-public class CreateProdutoViewModel
+public class CriaProdutoViewModel
 {
     public Guid CategoriaId { get; set; }
 
@@ -51,7 +50,6 @@ public class CreateProdutoViewModel
 
     [Currency]
     [Required(ErrorMessage = "O campo {0} é obrigatório")]
-    //[Range(1.01, 9999.00, ErrorMessage = "O campo {0} deve ser maior que {1} e menor que {2}")]
     [Display(Name = "Preço")]
     public decimal Preco { get; set; }
 
