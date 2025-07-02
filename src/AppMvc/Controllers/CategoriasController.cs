@@ -16,13 +16,11 @@ public class CategoriasController : Controller
         _categoriaService = categoriaService;
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
         return View(await _categoriaService.GetAsync(cancellationToken));
     }
 
-    [AllowAnonymous]
     public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();

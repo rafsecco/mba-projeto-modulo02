@@ -76,7 +76,8 @@ A estrutura do projeto é organizada da seguinte forma:
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
 
-   **Usuário default é:** Email: dev@mail.com e Senha: Dev@123
+   **Usuário Admin é:** Email: `admin@mail.com` e Senha: `Dev@123`
+   **Usuário default é:** Email: `dev@mail.com` e Senha: `Dev@123`
 
 4. **Executar a API:**
    - `cd src/Api/`

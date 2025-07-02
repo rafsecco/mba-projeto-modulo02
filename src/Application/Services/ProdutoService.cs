@@ -46,42 +46,42 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.GetByCategoriaIdAsync(categoriaId, cancellationToken);
     }
 
-    public async Task<Guid> CreateAsync(CreateProdutoViewModel createProdutoViewModel,
+    public async Task<Guid> CreateAsync(CriaProdutoViewModel criaProdutoViewModel,
         CancellationToken cancellationToken, string? path = null)
     {
         var isValidCategory =
-            await _categoriaRepository.IsValidCategoryAsync(createProdutoViewModel.CategoriaId, cancellationToken);
+            await _categoriaRepository.IsValidCategoryAsync(criaProdutoViewModel.CategoriaId, cancellationToken);
         if (!isValidCategory)
             throw new KeyNotFoundException("Categoria inválida");
 
         var produto = new Produto
         {
-            Nome = createProdutoViewModel.Nome,
-            Descricao = createProdutoViewModel.Descricao,
-            Preco = createProdutoViewModel.Preco,
-            Estoque = createProdutoViewModel.Estoque,
-            CategoriaId = createProdutoViewModel.CategoriaId,
+            Nome = criaProdutoViewModel.Nome,
+            Descricao = criaProdutoViewModel.Descricao,
+            Preco = criaProdutoViewModel.Preco,
+            Estoque = criaProdutoViewModel.Estoque,
+            CategoriaId = criaProdutoViewModel.CategoriaId,
             VendedorId = _currentUserId
         };
-        if (createProdutoViewModel.ImagemUpload != null)
-            await _upload.AddImageAsync(produto, createProdutoViewModel.ImagemUpload, path, cancellationToken);
+        if (criaProdutoViewModel.ImagemUpload != null)
+            await _upload.AddImageAsync(produto, criaProdutoViewModel.ImagemUpload, path, cancellationToken);
 
         return await _produtoRepository.CreateAsync(produto, cancellationToken);
     }
 
-    public async Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken)
+    public async Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken)
     {
-        var produto = await _produtoRepository.FindAsync(updateProductViewModel.Id, cancellationToken);
+        var produto = await _produtoRepository.FindAsync(atualizaProdutoViewModel.Id, cancellationToken);
         if (produto is null) throw new KeyNotFoundException("Produto não encontrado");
 
         if (!IsUserOwner(produto))
             throw new UnauthorizedAccessException("Ação não permitida.");
 
-        produto.Nome = updateProductViewModel.Nome ?? produto.Nome;
-        produto.Descricao = updateProductViewModel.Descricao ?? produto.Descricao;
-        produto.Preco = updateProductViewModel.Preco ?? produto.Preco;
-        produto.Estoque = updateProductViewModel.Estoque ?? produto.Estoque;
-        produto.Ativo = updateProductViewModel.Ativo;
+        produto.Nome = atualizaProdutoViewModel.Nome ?? produto.Nome;
+        produto.Descricao = atualizaProdutoViewModel.Descricao ?? produto.Descricao;
+        produto.Preco = atualizaProdutoViewModel.Preco ?? produto.Preco;
+        produto.Estoque = atualizaProdutoViewModel.Estoque ?? produto.Estoque;
+        produto.Ativo = atualizaProdutoViewModel.Ativo;
 
         await _produtoRepository.UpdateAsync(produto, cancellationToken);
     }
@@ -124,10 +124,10 @@ public interface IProdutoService
 
     Task<List<Produto>> GetByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
 
-    Task<Guid> CreateAsync(CreateProdutoViewModel createProdutoViewModel, CancellationToken cancellationToken,
+    Task<Guid> CreateAsync(CriaProdutoViewModel criaProdutoViewModel, CancellationToken cancellationToken,
         string? path = null);
 
-    Task UpdateAsync(UpdateProductViewModel updateProductViewModel, CancellationToken cancellationToken);
+    Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }
