@@ -13,9 +13,9 @@ namespace Core.Extensions
             try
             {
                 var moeda = Convert.ToDecimal(value, new CultureInfo("pt-BR"));
-                if (moeda < 0)
+                if (moeda <= 0)
                 {
-                    return new ValidationResult("O valor não pode ser negativo");
+                    return new ValidationResult("O valor precisa ser maior que 0");
                 }
             }
             catch (Exception)
