@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppMvc.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin")] 
 public class CategoriasController : Controller
 {
     private readonly ICategoriaService _categoriaService;
