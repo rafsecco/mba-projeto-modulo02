@@ -1,0 +1,41 @@
+@model IEnumerable<Business.Domain.Entities.Vendedor>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<h1 class="mt-4">Vendedores cadastrados</h1>
+
+@if (!Model.Any())
+{
+	<div class="alert alert-info text-center mt-4">
+		Nenhuma vendedor cadastrado.
+	</div>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.UserId)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.UserId)
+					</td>
+					<td>
+						<a asp-action="Ativar" class="btn btn-success" asp-route-id="@item.UserId"><span class="fa fa-circle-check"> Ativar</span></a> |
+						<a asp-action="Desativar" class="btn btn-danger" asp-route-id="@item.UserId"><span class="fa fa-circle-xmark"> Desativar</span></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
