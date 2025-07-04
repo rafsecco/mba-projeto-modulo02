@@ -1,8 +1,9 @@
-﻿using Business.Data;
-using Business.Domain.Entities;
+﻿using Business.Interfaces;
+using Business.Models;
+using Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Business.Data.Repositories;
+namespace Data.Repositorios;
 
 public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
 {
@@ -16,10 +17,4 @@ public class CategoriaRepository : Repository<Categoria>, ICategoriaRepository
             .AsNoTracking()
             .AnyAsync(p => p.Id == categoriaId, cancellationToken);
     }
-}
-
-public interface ICategoriaRepository : IRepository<Categoria>
-
-{
-    Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken);
 }

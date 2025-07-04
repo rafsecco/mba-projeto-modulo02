@@ -1,8 +1,9 @@
-﻿using Business.Data;
-using Business.Domain.Entities;
+﻿using Business.Interfaces;
+using Business.Models;
+using Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Business.Data.Repositories;
+namespace Data.Repositorios;
 
 public class ProdutoRepository : Repository<Produto>, IProdutoRepository
 {
@@ -42,14 +43,4 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
         return await _dbContext.Produtos.Where(p => p.VendedorId == vendedorId).ToListAsync(cancellationToken);
     }
-}
-
-public interface IProdutoRepository : IRepository<Produto>
-
-{
-    Task<bool> HasProdutosByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
-
-    Task<List<Produto>> GetByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
-
-    Task<List<Produto>> GetByVendedorIdAsync(Guid vendedorId, CancellationToken cancellationToken);
 }

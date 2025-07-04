@@ -1,8 +1,9 @@
-﻿using Business.Data;
-using Business.Domain.Entities;
+﻿using Business.Interfaces;
+using Business.Models;
+using Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Business.Data.Repositories
+namespace Data.Repositorios
 {
     public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity, new()
     {
@@ -48,18 +49,5 @@ namespace Business.Data.Repositories
         {
             _dbContext.Dispose();
         }
-    }
-
-    public interface IRepository<TEntity> : IDisposable where TEntity : Entity
-    {
-        public Task<Guid> CreateAsync(TEntity entity, CancellationToken cancellationToken);
-
-        public Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
-
-        public Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
-        public Task<List<TEntity>> GetAsync(CancellationToken cancellationToken);
-
-        public Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
-using Business.Data;
+using Business.Models;
+using Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -6,9 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
-using Business.Domain.Entities;
 
-namespace Business.Configuration;
+namespace Data.Configuration;
 
 public static class DbMigrationHelperExtension
 {

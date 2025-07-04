@@ -1,8 +1,8 @@
-﻿using Business.Domain.Entities;
+﻿using Business.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Business.Data.Configurations
+namespace Data.Mappings
 {
     public class ProdutoConfigurations : IEntityTypeConfiguration<Produto>
     {

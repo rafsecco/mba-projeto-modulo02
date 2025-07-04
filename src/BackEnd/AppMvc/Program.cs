@@ -1,10 +1,12 @@
 using Business;
-using Business.Configuration;
+using Data;
+using Data.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddApplicationServices();
+builder.AddDataServices();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

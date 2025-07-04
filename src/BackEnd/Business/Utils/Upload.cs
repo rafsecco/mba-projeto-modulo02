@@ -1,4 +1,4 @@
-﻿using Business.Domain.Entities;
+﻿using Business.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 

@@ -1,8 +1,9 @@
-using Business.Data;
-using Business.Domain.Entities;
+using Business.Interfaces;
+using Business.Models;
+using Data.Context;
 using Microsoft.EntityFrameworkCore;
 
-namespace Business.Data.Repositories;
+namespace Data.Repositorios;
 
 public class VendedorRepository : IVendedorRepository
 {
@@ -25,11 +26,4 @@ public class VendedorRepository : IVendedorRepository
         var retorno = _dbContext.Vendedores.ToListAsync(cancellationToken);
         return retorno;
     }
-}
-
-public interface IVendedorRepository
-{
-    public Task<Guid> CreateAsync(Vendedor vendedor, CancellationToken cancellationToken);
-
-    public Task<List<Vendedor>> GetAsync(CancellationToken cancellationToken);
 }

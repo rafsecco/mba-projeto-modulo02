@@ -1,6 +1,6 @@
-﻿using Business.Data.Repositories;
+﻿using Business.Interfaces;
+using Business.Models;
 using Business.ViewModels;
-using Business.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Business.Services;
@@ -51,11 +51,4 @@ public class UserService : IUserService
         }
         return null;
     }
-}
-
-public interface IUserService
-{
-    Task<Guid?> RegisterAsync(UserViewModel userViewModel, CancellationToken cancellationToken);
-
-    Task<Guid?> LoginAsync(UserViewModel userViewModel, CancellationToken cancellationToken);
 }

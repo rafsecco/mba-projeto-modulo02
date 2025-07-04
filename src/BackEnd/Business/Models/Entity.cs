@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Business.Domain.Entities;
+namespace Business.Models;
 
 public class Entity
 {

@@ -1,5 +1,5 @@
-using Business.Data.Repositories;
-using Business.Domain.Entities;
+using Business.Interfaces;
+using Business.Models;
 
 namespace Business.Services;
 
@@ -17,9 +17,4 @@ public class VendedorService : IVendedorService
         var retorno = await _vendedorRepository.GetAsync(cancellationToken);
         return retorno;
     }
-}
-
-public interface IVendedorService
-{
-    Task<List<Vendedor>> GetAsync(CancellationToken cancellationToken);
 }

@@ -1,5 +1,5 @@
-﻿using Business.Data.Repositories;
-using Business.Domain.Entities;
+﻿using Business.Interfaces;
+using Business.Models;
 using Business.ViewModels;
 
 namespace Business.Services;
@@ -57,19 +57,4 @@ public class CategoriaService : ICategoriaService
     {
         return await _categoriaRepository.IsValidCategoryAsync(categoriaId, cancellationToken);
     }
-}
-
-public interface ICategoriaService
-{
-    public Task<List<Categoria>> GetAsync(CancellationToken cancellationToken);
-
-    public Task<Categoria> FindAsync(Guid id, CancellationToken cancellationToken);
-
-    public Task<Guid> CreateAsync(CreateCategoriaViewModel createCategoriaViewModel, CancellationToken cancellationToken);
-
-    public Task UpdateAsync(UpdateCategoriaViewModel updateCategoriaViewModel, CancellationToken cancellationToken);
-
-    public Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken);
-
-    Task<bool> IsValidCategoryAsync(Guid categoriaId, CancellationToken cancellationToken);
 }

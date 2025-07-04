@@ -1,5 +1,5 @@
-﻿using Business.Data.Repositories;
-using Business.Domain.Entities;
+﻿using Business.Interfaces;
+using Business.Models;
 using Business.Utils;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -112,22 +112,4 @@ public class ProdutoService : IProdutoService
 
         return Guid.Parse(userId);
     }
-}
-
-public interface IProdutoService
-{
-    Task<List<Produto>> GetAsync(CancellationToken cancellationToken);
-
-    Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken);
-
-    Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken);
-
-    Task<List<Produto>> GetByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
-
-    Task<Guid> CreateAsync(CriaProdutoViewModel criaProdutoViewModel, CancellationToken cancellationToken,
-        string? path = null);
-
-    Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken);
-
-    Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

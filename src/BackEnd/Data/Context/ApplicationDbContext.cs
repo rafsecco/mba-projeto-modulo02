@@ -1,11 +1,10 @@
-using Business.Domain.Entities;
+using Business.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using System.Reflection.Emit;
 
-namespace Business.Data
+namespace Data.Context
 {
     public class ApplicationDbContext : IdentityDbContext
     {
@@ -22,16 +21,16 @@ namespace Business.Data
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(builder);
 
-			//HACK: pra auto incremento no Sqlite para a tabela AspNetRoleClaims
-			builder.Entity<IdentityRoleClaim<string>>(b =>
-			{
-				b.Property<int>("Id")
-					.ValueGeneratedOnAdd()
-					.HasColumnType("INTEGER"); // Ajuste para garantir auto-incremento no SQLite
-			});
+            //HACK: pra auto incremento no Sqlite para a tabela AspNetRoleClaims
+            builder.Entity<IdentityRoleClaim<string>>(b =>
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("INTEGER"); // Ajuste para garantir auto-incremento no SQLite
+            });
 
-			//HACK: pra não setar string como varchar(max)
-			foreach (var entityType in builder.Model.GetEntityTypes())
+            //HACK: pra não setar string como varchar(max)
+            foreach (var entityType in builder.Model.GetEntityTypes())
             {
                 foreach (var property in entityType.GetProperties())
                 {

@@ -1,5 +1,5 @@
-﻿using Business.Domain.Entities;
-using Business.Services;
+﻿using Business.Interfaces;
+using Business.Models;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

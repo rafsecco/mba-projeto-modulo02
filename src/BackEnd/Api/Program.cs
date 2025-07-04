@@ -1,6 +1,7 @@
 using Api.Models;
 using Business;
-using Business.Configuration;
+using Data;
+using Data.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -11,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.AddApplicationServices();
+builder.AddDataServices();
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = false);
 //builder.Services
 //    .AddFluentValidationAutoValidation()

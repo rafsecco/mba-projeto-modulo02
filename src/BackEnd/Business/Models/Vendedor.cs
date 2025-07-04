@@ -1,4 +1,4 @@
-﻿namespace Business.Domain.Entities
+﻿namespace Business.Models
 {
     public class Vendedor
     {

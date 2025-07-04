@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
-namespace Business.Domain.Entities
+namespace Business.Models
 {
     public class Produto : Entity
     {

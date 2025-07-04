@@ -1,12 +1,12 @@
-﻿using Business.Data;
-using Business.Services;
+﻿using Business.Interfaces;
 using Business.ViewModels;
+using Data.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppMvc.Controllers;
 
-[Authorize(Roles = "Admin")] 
+[Authorize(Roles = "Admin")]
 public class CategoriasController : Controller
 {
     private readonly ICategoriaService _categoriaService;
