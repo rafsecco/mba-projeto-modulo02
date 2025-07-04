@@ -8,7 +8,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class CategoriasController : ControllerBase
 {
     private readonly ICategoriaService _service;
