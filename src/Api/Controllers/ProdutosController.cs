@@ -21,12 +21,12 @@ public class ProdutosController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Guid>> Create([FromForm] CreateProdutoViewModel createProdutoViewModel,
+    public async Task<ActionResult<Guid>> Create([FromForm] CriaProdutoViewModel criaProdutoViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            var produtoId = await _service.CreateAsync(createProdutoViewModel, cancellationToken);
+            var produtoId = await _service.CreateAsync(criaProdutoViewModel, cancellationToken);
             return StatusCode(StatusCodes.Status201Created, produtoId);
         }
         catch (UnauthorizedAccessException ex)
@@ -39,12 +39,12 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update([FromBody] UpdateProdutoViewModel updateProdutoViewModel,
+    public async Task<IActionResult> Update([FromBody] AtualizaProdutoViewModel atualizaProdutoViewModel,
         CancellationToken cancellationToken)
     {
         try
         {
-            await _service.UpdateAsync(updateProdutoViewModel, cancellationToken);
+            await _service.UpdateAsync(atualizaProdutoViewModel, cancellationToken);
             return NoContent();
         }
         catch (UnauthorizedAccessException ex)
