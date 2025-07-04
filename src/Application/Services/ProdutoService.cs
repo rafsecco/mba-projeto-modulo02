@@ -102,7 +102,17 @@ public class ProdutoService : IProdutoService
 
     private bool IsUserOwner(Produto? produto)
     {
-        return produto != null && produto.VendedorId == _currentUserId;
+        if (produto == null)
+         return false;
+
+        if (produto.VendedorId == _currentUserId)
+        return true;
+
+         // Verifica se tem a role de Admin
+        var user = _httpContextAccessor.HttpContext?.User;
+        var isAdmin = user?.IsInRole("Admin") ?? false;
+
+        return isAdmin;
     }
 
     private Guid GetCurrentUserId()
