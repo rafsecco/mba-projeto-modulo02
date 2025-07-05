@@ -1,4 +1,4 @@
-﻿using Business.Models;
+using Business.Models;
 
 namespace Business.Interfaces;
 
@@ -10,4 +10,6 @@ public interface IProdutoRepository : IRepository<Produto>
     Task<List<Produto>> GetByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
 
     Task<List<Produto>> GetByVendedorIdAsync(Guid vendedorId, CancellationToken cancellationToken);
+
+	Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
 }

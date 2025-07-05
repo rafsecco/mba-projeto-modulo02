@@ -1,4 +1,4 @@
-﻿using Business.Interfaces;
+using Business.Interfaces;
 using Business.Models;
 using Business.Utils;
 using Business.ViewModels;
@@ -34,6 +34,11 @@ public class ProdutoService : IProdutoService
     public async Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken)
     {
         return await _produtoRepository.GetByVendedorIdAsync(_currentUserId, cancellationToken);
+    }
+
+    public async Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _produtoRepository.GetAllAsync(cancellationToken);
     }
 
     public async Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken)
@@ -97,7 +102,17 @@ public class ProdutoService : IProdutoService
 
     private bool IsUserOwner(Produto? produto)
     {
-        return produto != null && produto.VendedorId == _currentUserId;
+        if (produto == null)
+            return false;
+
+        if (produto.VendedorId == _currentUserId)
+            return true;
+
+        // Verifica se tem a role de Admin
+        var user = _httpContextAccessor.HttpContext?.User;
+        var isAdmin = user?.IsInRole("Admin") ?? false;
+
+        return isAdmin;
     }
 
     private Guid GetCurrentUserId()
@@ -112,4 +127,28 @@ public class ProdutoService : IProdutoService
 
         return Guid.Parse(userId);
     }
+
+    public async Task<Guid> AtivarAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
+
+        if (produto == null)
+            throw new KeyNotFoundException();
+
+
+        produto.Ativo = true;
+        await _produtoRepository.AtivarAsync(produto, cancellationToken); 
+        return produto.Id;
+    }
+    public async Task<Guid> InativarAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
+
+        if (produto == null)
+            throw new KeyNotFoundException();
+
+        produto.Ativo = false;
+        await _produtoRepository.InativarAsync(produto,cancellationToken);
+        return produto.Id;
+    }    
 }

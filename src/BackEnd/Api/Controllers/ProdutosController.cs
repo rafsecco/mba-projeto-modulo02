@@ -8,7 +8,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class ProdutosController : ControllerBase
 {
     private readonly IProdutoService _service;
@@ -105,4 +105,44 @@ public class ProdutosController : ControllerBase
 
         return Ok(produtos);
     }
+
+    [HttpPost("{id}/ativar")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Guid>> Ativar(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var produtoId = await _service.AtivarAsync(id, cancellationToken);
+            return Ok(produtoId);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    [HttpPost("{id}/inativar")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<Guid>> Inativar(Guid id, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var produtoId = await _service.InativarAsync(id, cancellationToken);
+            return Ok(produtoId);
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return Unauthorized(new { message = ex.Message });
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
 }

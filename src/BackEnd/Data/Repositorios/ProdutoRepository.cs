@@ -1,4 +1,4 @@
-﻿using Business.Interfaces;
+using Business.Interfaces;
 using Business.Models;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -42,5 +42,9 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     public async Task<List<Produto>> GetByVendedorIdAsync(Guid vendedorId, CancellationToken cancellationToken)
     {
         return await _dbContext.Produtos.Where(p => p.VendedorId == vendedorId).ToListAsync(cancellationToken);
+    }
+    public async Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Produtos.ToListAsync(cancellationToken);
     }
 }

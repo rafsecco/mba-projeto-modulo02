@@ -1,4 +1,5 @@
-﻿@using Business.Models
+@using Business.Models
+@using System.Security.Claims
 @model IEnumerable<Produto>
 @{
     var isHome = ViewData["IsHome"] as bool? ?? false;
@@ -36,7 +37,11 @@ else
         </thead>
         <tbody>
         @foreach (var item in Model)
-        {
+        {   
+            var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userIdGuid = Guid.Parse(userIdString);
+
+            var isOwner = item.VendedorId == userIdGuid; 
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.Nome)
@@ -62,7 +67,7 @@ else
                                onchange="this.form.submit()" @(item.Ativo ? "checked" : "") />
                     </form>
                 </td>
-                @if (!isHome)
+                @if (!isHome && isOwner)
                 {
                     <td>
                         <a asp-action="Details" class="btn btn-warning" asp-route-id="@item.Id"><span class="fa fa-search"></span></a> |

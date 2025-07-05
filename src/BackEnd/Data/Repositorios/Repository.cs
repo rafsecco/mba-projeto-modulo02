@@ -1,4 +1,4 @@
-﻿using Business.Interfaces;
+using Business.Interfaces;
 using Business.Models;
 using Data.Context;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +48,19 @@ namespace Data.Repositorios
         public void Dispose()
         {
             _dbContext.Dispose();
+        }
+
+
+        public virtual async Task AtivarAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            _dbSet.Update(entity);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public virtual async Task InativarAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            _dbSet.Update(entity);
+            await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }
