@@ -47,6 +47,19 @@ namespace Core.Data.Repositories
         {
             _dbContext.Dispose();
         }
+
+
+        public virtual async Task AtivarAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            _dbSet.Update(entity);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public virtual async Task InativarAsync(TEntity entity, CancellationToken cancellationToken)
+        {
+            _dbSet.Update(entity);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
     }
 
     public interface IRepository<TEntity> : IDisposable where TEntity : Entity
@@ -60,5 +73,8 @@ namespace Core.Data.Repositories
         public Task<List<TEntity>> GetAsync(CancellationToken cancellationToken);
 
         public Task<TEntity> FindAsync(Guid id, CancellationToken cancellationToken);
+
+        public Task AtivarAsync(TEntity entity, CancellationToken cancellationToken);
+        public Task InativarAsync(TEntity entity, CancellationToken cancellationToken);
     }
 }

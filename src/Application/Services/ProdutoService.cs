@@ -103,12 +103,12 @@ public class ProdutoService : IProdutoService
     private bool IsUserOwner(Produto? produto)
     {
         if (produto == null)
-         return false;
+            return false;
 
         if (produto.VendedorId == _currentUserId)
-        return true;
+            return true;
 
-         // Verifica se tem a role de Admin
+        // Verifica se tem a role de Admin
         var user = _httpContextAccessor.HttpContext?.User;
         var isAdmin = user?.IsInRole("Admin") ?? false;
 
@@ -127,6 +127,30 @@ public class ProdutoService : IProdutoService
 
         return Guid.Parse(userId);
     }
+
+    public async Task<Guid> AtivarAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
+
+        if (produto == null)
+            throw new KeyNotFoundException();
+
+
+        produto.Ativo = true;
+        await _produtoRepository.AtivarAsync(produto, cancellationToken); 
+        return produto.Id;
+    }
+    public async Task<Guid> InativarAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
+
+        if (produto == null)
+            throw new KeyNotFoundException();
+
+        produto.Ativo = false;
+        await _produtoRepository.InativarAsync(produto,cancellationToken);
+        return produto.Id;
+    }    
 }
 
 public interface IProdutoService
@@ -135,7 +159,7 @@ public interface IProdutoService
 
     Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken);
 
-     Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
 
     Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken);
 
@@ -147,4 +171,7 @@ public interface IProdutoService
     Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
+    
+    Task<Guid> AtivarAsync(Guid id, CancellationToken cancellationToken);
+    Task<Guid> InativarAsync(Guid id, CancellationToken cancellationToken);
 }
