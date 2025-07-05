@@ -1,4 +1,5 @@
-﻿using Core.Services;
+﻿using Core.Domain.Entities;
+using Core.Services;
 using Core.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,19 @@ public class ProdutosController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var produtos = await _produtoService.GetByVendedorId(cancellationToken);
+
+        List<Produto> produtos;
+
+        if (User.IsInRole("Admin"))
+        {
+            produtos = await _produtoService.GetAllAsync(cancellationToken);
+        }
+        else
+        {
+            produtos = await _produtoService.GetByVendedorId(cancellationToken);
+        }   
+
+        
         return View(produtos);
     }
 

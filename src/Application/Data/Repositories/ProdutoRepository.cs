@@ -41,6 +41,10 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
         return await _dbContext.Produtos.Where(p => p.VendedorId == vendedorId).ToListAsync(cancellationToken);
     }
+    public async Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Produtos.ToListAsync(cancellationToken);
+    }
 }
 
 public interface IProdutoRepository : IRepository<Produto>
@@ -51,4 +55,7 @@ public interface IProdutoRepository : IRepository<Produto>
     Task<List<Produto>> GetByCategoriaIdAsync(Guid categoriaId, CancellationToken cancellationToken);
 
     Task<List<Produto>> GetByVendedorIdAsync(Guid vendedorId, CancellationToken cancellationToken);
+
+    Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
+
 }
