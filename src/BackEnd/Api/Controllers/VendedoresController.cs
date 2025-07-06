@@ -1,5 +1,6 @@
 using Business.Interfaces;
 using Business.Models;
+using Business.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,22 @@ public class VendedoresController : ControllerBase
         _vendedorService = vendedorService;
     }
 
+    [HttpPost]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] UserViewModel userViewModel,
+        CancellationToken cancellationToken)
+    {
+        var userId = await _vendedorService.CriaAsync(userViewModel, cancellationToken);
+
+        if (userId.HasValue)
+            return StatusCode(StatusCodes.Status201Created, userId);
+
+        return Problem("Erro ao registrar vendedor");
+    }
+
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -24,11 +41,22 @@ public class VendedoresController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<List<Vendedor>>> Get(CancellationToken cancellationToken)
     {
-        List<Vendedor>? resultado = await _vendedorService.GetAsync(cancellationToken);
+        var resultado = await _vendedorService.GetAsync(cancellationToken);
 
         if (resultado == null)
             return NotFound();
 
         return Ok(resultado);
     }
+
+    [HttpPut("{id}/Ativo")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> AtualizaAtivo(Guid id, bool ativo, CancellationToken cancellationToken)
+    {
+        await _vendedorService.AtualizaAtivoAsync(id, ativo, cancellationToken);
+        return NoContent();
+    }
+
 }

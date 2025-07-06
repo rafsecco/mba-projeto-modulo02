@@ -142,7 +142,7 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-	public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
+    public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
     {
         var produto = await _produtoService.FindAsync(id, cancellationToken);
         if (produto == null) return NotFound();
@@ -152,7 +152,7 @@ public class ProdutosController : Controller
             Id = produto.Id,
             Ativo = ativo
         };
-        await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken); // ou o método que você usa
+        await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken); 
 
         return RedirectToAction(nameof(Index));
     }
