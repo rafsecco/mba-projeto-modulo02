@@ -4,7 +4,7 @@ namespace Business.Interfaces;
 
 public interface IVendedorRepository
 {
-    Task<Guid> CreateAsync(Vendedor vendedor, CancellationToken cancellationToken);
+    Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken);
 
     Task<List<Vendedor>> GetAsync(CancellationToken cancellationToken);
 

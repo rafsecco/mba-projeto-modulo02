@@ -1,5 +1,6 @@
 using Business.Interfaces;
 using Business.Models;
+using Business.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,22 @@ public class VendedoresController : ControllerBase
     public VendedoresController(IVendedorService vendedorService)
     {
         _vendedorService = vendedorService;
+    }
+
+    [HttpPost]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [AllowAnonymous]
+    public async Task<IActionResult> Register([FromBody] UserViewModel userViewModel,
+        CancellationToken cancellationToken)
+    {
+        var userId = await _vendedorService.CriaAsync(userViewModel, cancellationToken);
+
+        if (userId.HasValue)
+            return StatusCode(StatusCodes.Status201Created, userId);
+
+        return Problem("Erro ao registrar vendedor");
     }
 
     [HttpGet]
@@ -41,4 +58,5 @@ public class VendedoresController : ControllerBase
         await _vendedorService.AtualizaAtivoAsync(id, ativo, cancellationToken);
         return NoContent();
     }
+
 }

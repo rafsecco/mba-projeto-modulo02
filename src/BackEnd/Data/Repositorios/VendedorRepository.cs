@@ -14,8 +14,13 @@ public class VendedorRepository : IVendedorRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Guid> CreateAsync(Vendedor vendedor, CancellationToken cancellationToken)
+    public async Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken)
     {
+        var vendedor = new Vendedor
+        {
+            UserId = userId,
+            Ativo = true
+        };
         await _dbContext.Vendedores.AddAsync(vendedor, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
         return vendedor.UserId;

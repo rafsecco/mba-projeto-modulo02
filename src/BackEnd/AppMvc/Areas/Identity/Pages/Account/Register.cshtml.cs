@@ -20,6 +20,7 @@ namespace AppMvc.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
 
+        private readonly IVendedorService _vendedorService;
         private readonly IUserService _userService;
 
         public RegisterModel(
@@ -27,6 +28,7 @@ namespace AppMvc.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
+            IVendedorService vendedorService,
             IUserService userService)
         {
             _userManager = userManager;
@@ -35,6 +37,7 @@ namespace AppMvc.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
 
+            _vendedorService = vendedorService;
             _userService = userService;
         }
 
@@ -104,7 +107,7 @@ namespace AppMvc.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     Password = Input.Password
                 };
-                var result = await _userService.RegisterAsync(userViewModel, CancellationToken.None);
+                var result = await _vendedorService.CriaAsync(userViewModel, CancellationToken.None);
 
                 if (result.HasValue)
                 {
