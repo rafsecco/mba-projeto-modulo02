@@ -15,6 +15,26 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppMvc", "src\BackEnd\AppMv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "src\BackEnd\Data\Data.csproj", "{95E100F3-1252-42AC-9192-8E7F317037F9}"
 EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "AppAngular", "src\FrontEnd\AppAngular\", "{A5792F25-021E-2C06-0677-1290B240C6BA}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_63960"
+		Debug.AspNetCompiler.PhysicalPath = "src\FrontEnd\AppAngular\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63960\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_63960"
+		Release.AspNetCompiler.PhysicalPath = "src\FrontEnd\AppAngular\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_63960\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "63960"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +57,10 @@ Global
 		{95E100F3-1252-42AC-9192-8E7F317037F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95E100F3-1252-42AC-9192-8E7F317037F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95E100F3-1252-42AC-9192-8E7F317037F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5792F25-021E-2C06-0677-1290B240C6BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5792F25-021E-2C06-0677-1290B240C6BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5792F25-021E-2C06-0677-1290B240C6BA}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5792F25-021E-2C06-0677-1290B240C6BA}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +70,7 @@ Global
 		{600E711B-1A73-768F-93F8-1A26C4691C8C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{D9C6B07E-442B-6439-CEFC-668111C1AE71} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{95E100F3-1252-42AC-9192-8E7F317037F9} = {2E9419C8-102A-48D4-B157-F276DCB8BD02}
+		{A5792F25-021E-2C06-0677-1290B240C6BA} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2FC23A7D-1C2A-4515-9C64-BF4C07386E3B}

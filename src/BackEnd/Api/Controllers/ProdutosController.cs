@@ -1,4 +1,5 @@
-﻿using Business.Interfaces;
+using Business.Extensions;
+using Business.Interfaces;
 using Business.Models;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -8,7 +9,7 @@ namespace Api.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,Vendedor")]
 public class ProdutosController : ControllerBase
 {
     private readonly IProdutoService _service;
@@ -19,7 +20,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+	[ClaimsAuthorize("Produtos", "AD")]
+	[ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Guid>> Create([FromForm] CriaProdutoViewModel criaProdutoViewModel,
         CancellationToken cancellationToken)
@@ -36,7 +38,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ClaimsAuthorize("Produtos", "ED")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update([FromBody] AtualizaProdutoViewModel atualizaProdutoViewModel,
@@ -58,7 +61,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+	[ClaimsAuthorize("Produtos", "EX")]
+	[ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Remove(Guid id, CancellationToken cancellationToken)
     {
