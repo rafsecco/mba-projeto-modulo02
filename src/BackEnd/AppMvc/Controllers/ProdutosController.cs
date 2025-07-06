@@ -1,3 +1,4 @@
+using Business.Extensions;
 using Business.Interfaces;
 using Business.Models;
 using Business.ViewModels;
@@ -8,7 +9,7 @@ using System.Security.Claims;
 
 namespace AppMvc.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Admin,Vendedor")]
 public class ProdutosController : Controller
 {
     private readonly ICategoriaService _categoriaService;
@@ -38,7 +39,8 @@ public class ProdutosController : Controller
         return View(produtos);
     }
 
-    public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
+	[ClaimsAuthorize("Produtos", "VI")]
+	public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -48,6 +50,7 @@ public class ProdutosController : Controller
         return View(produto);
     }
 
+	[ClaimsAuthorize("Produtos", "AD")]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
         var categorias = await _categoriaService.GetAsync(cancellationToken);
@@ -56,8 +59,9 @@ public class ProdutosController : Controller
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+	[HttpPost]
+	[ClaimsAuthorize("Produtos", "AD")]
+	[ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         CriaProdutoViewModel criaProdutoViewModel, CancellationToken cancellationToken)
     {
@@ -74,7 +78,8 @@ public class ProdutosController : Controller
         return View(criaProdutoViewModel);
     }
 
-    public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
+	[ClaimsAuthorize("Produtos", "ED")]
+	public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -94,7 +99,8 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-    [ValidateAntiForgeryToken]
+	[ClaimsAuthorize("Produtos", "ED")]
+	[ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Guid id,
         AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken)
     {
@@ -112,7 +118,8 @@ public class ProdutosController : Controller
         return View(atualizaProdutoViewModel);
     }
 
-    public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
+	[ClaimsAuthorize("Produtos", "EX")]
+	public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -123,7 +130,8 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-    [ActionName("Delete")]
+	[ClaimsAuthorize("Produtos", "EX")]
+	[ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
@@ -134,7 +142,7 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
+	public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
     {
         var produto = await _produtoService.FindAsync(id, cancellationToken);
         if (produto == null) return NotFound();
