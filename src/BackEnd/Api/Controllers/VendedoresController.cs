@@ -24,11 +24,21 @@ public class VendedoresController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<List<Vendedor>>> Get(CancellationToken cancellationToken)
     {
-        List<Vendedor>? resultado = await _vendedorService.GetAsync(cancellationToken);
+        var resultado = await _vendedorService.GetAsync(cancellationToken);
 
         if (resultado == null)
             return NotFound();
 
         return Ok(resultado);
+    }
+
+    [HttpPut("{id}/Ativo")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> AtualizaAtivo(Guid id, bool ativo, CancellationToken cancellationToken)
+    {
+        await _vendedorService.AtualizaAtivoAsync(id, ativo, cancellationToken);
+        return NoContent();
     }
 }

@@ -17,4 +17,10 @@ public class VendedorService : IVendedorService
         var retorno = await _vendedorRepository.GetAsync(cancellationToken);
         return retorno;
     }
+
+    public async Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken)
+    {
+       
+        await _vendedorRepository.AtualizaAtivoAsync(id, ativo, cancellationToken);
+    }
 }

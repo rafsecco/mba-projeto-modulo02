@@ -9,6 +9,7 @@ namespace Data.Mappings
         public void Configure(EntityTypeBuilder<Vendedor> builder)
         {
             builder.HasKey(s => s.UserId);
+            builder.Property(p => p.Ativo).HasDefaultValue(true);
         }
     }
 }

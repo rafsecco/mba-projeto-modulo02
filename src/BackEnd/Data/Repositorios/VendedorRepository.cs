@@ -26,4 +26,12 @@ public class VendedorRepository : IVendedorRepository
         var retorno = _dbContext.Vendedores.ToListAsync(cancellationToken);
         return retorno;
     }
+    public async Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken)
+    {
+        var vendedor = await _dbContext.Vendedores.FindAsync(id,cancellationToken);
+        if (vendedor is null) return;
+        vendedor.Ativo = ativo;
+        _dbContext.Vendedores.Update(vendedor);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }

@@ -1,9 +1,13 @@
-﻿namespace Business.Models
-{
-    public class Vendedor
-    {
-        public Guid UserId { get; set; }
+﻿using System.ComponentModel;
 
-        public List<Produto>? Produtos;
-    }
+namespace Business.Models;
+
+public class Vendedor
+{
+    public Guid UserId { get; set; }
+
+    [DisplayName("Ativo?")]
+    public bool Ativo { get; set; } = true;
+
+    public List<Produto>? Produtos;
 }

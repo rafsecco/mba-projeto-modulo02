@@ -31,7 +31,9 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Estoque)
             </th>
-            <th>Ativo?</th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Ativo)
+                </th>
             <th></th>
         </tr>
         </thead>
@@ -61,7 +63,7 @@ else
                 </td>
                 <!-- Checkbox para ativar/desativar -->
                 <td>
-                    <form asp-action="ToggleStatus" method="post">
+                    <form asp-action="AtualizaAtivo" method="post">
                         <input type="hidden" name="id" value="@item.Id" />
                         <input type="checkbox" name="ativo" value="true"
                                onchange="this.form.submit()" @(item.Ativo ? "checked" : "") />
