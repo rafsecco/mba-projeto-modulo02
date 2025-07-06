@@ -22,7 +22,7 @@ public class VendedoresController : Controller
 		return View(await _vendedorService.GetAsync(cancellationToken));
 	}
 
-    [HttpPut("{id}/Ativo")]
+    [HttpPost]
     public async Task<IActionResult> AtualizaAtivo(Guid id, bool ativo, CancellationToken cancellationToken)
     {
         
