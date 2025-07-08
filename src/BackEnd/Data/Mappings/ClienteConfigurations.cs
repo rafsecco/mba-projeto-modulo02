@@ -14,7 +14,7 @@ namespace Data.Mappings
         public void Configure(EntityTypeBuilder<Cliente> builder)
         {
             builder.HasKey(s => s.UserId);
-            builder.Property(p => p.Ativo).HasDefaultValue(true);
+            builder.Property(p => p.Ativo).HasDefaultValue(true);            
         }
     }
 }

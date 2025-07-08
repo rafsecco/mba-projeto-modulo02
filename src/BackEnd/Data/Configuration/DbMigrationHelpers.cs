@@ -69,7 +69,10 @@ public static class DbMigrationHelpers
 
         var cliente = new Cliente
         {
-            UserId = Guid.Parse(identityUser.Id)
+            UserId = Guid.Parse(identityUser.Id),
+
+            Id = Guid.NewGuid(),
+            Ativo = true
         };
         await context.Clientes.AddAsync(cliente);
 

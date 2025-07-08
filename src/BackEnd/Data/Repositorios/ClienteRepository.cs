@@ -5,15 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositorios
 {
-    public class ClienteRepository : IClienteRepository
+    public class ClienteRepository :  Repository<Cliente>, IClienteRepository
         
     {
         private readonly ApplicationDbContext _dbContext;
-        public ClienteRepository(ApplicationDbContext dbContext)
+        public ClienteRepository(ApplicationDbContext dbContext):base(dbContext) 
         {
             _dbContext = dbContext;
 
         }
+        
         public async Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken)
         {
             var cliente = await _dbContext.Clientes.FindAsync(id, cancellationToken);
@@ -29,6 +30,8 @@ namespace Data.Repositorios
         {
             Cliente cliente = new Cliente
             {
+                
+                Id =new Guid(),
                 UserId = userId,
                 Ativo = true
             };

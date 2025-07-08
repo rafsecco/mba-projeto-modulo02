@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Business.Models
 {
-    public class Cliente
+    public class Cliente:Entity
     {
         public Guid UserId { get; set; }
         [DisplayName("Ativo?")]
