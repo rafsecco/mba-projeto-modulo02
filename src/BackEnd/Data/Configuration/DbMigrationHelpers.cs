@@ -1,4 +1,5 @@
 using Business.Models;
+using Core.Migrations;
 using Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,7 +67,33 @@ public static class DbMigrationHelpers
 
 		await context.SaveChangesAsync();
 
-		if (context.Categorias.Any())
+        var cliente = new Cliente
+        {
+            UserId = Guid.Parse(identityUser.Id)
+        };
+        await context.Clientes.AddAsync(cliente);
+
+        await context.SaveChangesAsync();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        if (context.Categorias.Any())
 			return;
 
 		var categoria = new Categoria
