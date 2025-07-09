@@ -11,8 +11,7 @@ namespace Business.Interfaces
     public interface IClienteRepository : IRepository<Cliente>
     {
         Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken);
-
-        Task<List<Cliente>> GetAsync(CancellationToken cancellationToken);
+        
 
         Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken);        
     }
