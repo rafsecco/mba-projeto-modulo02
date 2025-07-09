@@ -27,11 +27,11 @@ namespace Data.Repositorios
         }
 
         public async Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken)
-        {
+        {            
             Cliente cliente = new Cliente
             {
                 
-                Id =new Guid(),
+                Id = Guid.NewGuid(),
                 UserId = userId,
                 Ativo = true
             };
