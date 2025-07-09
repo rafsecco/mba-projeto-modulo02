@@ -66,36 +66,7 @@ public static class DbMigrationHelpers
 		await context.Vendedores.AddAsync(vendedor);
 
 		await context.SaveChangesAsync();
-
-        var cliente = new Cliente
-        {
-            UserId = Guid.Parse(identityUser.Id),
-
-            Id = Guid.NewGuid(),
-            Ativo = true
-        };
-        await context.Clientes.AddAsync(cliente);
-
-        await context.SaveChangesAsync();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
         if (context.Categorias.Any())
 			return;
 
