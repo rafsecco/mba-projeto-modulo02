@@ -23,9 +23,10 @@ namespace Business.Services
         }
 
         public async Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
-        {
+        {            
             var userId = _userService.RegisterAsync(userViewModel, "cliente", cancellationToken);
-            await _clienteRepository.CreateAsync(userId.Result.Value, cancellationToken);
+            Cliente cliente = new Cliente { Ativo = true, Id = Guid.NewGuid(), UserId = userId.Result.Value };
+            await _clienteRepository.CreateAsync(cliente, cancellationToken);
             return userId.Result.Value;
         }
 

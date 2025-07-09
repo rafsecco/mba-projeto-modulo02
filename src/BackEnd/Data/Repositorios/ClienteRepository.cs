@@ -20,30 +20,10 @@ namespace Data.Repositorios
             var cliente = await _dbContext.Clientes.FindAsync(id, cancellationToken);
             if (cliente is null) return;
             cliente.Ativo = ativo;
-            _dbContext.Clientes.Update(cliente);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            _dbContext.Clientes.Update(cliente);            
             await  _dbContext.SaveChangesAsync(cancellationToken);
 
-        }
-
-        public async Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken)
-        {            
-            Cliente cliente = new Cliente
-            {
-                
-                Id = Guid.NewGuid(),
-                UserId = userId,
-                Ativo = true
-            };
-            _dbContext.Clientes.Add(cliente);
-            await _dbContext.SaveChangesAsync(cancellationToken);
-            return cliente.UserId;
-        }
-
-        public async Task<List<Cliente>> GetAsync(CancellationToken cancellationToken)
-        {
-            return await _dbContext.Clientes.ToListAsync(cancellationToken);
-        }
+        }              
     }
 }
 
