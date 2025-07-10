@@ -50,6 +50,7 @@ namespace Data.Repositorios
             _dbContext.Dispose();
         }
 
+        //TODO: remover
 
         public virtual async Task AtivarAsync(TEntity entity, CancellationToken cancellationToken)
         {

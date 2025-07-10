@@ -2,7 +2,7 @@ using Business.Models;
 
 namespace Business.Interfaces;
 
-public interface IVendedorRepository
+public interface IVendedorRepository : IRepository<Vendedor>
 {
     Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken);
 

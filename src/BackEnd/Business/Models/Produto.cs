@@ -45,5 +45,9 @@ namespace Business.Models
 
         [NotMapped]
         public Categoria Categoria { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public List<Favorito> Favoritos { get; set; }
     }
 }

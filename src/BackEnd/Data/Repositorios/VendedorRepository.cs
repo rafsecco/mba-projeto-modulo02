@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositorios;
 
-public class VendedorRepository : IVendedorRepository
+public class VendedorRepository : Repository<Vendedor>, IVendedorRepository
 {
-    private readonly ApplicationDbContext _dbContext;
-
-    public VendedorRepository(ApplicationDbContext dbContext)
+    public VendedorRepository(ApplicationDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
     }
 
     public async Task<Guid> CreateAsync(Guid userId, CancellationToken cancellationToken)
@@ -31,9 +28,10 @@ public class VendedorRepository : IVendedorRepository
         var retorno = _dbContext.Vendedores.ToListAsync(cancellationToken);
         return retorno;
     }
+
     public async Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken)
     {
-        var vendedor = await _dbContext.Vendedores.FindAsync(id,cancellationToken);
+        var vendedor = await _dbContext.Vendedores.FindAsync(id, cancellationToken);
         if (vendedor is null) return;
         vendedor.Ativo = ativo;
         _dbContext.Vendedores.Update(vendedor);
