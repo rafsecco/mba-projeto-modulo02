@@ -1,7 +1,8 @@
 ﻿@using Business.Models
 @model IEnumerable<Produto>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Mini Loja Virtual "; 
+    ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
 }
 <h1 class="mt-4">Produtos cadastrados</h1>
 <div class="text-center">

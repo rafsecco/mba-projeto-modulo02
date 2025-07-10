@@ -1,7 +1,8 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Mini Loja Virtual ";
+    ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
 }
 
 <h1>Registrar</h1>
