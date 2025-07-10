@@ -20,8 +20,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPost]
-	[ClaimsAuthorize("Produtos", "AD")]
-	[ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ClaimsAuthorize("Produtos", "AD")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<Guid>> Create([FromForm] CriaProdutoViewModel criaProdutoViewModel,
         CancellationToken cancellationToken)
@@ -38,8 +38,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpPut]
-	[ClaimsAuthorize("Produtos", "ED")]
-	[ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ClaimsAuthorize("Produtos", "ED")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update([FromBody] AtualizaProdutoViewModel atualizaProdutoViewModel,
@@ -61,8 +61,8 @@ public class ProdutosController : ControllerBase
     }
 
     [HttpDelete]
-	[ClaimsAuthorize("Produtos", "EX")]
-	[ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ClaimsAuthorize("Produtos", "EX")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Remove(Guid id, CancellationToken cancellationToken)
     {
@@ -103,50 +103,37 @@ public class ProdutosController : ControllerBase
     [AllowAnonymous]
     [HttpGet("{categoriaId}/categoriaId")]
     [ProducesResponseType(typeof(List<Produto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<List<Produto>>> GetByCategoryId(Guid categoriaId, CancellationToken cancellationToken)
+    public async Task<ActionResult<List<Produto>>> GetByCategoryId(Guid categoriaId,
+        CancellationToken cancellationToken)
     {
         var produtos = await _service.GetByCategoriaIdAsync(categoriaId, cancellationToken);
 
         return Ok(produtos);
     }
 
-    [HttpPost("{id}/ativar")]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Guid>> Ativar(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> AtualizaAtivo(Guid id, bool ativo, CancellationToken cancellationToken)
     {
         try
         {
-            var produtoId = await _service.AtivarAsync(id, cancellationToken);
-            return Ok(produtoId);
+            var atualizaProdutoViewModel = new AtualizaProdutoViewModel
+            {
+                Id = id,
+                Ativo = ativo
+            };
+            await _service.UpdateAsync(atualizaProdutoViewModel, cancellationToken);
+            return NoContent();
         }
         catch (UnauthorizedAccessException ex)
         {
             return Unauthorized(new { message = ex.Message });
         }
-        catch (KeyNotFoundException)
+        catch (KeyNotFoundException ex)
         {
-            return NotFound();
+            return NotFound(new { message = ex.Message });
         }
     }
-    [HttpPost("{id}/inativar")]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<Guid>> Inativar(Guid id, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var produtoId = await _service.InativarAsync(id, cancellationToken);
-            return Ok(produtoId);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            return Unauthorized(new { message = ex.Message });
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
 }

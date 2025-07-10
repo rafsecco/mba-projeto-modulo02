@@ -1,5 +1,6 @@
 using AppMvc.Models;
 using Business.Interfaces;
+using Business.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -20,7 +21,12 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-        var produtos = await _produtoService.GetByVendedorId(cancellationToken);
+        var produtos = new List<Produto>();
+        if (User.IsInRole("Admin"))
+            produtos = await _produtoService.GetAsync(cancellationToken);
+        else
+            produtos = await _produtoService.GetByVendedorId(cancellationToken);
+
         ViewData["IsHome"] = true;
         return View(produtos);
     }

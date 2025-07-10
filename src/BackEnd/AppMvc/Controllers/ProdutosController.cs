@@ -23,24 +23,22 @@ public class ProdutosController : Controller
 
     public async Task<IActionResult> Index(CancellationToken cancellationToken)
     {
-
         List<Produto> produtos;
 
         if (User.IsInRole("Admin"))
         {
-            produtos = await _produtoService.GetAllAsync(cancellationToken);
+            produtos = await _produtoService.GetAsync(cancellationToken);
         }
         else
         {
             produtos = await _produtoService.GetByVendedorId(cancellationToken);
-        }   
+        }
 
-        
         return View(produtos);
     }
 
-	[ClaimsAuthorize("Produtos", "VI")]
-	public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
+    [ClaimsAuthorize("Produtos", "VI")]
+    public async Task<IActionResult> Details(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -50,7 +48,7 @@ public class ProdutosController : Controller
         return View(produto);
     }
 
-	[ClaimsAuthorize("Produtos", "AD")]
+    [ClaimsAuthorize("Produtos", "AD")]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
         var categorias = await _categoriaService.GetAsync(cancellationToken);
@@ -59,9 +57,9 @@ public class ProdutosController : Controller
         return View();
     }
 
-	[HttpPost]
-	[ClaimsAuthorize("Produtos", "AD")]
-	[ValidateAntiForgeryToken]
+    [HttpPost]
+    [ClaimsAuthorize("Produtos", "AD")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         CriaProdutoViewModel criaProdutoViewModel, CancellationToken cancellationToken)
     {
@@ -78,8 +76,8 @@ public class ProdutosController : Controller
         return View(criaProdutoViewModel);
     }
 
-	[ClaimsAuthorize("Produtos", "ED")]
-	public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
+    [ClaimsAuthorize("Produtos", "ED")]
+    public async Task<IActionResult> Edit(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -99,8 +97,8 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-	[ClaimsAuthorize("Produtos", "ED")]
-	[ValidateAntiForgeryToken]
+    [ClaimsAuthorize("Produtos", "ED")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(Guid id,
         AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken)
     {
@@ -118,8 +116,8 @@ public class ProdutosController : Controller
         return View(atualizaProdutoViewModel);
     }
 
-	[ClaimsAuthorize("Produtos", "EX")]
-	public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
+    [ClaimsAuthorize("Produtos", "EX")]
+    public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
     {
         if (id == null) return NotFound();
 
@@ -130,8 +128,8 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-	[ClaimsAuthorize("Produtos", "EX")]
-	[ActionName("Delete")]
+    [ClaimsAuthorize("Produtos", "EX")]
+    [ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(Guid id, CancellationToken cancellationToken)
     {
@@ -142,17 +140,15 @@ public class ProdutosController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> ToggleStatus(Guid id, bool ativo, CancellationToken cancellationToken)
+    public async Task<IActionResult> AtualizaAtivo(Guid id, bool ativo, CancellationToken cancellationToken)
     {
-        var produto = await _produtoService.FindAsync(id, cancellationToken);
-        if (produto == null) return NotFound();
-
         var atualizaProdutoViewModel = new AtualizaProdutoViewModel
         {
-            Id = produto.Id,
+            Id = id,
             Ativo = ativo
         };
-        await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken); 
+
+        await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken);
 
         return RedirectToAction(nameof(Index));
     }

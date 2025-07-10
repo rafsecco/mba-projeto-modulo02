@@ -36,11 +36,6 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.GetByVendedorIdAsync(_currentUserId, cancellationToken);
     }
 
-    public async Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken)
-    {
-        return await _produtoRepository.GetAllAsync(cancellationToken);
-    }
-
     public async Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _produtoRepository.FindAsync(id, cancellationToken);
@@ -127,28 +122,4 @@ public class ProdutoService : IProdutoService
 
         return Guid.Parse(userId);
     }
-
-    public async Task<Guid> AtivarAsync(Guid id, CancellationToken cancellationToken)
-    {
-        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
-
-        if (produto == null)
-            throw new KeyNotFoundException();
-
-
-        produto.Ativo = true;
-        await _produtoRepository.AtivarAsync(produto, cancellationToken); 
-        return produto.Id;
-    }
-    public async Task<Guid> InativarAsync(Guid id, CancellationToken cancellationToken)
-    {
-        var produto = await _produtoRepository.FindAsync(id, cancellationToken);
-
-        if (produto == null)
-            throw new KeyNotFoundException();
-
-        produto.Ativo = false;
-        await _produtoRepository.InativarAsync(produto,cancellationToken);
-        return produto.Id;
-    }    
 }
