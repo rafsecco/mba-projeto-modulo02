@@ -2,7 +2,8 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Mini Loja Virtual ";
+    ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
 }
 
 <h1>Login</h1>

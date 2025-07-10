@@ -2,7 +2,8 @@
 @model IEnumerable<Vendedor>
 
 @{
-	ViewData["Title"] = "Index";
+	ViewData["Title"] = "Mini Loja Virtual ";
+	ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
 }
 
 <h1 class="mt-4">Vendedores cadastrados</h1>
