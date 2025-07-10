@@ -1,15 +1,23 @@
-﻿@using Business.Models
-@model IEnumerable<Produto>
+﻿@model IEnumerable<Business.Models.Produto>
+
+@{
+    var isAdmin = User.IsInRole("Admin");
+}
 
 @{
     ViewData["Title"] = "Mini Loja Virtual ";
-    ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
+    ViewData["SubTitle"] = isAdmin ? "Admin" : "";
 }
 
 <h1 class="mt-4">Produtos cadastrados</h1>
-<p>
-    <a class="btn btn-primary" asp-action="Create"><span class="fa fa-plus"></span> Cadastrar</a>
-</p>
+@{
+    if (!isAdmin)
+    {
+        <p>
+            <a class="btn btn-primary" asp-action="Create"><span class="fa fa-plus"></span> Cadastrar</a>
+        </p>
+    }
+}
 
-<partial name="_ProductList" />
 
+<partial name="_ProductList"/>

@@ -19,10 +19,4 @@ public interface IProdutoService
     Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
-
-	Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
-
-	Task<Guid> AtivarAsync(Guid id, CancellationToken cancellationToken);
-
-	Task<Guid> InativarAsync(Guid id, CancellationToken cancellationToken);
 }

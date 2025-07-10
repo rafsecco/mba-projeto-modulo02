@@ -11,7 +11,15 @@ namespace Business.Interfaces
     public interface IClienteService
     {
         Task<List<Cliente>> GetAsync(CancellationToken cancellationToken);
+
         Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken);
+
         Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken);
+
+        Task<Favorito> AddFavoritoAsync(Guid produtoId, CancellationToken cancellationToken);
+
+        Task RemoveFavoritoAsync(Guid produtoId, CancellationToken cancellationToken);
+
+        Task<List<Favorito>> GetFavoritosAsync(CancellationToken cancellationToken);
     }
 }

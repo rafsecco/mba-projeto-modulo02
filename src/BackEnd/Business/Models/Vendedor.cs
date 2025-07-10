@@ -2,7 +2,7 @@
 
 namespace Business.Models;
 
-public class Vendedor
+public class Vendedor : Entity
 {
     public Guid UserId { get; set; }
 
