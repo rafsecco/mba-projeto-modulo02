@@ -111,7 +111,7 @@ public class ProdutosController : ControllerBase
         return Ok(produtos);
     }
 
-    [HttpPut]
+    [HttpPut("ativo")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

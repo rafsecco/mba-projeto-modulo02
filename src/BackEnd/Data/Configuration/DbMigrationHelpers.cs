@@ -39,78 +39,130 @@ public static class DbMigrationHelpers
 		if (env.IsDevelopment() || env.IsStaging())
 		{
 			await context.Database.MigrateAsync();
+			await EnsureSeedRolesAclaims(context, roleManager);
+			await EnsureUsers(context, userManager);
 			await EnsureSeedProducts(context, userManager);
 		}
-
-		await EnsureSeedAccessProfile(context, roleManager, userManager);
 	}
 
-	private static async Task EnsureSeedProducts(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+	private static async Task CreateUserWithRoleAsync(ApplicationDbContext context, UserManager<IdentityUser> userManager, string email, string password, string roleName)
+	{
+		var user = new IdentityUser
+		{
+			Email = email,
+			UserName = email
+		};
+		var result = await userManager.CreateAsync(user, password);
+		if (result.Succeeded)
+		{
+			await userManager.AddToRoleAsync(user, roleName);
+		}
+		else
+		{
+			throw new Exception($"Falha ao criar o usuário identity {email}: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+		}
+
+		switch (roleName)
+		{
+			case "Admin": break;
+			case "Vendedor":
+				var vendedor = new Vendedor
+				{
+					UserId = Guid.Parse(user.Id)
+				};
+				await context.Vendedores.AddAsync(vendedor);
+				break;
+			case "Cliente":
+				var cliente = new Cliente
+				{
+					UserId = Guid.Parse(user.Id)
+				};
+				await context.Clientes.AddAsync(cliente);
+				break;
+			default:
+				throw new Exception($"Tipo de usuário não encontrado!");
+		}
+		await context.SaveChangesAsync();
+	}
+
+	private static async Task EnsureUsers(ApplicationDbContext context, UserManager<IdentityUser> userManager)
 	{
 		if (context.Users.Any())
 			return;
 
-		var identityUser = new IdentityUser
-		{
-			Email = "dev@mail.com",
-			UserName = "dev@mail.com"
-		};
+		await CreateUserWithRoleAsync(context, userManager, "admin@mail.com", "Dev@123", "Admin");
+		await CreateUserWithRoleAsync(context, userManager, "vendedor1@mail.com", "Dev@123", "Vendedor");
+		await CreateUserWithRoleAsync(context, userManager, "vendedor2@mail.com", "Dev@123", "Vendedor");
+		await CreateUserWithRoleAsync(context, userManager, "cliente@mail.com", "Dev@123", "Cliente");
+	}
 
-		var result = userManager.CreateAsync(identityUser, "Dev@123").GetAwaiter().GetResult();
-		if (!result.Succeeded) return;
-
-		var vendedor = new Vendedor
-		{
-			UserId = Guid.Parse(identityUser.Id)
-		};
-		await context.Vendedores.AddAsync(vendedor);
-
-		await context.SaveChangesAsync();
-        
-        if (context.Categorias.Any())
+	private static async Task EnsureSeedProducts(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+	{
+		#region Criar Categorias
+		if (context.Categorias.Any())
 			return;
 
-		var categoria = new Categoria
+		var categorias = new List<Categoria>
 		{
-			Nome = "Flores",
-			Descricao = "Categoria destinada para produtos do tipo flores"
+			new Categoria { Nome = "Flores", Descricao = "Categoria destinada para produtos do tipo flores" },
+			new Categoria { Nome = "Limpeza", Descricao = "Categoria destinada para produtos do tipo limpeza" }
 		};
 
-		await context.Categorias.AddAsync(categoria);
-
+		await context.Categorias.AddRangeAsync(categorias);
 		await context.SaveChangesAsync();
+		#endregion Criar Categorias
 
+		#region Criar Produtos
 		if (context.Produtos.Any())
 			return;
 
-		await context.Produtos.AddAsync(new Produto
+		var produtos = new Produto[]
 		{
-			Nome = "Rosa",
-			Descricao = "Produto do tipo flores ",
-			Preco = 25.80m,
-			Estoque = 100,
-			Imagem = "21.png",
+			new() {
+				Nome = "Rosa",
+				Descricao = "Produto do tipo flores",
+				Preco = 25.80m,
+				Estoque = 100,
+				Imagem = "21.png",
+				VendedorId = Guid.Parse(userManager.FindByEmailAsync("vendedor1@mail.com").Result.Id),
+				CategoriaId = context.Categorias.FirstOrDefault(c => c.Nome == "Flores")?.Id ?? Guid.Empty
+			},
+			new() {
+				Nome = "Rosa variação",
+				Descricao = "Produto do tipo flores",
+				Preco = 15.20m,
+				Estoque = 150,
+				Imagem = "23.png",
+				VendedorId = Guid.Parse(userManager.FindByEmailAsync("vendedor1@mail.com").Result.Id),
+				CategoriaId = context.Categorias.FirstOrDefault(c => c.Nome == "Flores")?.Id ?? Guid.Empty
+			},
 
-			VendedorId = Guid.Parse(identityUser.Id),
-			CategoriaId = categoria.Id
-		});
 
-		await context.Produtos.AddAsync(new Produto
-		{
-			Nome = "Rosa variação",
-			Descricao = "Produto do tipo flores",
-			Preco = 15.20m,
-			Estoque = 150,
-			Imagem = "23.png",
-
-			VendedorId = Guid.Parse(identityUser.Id),
-			CategoriaId = categoria.Id
-		});
-
+			new() {
+				Nome = "Orquídeas",
+				Descricao = "Produto do tipo flores",
+				Preco = 20.85m,
+				Estoque = 100,
+				Imagem = "21.png",
+				VendedorId = Guid.Parse(userManager.FindByEmailAsync("vendedor2@mail.com").Result.Id),
+				CategoriaId = context.Categorias.FirstOrDefault(c => c.Nome == "Flores")?.Id ?? Guid.Empty
+			},
+			new() {
+				Nome = "Detergente",
+				Descricao = "Produto do tipo limpeza",
+				Preco = 30.20m,
+				Estoque = 80,
+				Imagem = "Detergent_307.png",
+				VendedorId = Guid.Parse(userManager.FindByEmailAsync("vendedor2@mail.com").Result.Id),
+				CategoriaId = context.Categorias.FirstOrDefault(c => c.Nome == "Limpeza")?.Id ?? Guid.Empty
+			},
+		};
+		await context.Produtos.AddRangeAsync(produtos);
 		await context.SaveChangesAsync();
+		#endregion Criar Produtos
 	}
 
-	private static async Task EnsureSeedAccessProfile(ApplicationDbContext context, RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+	private static async Task EnsureSeedRolesAclaims(ApplicationDbContext context, RoleManager<IdentityRole> roleManager)
 	{
 		#region Definindo os roles e claims em um dicionário
 
@@ -143,47 +195,7 @@ public static class DbMigrationHelpers
 				await AddRoleClaimAsync(context, roleManager, role.Key, claim);
 			}
 		}
-
 		#endregion Definindo os roles e claims em um dicionário
-
-		#region Criar usuário admin
-
-		var usuarioAdminIdentity = new IdentityUser
-		{
-			Email = "admin@mail.com",
-			UserName = "admin@mail.com"
-		};
-
-		var createUserResult = await userManager.CreateAsync(usuarioAdminIdentity, "Dev@123");
-
-		if (createUserResult.Succeeded)
-		{
-			var roleAdmin = await roleManager.FindByNameAsync("Admin");
-
-			if (roleAdmin != null)
-			{
-				var addToRoleResult = await userManager.AddToRoleAsync(usuarioAdminIdentity, "Admin");
-
-				if (addToRoleResult.Succeeded)
-				{
-					Console.WriteLine("Usuário admin adicionado à role Admin com sucesso.");
-				}
-				else
-				{
-					Console.WriteLine("Falha ao adicionar usuário à role Admin.");
-				}
-			}
-			else
-			{
-				Console.WriteLine("Role 'Admin' não encontrada.");
-			}
-		}
-		else
-		{
-			Console.WriteLine("Falha ao criar o usuário admin.");
-		}
-
-		#endregion Criar usuário admin
 	}
 
 	private static async Task CreateRoleAsync(RoleManager<IdentityRole> roleManager, string roleName)

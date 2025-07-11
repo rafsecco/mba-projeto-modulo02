@@ -10,7 +10,12 @@ produtos e categorias em um formato tipo e-commerce marketplace.
 
 
 ### **Autor**
+- **Guilherme Sant'Anna**
+- **Jefferson Molaz**
 - **Karollainny Teles**
+- **Nelson Campozano**
+- **Rafael Batista**
+- **Rafael Secco**
 
 ## **2. Proposta do Projeto**
 
@@ -76,8 +81,11 @@ A estrutura do projeto é organizada da seguinte forma:
    - No arquivo `appsettings.json`, configure a string de conexão do SQL Server.
    - Rode o projeto para que a configuração do Seed crie o banco e popule com os dados básicos
 
-   **Usuário Admin é:** Email: `admin@mail.com` e Senha: `Dev@123`
-   **Usuário default é:** Email: `dev@mail.com` e Senha: `Dev@123`
+3. **Usuários criados:**
+   - **Admin:** Email: `admin@mail.com` e Senha: `Dev@123`
+   - **Vendedor 1:** Email: `vendedor1@mail.com` e Senha: `Dev@123`
+   - **Vendedor 2:** Email: `vendedor2@mail.com` e Senha: `Dev@123`
+   - **Cliente:** Email: `cliente@mail.com` e Senha: `Dev@123`
 
 4. **Executar a API:**
    - `cd src/Api/`
