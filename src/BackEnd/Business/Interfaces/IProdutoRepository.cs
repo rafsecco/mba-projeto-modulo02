@@ -11,5 +11,7 @@ public interface IProdutoRepository : IRepository<Produto>
 
     Task<List<Produto>> GetByVendedorIdAsync(Guid vendedorId, CancellationToken cancellationToken);
 
-	Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
+    Task<List<Produto>> GetAllAsync(CancellationToken cancellationToken);
+    
+    Task<List<Produto>> GetValidProductsAsync(CancellationToken cancellationToken);
 }

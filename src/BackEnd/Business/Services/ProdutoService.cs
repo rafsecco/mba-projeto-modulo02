@@ -31,6 +31,11 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.GetAsync(cancellationToken);
     }
 
+    public async Task<List<Produto>> GetValidProductsAsync(CancellationToken cancellationToken)
+    {
+        return await _produtoRepository.GetValidProductsAsync(cancellationToken);
+    }
+
     public async Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken)
     {
         return await _produtoRepository.GetByVendedorIdAsync(_currentUserId, cancellationToken);

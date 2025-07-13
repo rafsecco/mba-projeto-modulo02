@@ -87,6 +87,16 @@ public class ProdutosController : ControllerBase
     }
 
     [AllowAnonymous]
+    [HttpGet("produtosValidos")]
+    [ProducesResponseType(typeof(List<Produto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<Produto>>> GetValidProducts(CancellationToken cancellationToken)
+    {
+        var result = await _service.GetValidProductsAsync(cancellationToken);
+        return Ok(result);
+    }
+
+
+    [AllowAnonymous]
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Produto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
