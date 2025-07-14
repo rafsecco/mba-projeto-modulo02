@@ -7,6 +7,8 @@ public interface IProdutoService
 {
     Task<List<Produto>> GetAsync(CancellationToken cancellationToken);
 
+    Task<List<Produto>> GetValidProductsAsync(CancellationToken cancellationToken);
+
     Task<List<Produto>> GetByVendedorId(CancellationToken cancellationToken);
 
     Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken);

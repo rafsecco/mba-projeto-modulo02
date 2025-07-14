@@ -31,6 +31,15 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
         return await _dbContext.Produtos.Include(p => p.Categoria).ToListAsync(cancellationToken);
     }
 
+    public async Task<List<Produto>> GetValidProductsAsync(CancellationToken cancellationToken)
+    {
+        return await _dbContext.Produtos
+            .Include(p => p.Categoria)
+            .Include(p => p.Vendedor)
+            .Where(p => p.Vendedor != null && p.Vendedor.Ativo && p.Ativo)
+            .ToListAsync(cancellationToken);
+    }
+
     public override async Task<Produto> FindAsync(Guid id, CancellationToken cancellationToken)
     {
         return await _dbContext.Produtos
