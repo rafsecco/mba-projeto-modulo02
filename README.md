@@ -88,9 +88,16 @@ A estrutura do projeto é organizada da seguinte forma:
    - **Cliente:** Email: `cliente@mail.com` e Senha: `Dev@123`
 
 4. **Executar a API:**
-   - `cd src/Api/`
+   - `cd src/BackEnd/Api/`
    - `dotnet run`
-   - Acesse a documentação da API em: http://localhost:5001/swagger
+   - Acesse a documentação da API em: `http://localhost:5259/swagger/` ou `https://localhost:7011/swagger`
+
+5. **Executar o FrontEnd Angular:**
+   - Pré-requisito: projeto da API
+   - Abra um novo terminal
+   - `cd src/FrontEnd/AppAngular/`
+   - `npm install`
+   - `ng serve` 
 
 ## **7. Instruções de Configuração**
 
@@ -101,7 +108,8 @@ A estrutura do projeto é organizada da seguinte forma:
 
 A documentação da API está disponível através do Swagger. Após iniciar a API, acesse a documentação em:
 
-http://localhost:5001/swagger
+- http://localhost:5259/swagger/
+- https://localhost:7011/swagger
 
 ## **9. Avaliação**
 
