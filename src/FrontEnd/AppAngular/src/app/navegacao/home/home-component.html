@@ -4,16 +4,16 @@
 
         <div *ngFor="let produto of produtos" class="col-md-4" style="padding-bottom: 30px;">
             <div class="card h-100">
-                <a class="text-decoration-none" [routerLink]="['/produto-detalhe', produto.id]">
+                <a class="text-decoration-none" [routerLink]="['/produtos/detalhe', produto.id]">
                     <div style="align-content:center;">
                         <img src="/assets/{{ produto.imagem }}" height="164px" width="253px" alt="">
                     </div>
                 </a>
-                <h4 class="card-title">{{ produto.nome | titlecase }}</h4>
+                <h4 class="card-title"><a [routerLink]="['/produtos/detalhe',produto.id]">{{ produto.nome | titlecase }}</a></h4>
 
                 <div class="card-body">
                     <p class="card-text">{{ produto.descricao }}</p>
-                    <div><h4>{{ produto.preco| currency:'BRL':"symbol":'1.2-2':'pt' }}</h4></div>
+                    <div><h4>{{ produto.preco | currency:'BRL':"symbol":'1.2-2':'pt' }}</h4></div>
                     <p class="card-text">
                       Unidades: {{ produto.estoque }} <br />
                       Categoria: {{ produto.categoria.nome }}
