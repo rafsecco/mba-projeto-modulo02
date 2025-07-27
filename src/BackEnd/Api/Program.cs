@@ -82,6 +82,14 @@ app.UseDbMigrationHelper();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors(x => x
+	.AllowAnyHeader()
+	.AllowAnyMethod()
+	.AllowAnyOrigin()
+	.WithExposedHeaders("content-disposition") // Para pegar o nome do arquivos no header
+);
+
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

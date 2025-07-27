@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+/* You can add global styles to this file, and also import other style files */
+.main-container {
+  padding-top: 100px;
+  padding-right: 15px;
+  padding-left: 15px;
+  padding-bottom: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  overflow: hidden;
+}
+
+.footer {
+  height: 50px;
+  text-align: center;
+}
+
+.navbar-collapse {
+  display: flex;
+  flex-basis: auto; /* Remove o flex-grow */
+  justify-content: flex-end; /* Isso alinha os links à direita */
+}
