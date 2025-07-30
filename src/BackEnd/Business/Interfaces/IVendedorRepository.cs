@@ -9,4 +9,6 @@ public interface IVendedorRepository : IRepository<Vendedor>
     Task<List<Vendedor>> GetAsync(CancellationToken cancellationToken);
 
     Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken);
+
+	Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken);
 }

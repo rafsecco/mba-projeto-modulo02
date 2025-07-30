@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 
 namespace Business.Models;
 
@@ -9,5 +9,5 @@ public class Vendedor : Entity
     [DisplayName("Ativo?")]
     public bool Ativo { get; set; } = true;
 
-    public List<Produto>? Produtos;
+    public List<Produto>? Produtos { get; set; }
 }

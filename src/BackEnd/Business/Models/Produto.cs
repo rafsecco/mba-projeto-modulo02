@@ -1,4 +1,4 @@
-﻿using Business.Extensions;
+using Business.Extensions;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

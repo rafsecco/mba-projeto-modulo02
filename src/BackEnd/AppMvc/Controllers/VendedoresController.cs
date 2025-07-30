@@ -1,4 +1,5 @@
 using Business.Interfaces;
+using Business.Models;
 using Business.Services;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -30,4 +31,11 @@ public class VendedoresController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+	[HttpGet("id:Guid")]
+	public async Task<ActionResult<Vendedor>> ObterVendedor(Guid id, CancellationToken cancellationToken)
+	{
+		var retorno = await _vendedorService.ObterVendedorPorIdAsync(id, cancellationToken);
+		return View(retorno);
+	}
 }

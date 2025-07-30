@@ -10,5 +10,5 @@ export interface Produto {
   estoque: number;
   imagem: string;
   ativo: boolean;
-  categoria: Categoria
+  categoria: Categoria;
 }
