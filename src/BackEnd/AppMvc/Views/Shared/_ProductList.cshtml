@@ -1,4 +1,7 @@
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 @model IEnumerable<Business.Models.Produto>
 @{
     var isHome = ViewData["IsHome"] as bool? ?? false;
@@ -30,6 +33,7 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Estoque)
             </th>
+                <th>E-mail Vendedor</th>
             @if (!isHome)
             {
                 <th>
@@ -64,6 +68,13 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.Estoque)
                 </td>
+                    <td>
+                        @{
+                            var vendedor =  UserManager.FindByIdAsync(item.VendedorId.ToString()).GetAwaiter().GetResult();
+                        }
+                        @(vendedor?.Email ?? "Desconhecido")
+
+                        @Html.DisplayText(vendedor.Email)
                 <!-- Checkbox para ativar/desativar -->
                 @if (!isHome)
                 {
