@@ -37,4 +37,12 @@ public class VendedorRepository : Repository<Vendedor>, IVendedorRepository
         _dbContext.Vendedores.Update(vendedor);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
+
+	public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)
+	{
+		var retorno = await _dbContext.Vendedores
+			.Include(v => v.Produtos.Where(p => p.Ativo))
+			.FirstOrDefaultAsync(x => x.UserId == id);
+		return retorno;
+	}
 }

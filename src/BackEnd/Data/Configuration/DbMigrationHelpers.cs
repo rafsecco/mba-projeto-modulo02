@@ -68,7 +68,8 @@ public static class DbMigrationHelpers
 			case "Vendedor":
 				var vendedor = new Vendedor
 				{
-					UserId = Guid.Parse(user.Id)
+					UserId = Guid.Parse(user.Id),
+					Id = Guid.Parse(user.Id)
 				};
 				await context.Vendedores.AddAsync(vendedor);
 				break;

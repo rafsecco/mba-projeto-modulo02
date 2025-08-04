@@ -17,4 +17,9 @@ export class ProdutoService {
       .get<Produto[]>(this.UrlServiceV1 + "Produtos");
   }
 
+  obterProdutoPorId(id:string) : Observable<Produto> {
+    return this.http
+      .get<Produto>(this.UrlServiceV1 + `Produtos/${id}`);
+  }
+
 }

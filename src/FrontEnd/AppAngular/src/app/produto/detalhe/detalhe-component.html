@@ -1,0 +1,59 @@
+<div class="container main-container">
+  <div class="row">
+
+    <div class="col-md-4">
+      <img src="/assets/{{ produto?.imagem }}" style="width: 300px; height: 428px" />
+    </div>
+
+    <div class="col-md-6">
+      <dl>
+        <dt>Id</dt>
+        <dd>{{ produto?.id }}</dd>
+
+        <dt>Nome</dt>
+        <dd>{{ produto?.nome }}</dd>
+
+        <dt>Descrição</dt>
+        <dd>{{ produto?.descricao }}</dd>
+
+        <dt>Valor</dt>
+        <dd>{{ produto?.preco }}</dd>
+
+        <dt>Estoque</dt>
+        <dd>{{ produto?.estoque }}</dd>
+
+        <dt>Ativo?</dt>
+        <dd><input [checked]="produto?.ativo" class="check-box" disabled="disabled" type="checkbox" /></dd>
+
+        <dt>Categoria</dt>
+        <dd>{{ produto?.categoria?.nome }}</dd>
+
+      </dl>
+    </div>
+
+
+    <hr style="margin-top: 15px;" />
+
+    <div class="col-md-12">
+      <h4>Informações do vendedor</h4>
+      <dl>
+        <dt>Id</dt>
+        <dd>{{ vendedor?.id }}</dd>
+
+        <dt>UserId</dt>
+        <dd>{{ vendedor?.userId }}</dd>
+      </dl>
+    </div>
+
+    <hr />
+
+    <div class="col-md-12">
+      <h4>Produtos do vendedor</h4>
+      <ul class="list-group">
+        <li *ngFor="let produto of vendedor?.produtos" class="list-group-item">
+          <a [routerLink]="['/produtos/detalhe', produto.id]">{{ produto.nome }}</a>
+        </li>
+      </ul>
+
+  </div>
+</div>

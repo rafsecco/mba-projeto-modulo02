@@ -59,4 +59,20 @@ public class VendedoresController : ControllerBase
         return NoContent();
     }
 
+
+	[AllowAnonymous]
+	[HttpGet("{id:guid}")]
+	[ProducesResponseType(StatusCodes.Status404NotFound)]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+
+	public async Task<ActionResult<Vendedor>> ObterVendedorPorId(Guid id, CancellationToken cancellationToken)
+	{
+		var resultado = await _vendedorService.ObterVendedorPorIdAsync(id, cancellationToken);
+
+		if (resultado == null)
+			return NotFound();
+
+		return Ok(resultado);
+
+	}
 }

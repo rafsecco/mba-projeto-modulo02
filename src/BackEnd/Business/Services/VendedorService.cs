@@ -33,4 +33,10 @@ public class VendedorService : IVendedorService
        await _vendedorRepository.CreateAsync(userId.Result.Value, cancellationToken);
        return userId.Result.Value;
     }
+
+	public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)
+	{
+		var retorno = await _vendedorRepository.ObterVendedorPorIdAsync(id, cancellationToken);
+		return retorno;
+	}
 }
