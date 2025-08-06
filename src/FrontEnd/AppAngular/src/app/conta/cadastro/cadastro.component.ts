@@ -1,112 +1,88 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
-import { FormBuilder, FormControlName, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario';
 import { ContaService } from '../services/conta.service';
-import { GenericValidator, ValidationMessages, DisplayMessage } from '../../utils/generic-form-validations';
-import { CustomValidators } from 'ngx-custom-validators';
-import { fromEvent, merge, Observable } from 'rxjs';
-import { Router } from '@angular/router';
+import { LocalStorageUtils } from '../../utils/localstorage';
+import { DisplayMessage, GenericValidator, ValidationMessages } from '../../utils/generic-form-validations';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-cadastro',
   standalone: true,
   templateUrl: './cadastro.component.html',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule]
+  imports: [CommonModule, ReactiveFormsModule]
 })
-export class CadastroComponent implements OnInit, AfterViewInit {
-
-  @ViewChildren(FormControlName, { read: ElementRef }) 
-  formInputElements!: ElementRef[];
-
-  errors: any[] = [];
+export class CadastroComponent implements OnInit {
   cadastroForm!: FormGroup;
-  usuario!: Usuario;
+  errors: string[] = [];
+  localStorageUtils = new LocalStorageUtils();
 
-  validationMessages: ValidationMessages;
   genericValidator: GenericValidator;
   displayMessage: DisplayMessage = {};
+
+  validationMessages: ValidationMessages = {
+    email: {
+      required: 'Informe o e-mail',
+      email: 'Email inválido'
+    },
+    password: {
+      required: 'Informe a senha',
+      minlength: 'A senha deve ter no mínimo 6 caracteres'
+    }
+  };
 
   constructor(
     private fb: FormBuilder,
     private contaService: ContaService,
-    private router: Router 
+    private router: Router
   ) {
-    this.validationMessages = {
-      email: {
-        required: 'Informe o e-mail',
-        email: 'Email inválido'
-      },
-      password: {
-        required: 'Informe a senha',
-        rangeLength: 'A senha deve possuir entre 6 e 15 caracteres'
-      }
-    };
-
     this.genericValidator = new GenericValidator(this.validationMessages);
   }
 
   ngOnInit(): void {
     this.cadastroForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, CustomValidators.rangeLength([6, 15])]]
+      password: ['', [Validators.required, Validators.minLength(6)]]
     });
-  }
 
-  ngAfterViewInit(): void {
-    const controlBlurs: Observable<any>[] = this.formInputElements
-      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
-
-    merge(...controlBlurs).subscribe(() => {
+    this.cadastroForm.valueChanges.subscribe(() => {
       this.displayMessage = this.genericValidator.processarMensagens(this.cadastroForm);
     });
   }
 
-  adicionarConta(): void {
+  adicionarConta() {
     if (this.cadastroForm.dirty && this.cadastroForm.valid) {
-      this.usuario = Object.assign({}, this.usuario, this.cadastroForm.value);
-      this.contaService.registrarusuario(this.usuario)
-        .subscribe(
-          sucesso => this.processarSucesso(sucesso),
-          falha => this.processarFalha(falha)
-        );
-    }
-  }
+      const usuario: Usuario = { ...this.cadastroForm.value };
 
-  processarSucesso(response: any) {
-  this.cadastroForm.reset();
-  this.errors = [];
+      this.contaService.registrarusuario(usuario).subscribe({
+        next: () => {
+          this.contaService.login(usuario).subscribe({
+            next: (response: any) => {
+            this.localStorageUtils.salvarTokenUsuario(response.token);
 
-  // Salva o token
-  this.contaService.LocalStorage.salvarTokenUsuario(response.token);
-
-  // Busca os dados do cliente
-  this.contaService.getCliente().subscribe({
-    next: (cliente) => {
-    if (cliente && cliente.email) {
-      this.contaService.LocalStorage.salvarUsuario(cliente);
-    }
-      this.router.navigate(['/home']);
-    },
-    error: (erro) => {
-      console.error('Erro ao buscar dados do cliente', erro);
-      this.router.navigate(['/home']);
-    }
-  });
-}
-  processarFalha(fail: any) {
-    this.errors = [];
-
-    if (fail.error?.errors) {
-      for (let campo in fail.error.errors) {
-        if (fail.error.errors.hasOwnProperty(campo)) {
-          this.errors.push(...fail.error.errors[campo]);
+              this.contaService.getCliente().subscribe({
+                next: (usuario) => {
+                  this.localStorageUtils.salvarUsuario(usuario);
+                  this.router.navigate(['/home']);
+                },
+                error: (err) => {
+                  console.error('Erro ao buscar usuário:', err);
+                  this.errors.push('Erro ao carregar os dados do usuário.');
+                }
+              });
+            },
+            error: (err) => {
+              console.error('Erro ao logar após cadastro:', err);
+              this.errors.push('Erro ao logar após o cadastro.');
+            }
+          });
+        },
+        error: (err) => {
+          console.error('Erro ao registrar:', err);
+          this.errors.push('Erro ao registrar usuário.');
         }
-      }
-    } else if (fail.error?.message) {
-      this.errors.push(fail.error.message);
-    } else {
-      this.errors.push('Erro desconhecido ao processar requisição.');
+      });
     }
   }
 }

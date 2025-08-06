@@ -31,23 +31,23 @@ export abstract class BaseService {
     return response.data || {};
   }
 
-  protected serviceError(response: Response | any) {
+  protected serviceError(error: any): Observable<never> {
     let customError: string[] = [];
 
-    if (response instanceof HttpErrorResponse) {
-      if (response.statusText === "Unknown Error") {
+    if (error instanceof HttpErrorResponse) {
+      if (error.statusText === "Unknown Error") {
         customError.push("Ocorreu um erro desconhecido");
-        response.error.errors = customError;
+        error.error.errors = customError;
       }
     }
 
-    console.error(response);
-    return throwError(response);
+    console.error(error);
+    return throwError(() => error);
   }
 
   public getCliente(): Observable<any> {
     return this.http.get<any>(
-      `{this.UrlServiceV1}/clientes`,
+      `${this.UrlServiceV1}Clientes`,
       this.ObterHeaderAuthorization()
     );
   }

@@ -14,9 +14,9 @@ export class ContaService extends BaseService {
     super(http);
   }
 
-  registrarusuario(usuario: Usuario): Observable<Usuario> {
-    return this.http.post<Usuario>(
-      `${this.UrlServiceV1}clientes`,
+  registrarusuario(usuario: Usuario): Observable<{ accessToken: string }> {
+    return this.http.post<{ accessToken: string }>(
+      `${this.UrlServiceV1}Clientes`,
       usuario,
       this.ObterHeaderJson()
     ).pipe(
@@ -25,16 +25,18 @@ export class ContaService extends BaseService {
     );
   }
 
-  login(usuario: Usuario): Observable<any> {
-    return this.http.post<any>(
-      `${this.UrlServiceV1}users/login`,
+login(usuario: Usuario): Observable<{ token: string }> {
+  return this.http
+    .post<{ token: string }>(
+      `${this.UrlServiceV1}Users/login`,
       usuario,
       this.ObterHeaderJson()
-    ).pipe(
-      map(this.extractData),
-      catchError(this.serviceError)
+    )
+    .pipe(
+      catchError((error) => this.serviceError(error))  
     );
-  }
+}
+
 
   override getCliente(): Observable<any> {
     return super.getCliente();
