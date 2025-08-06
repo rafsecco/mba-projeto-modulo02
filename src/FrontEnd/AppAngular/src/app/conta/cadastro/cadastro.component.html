@@ -1,0 +1,55 @@
+<div class="container mt-5 pt-5">
+  <h2 class="mb-4" style="font-size: 1.5rem;">Cadastro</h2>
+
+  <form [formGroup]="cadastroForm" (ngSubmit)="adicionarConta()" novalidate style="max-width: 400px;">
+    <!-- Campo Email -->
+    <div class="form-group mb-3">
+      <label for="email">E-mail</label>
+      <input
+        type="email"
+        id="email"
+        class="form-control form-control-sm"
+        formControlName="email"
+        placeholder="Digite seu e-mail"
+        [class.is-invalid]="
+          cadastroForm.get('email')?.invalid &&
+          (cadastroForm.get('email')?.touched || cadastroForm.get('email')?.dirty)
+        "
+      />
+      <div *ngIf="displayMessage['email']" class="invalid-feedback">
+        {{ displayMessage['email'] }}
+      </div>
+    </div>
+
+    <!-- Campo Senha -->
+    <div class="form-group mb-3">
+      <label for="password">Senha</label>
+      <input
+        type="password"
+        id="password"
+        class="form-control form-control-sm"
+        formControlName="password"
+        placeholder="Digite sua senha"
+        [class.is-invalid]="
+          cadastroForm.get('password')?.invalid &&
+          (cadastroForm.get('password')?.touched || cadastroForm.get('password')?.dirty)
+        "
+      />
+      <div *ngIf="displayMessage['password']" class="invalid-feedback">
+        {{ displayMessage['password'] }}
+      </div>
+    </div>
+
+    <!-- Botão Submit -->
+    <button type="submit" class="btn btn-primary btn-sm" [disabled]="cadastroForm.invalid">
+      Cadastrar
+    </button>
+  </form>
+
+  <!-- Mensagens de erro -->
+  <div *ngIf="errors.length > 0" class="alert alert-danger mt-3" style="max-width: 400px;">
+    <ul>
+      <li *ngFor="let error of errors">{{ error }}</li>
+    </ul>
+  </div>
+</div>

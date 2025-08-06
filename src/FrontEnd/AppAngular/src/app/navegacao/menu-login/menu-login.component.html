@@ -1,0 +1,17 @@
+<ul class="navbar-nav ml-auto" [ngSwitch]="logado">
+
+  <!-- Quando NÃO estiver logado -->
+  <li *ngSwitchCase="false" class="nav-item" style="padding-right: 15px;">
+    <a class="btn btn-success" [routerLink]="['/conta/cadastro']">Criar sua conta</a>
+  </li>
+  <li *ngSwitchCase="false" class="nav-item" style="padding-right: 15px;">
+    <a class="btn btn-primary" [routerLink]="['/conta/login']">Entrar</a>
+  </li>
+
+  <!-- Quando estiver logado -->
+  <li *ngSwitchCase="true" class="nav-item d-flex align-items-center" style="gap: 10px; padding-right: 15px;">
+    <span class="text-white">{{ email }}</span>
+    <a class="btn btn-outline-light btn-sm" (click)="logout()">Sair</a>
+  </li>
+
+</ul>

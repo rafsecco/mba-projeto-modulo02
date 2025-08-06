@@ -5,9 +5,11 @@ import { FooterComponent } from './navegacao/footer/footer-component';
 
 @Component({
   selector: 'app-root',
+  
   imports: [RouterOutlet, MenuComponent, FooterComponent],
   templateUrl: './app.html'
 })
 export class App {
   protected title = 'AppAngular';
 }
+

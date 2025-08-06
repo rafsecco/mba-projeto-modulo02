@@ -6,7 +6,7 @@ import { Produto } from '../../produto/models/produto';
 import { ProdutoService } from '../../produto/services/produto-service';
 
 @Component({
-  standalone: true,
+  //standalone: true,
   selector: 'app-home',
   imports: [CommonModule, RouterLink],
   templateUrl: './home-component.html',
