@@ -1,0 +1,17 @@
+<ul class="navbar-nav ml-auto" [ngSwitch]="logado">
+   <li *ngSwitchCase="false" class="nav-item" style="padding-right: 15px;">
+    <a class="btn btn-success" [routerLink]="['/conta/cadastro']">Criar sua conta</a>
+  </li>
+  <li *ngSwitchCase="false" class="nav-item" style="padding-right: 15px;">
+    <a class="btn btn-primary" [routerLink]="['/conta/login']">Entrar</a>
+  </li>
+
+  <li *ngSwitchCase="true" class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+      {{ email }}
+    </a>
+    <div class="dropdown-menu">
+      <a class="dropdown-item" (click)="logout()">Sair</a>
+    </div>
+  </li>
+</ul>

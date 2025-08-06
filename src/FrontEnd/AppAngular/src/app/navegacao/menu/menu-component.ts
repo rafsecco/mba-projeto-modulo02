@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { MenuLoginComponent } from '../menu-login/menu-login.component';
+
 
 @Component({
   selector: 'app-menu',
-  imports: [RouterLink],
+  standalone: true,
+  imports: [RouterModule, CommonModule,MenuLoginComponent],
   templateUrl: './menu-component.html'
 })
-export class MenuComponent {
-
-}
+export class MenuComponent {}
