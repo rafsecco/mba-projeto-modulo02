@@ -18,7 +18,7 @@ public interface IProdutoService
     Task<Guid> CreateAsync(CriaProdutoViewModel criaProdutoViewModel, CancellationToken cancellationToken,
         string? path = null);
 
-    Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken);
+    Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken, string? path = null);
 
     Task DeleteAsync(Guid id, CancellationToken cancellationToken);
 }

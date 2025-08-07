@@ -1,4 +1,4 @@
-﻿using Business.Extensions;
+using Business.Extensions;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -17,8 +17,11 @@ public class AtualizaProdutoViewModel
     [StringLength(300, MinimumLength = 2, ErrorMessage = "O campo {0} precisa ter entre {1} e {2} caracteres")]
     [Display(Name = "Descrição")]
     public string? Descricao { get; set; }
+	
+	public string? Imagem { get; set; }
+	public IFormFile? ImagemUpload { get; set; }
 
-    [Currency]
+	[Currency]
     [Display(Name = "Preço")]
     public decimal? Preco { get; set; }
 
