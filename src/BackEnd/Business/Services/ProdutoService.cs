@@ -4,6 +4,7 @@ using Business.Utils;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 using System.Security.Claims;
 
 namespace Business.Services;
@@ -74,7 +75,7 @@ public class ProdutoService : IProdutoService
         return await _produtoRepository.CreateAsync(produto, cancellationToken);
     }
 
-    public async Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken)
+    public async Task UpdateAsync(AtualizaProdutoViewModel atualizaProdutoViewModel, CancellationToken cancellationToken, string? path = null)
     {
         var produto = await _produtoRepository.FindAsync(atualizaProdutoViewModel.Id, cancellationToken);
         if (produto is null) throw new KeyNotFoundException("Produto não encontrado");
@@ -88,7 +89,10 @@ public class ProdutoService : IProdutoService
         produto.Estoque = atualizaProdutoViewModel.Estoque ?? produto.Estoque;
         produto.Ativo = atualizaProdutoViewModel.Ativo;
 
-        await _produtoRepository.UpdateAsync(produto, cancellationToken);
+		if (atualizaProdutoViewModel.ImagemUpload != null)
+			await _upload.AddImageAsync(produto, atualizaProdutoViewModel.ImagemUpload, path, cancellationToken);
+
+		await _produtoRepository.UpdateAsync(produto, cancellationToken);
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)

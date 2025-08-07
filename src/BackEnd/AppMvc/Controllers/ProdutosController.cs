@@ -89,6 +89,7 @@ public class ProdutosController : Controller
             Id = produto.Id,
             Nome = produto.Nome,
             Descricao = produto.Descricao,
+			Imagem = produto.Imagem,
             Preco = produto.Preco,
             Estoque = produto.Estoque,
             Ativo = produto.Ativo
@@ -104,17 +105,28 @@ public class ProdutosController : Controller
     {
         if (id != atualizaProdutoViewModel.Id) return NotFound();
 
-        if (ModelState.IsValid)
+		if (!ModelState.IsValid)
         {
-            await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken);
-
-            return RedirectToAction(nameof(Index));
+			return View(atualizaProdutoViewModel);
         }
 
-        //ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", product.CategoryId);
-        //ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId", product.SellerId);
-        return View(atualizaProdutoViewModel);
-    }
+		var produtoDb = await _produtoService.FindAsync(id, cancellationToken);
+
+		atualizaProdutoViewModel.Imagem = produtoDb.Imagem;
+
+		if (atualizaProdutoViewModel.ImagemUpload != null)
+		{
+			atualizaProdutoViewModel.Imagem = atualizaProdutoViewModel.ImagemUpload.FileName;
+		}
+
+		await _produtoService.UpdateAsync(atualizaProdutoViewModel, cancellationToken, "wwwroot");
+
+		return RedirectToAction(nameof(Index));
+
+		//ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Description", product.CategoryId);
+		//ViewData["SellerId"] = new SelectList(_context.Sellers, "UserId", "UserId", product.SellerId);
+
+	}
 
     [ClaimsAuthorize("Produtos", "EX")]
     public async Task<IActionResult> Delete(Guid? id, CancellationToken cancellationToken)
