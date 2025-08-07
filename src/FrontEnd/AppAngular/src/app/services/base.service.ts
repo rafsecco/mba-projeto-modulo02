@@ -29,11 +29,6 @@ export abstract class BaseService {
     };
   }
 
-  /*
-  protected extractData(response: any) {
-    return response.data || {};
-  }*/
-
   protected extractData(response: any) {
   return response || [];
   }
