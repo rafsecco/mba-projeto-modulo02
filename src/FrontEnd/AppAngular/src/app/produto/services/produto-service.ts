@@ -10,16 +10,16 @@ export class ProdutoService {
 
   constructor(private http: HttpClient) { }
 
-  protected UrlServiceV1: string = "https://localhost:7011/";
+  protected UrlServiceV1: string = "https://localhost:7011/Produtos/";
 
   obterProdutos() : Observable<Produto[]> {
     return this.http
-      .get<Produto[]>(this.UrlServiceV1 + "Produtos");
+      .get<Produto[]>(this.UrlServiceV1 + "produtosValidos");
   }
 
   obterProdutoPorId(id:string) : Observable<Produto> {
     return this.http
-      .get<Produto>(this.UrlServiceV1 + `Produtos/${id}`);
+      .get<Produto>(this.UrlServiceV1 + `${id}`);
   }
 
 }
