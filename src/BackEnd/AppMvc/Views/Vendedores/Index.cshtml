@@ -1,40 +1,45 @@
 @using Business.Models
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<IdentityUser> UserManager
 @model IEnumerable<Vendedor>
 
 @{
-	ViewData["Title"] = "Mini Loja Virtual ";
-	ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
+    ViewData["Title"] = "Mini Loja Virtual ";
+    ViewData["SubTitle"] = User.IsInRole("Admin") ? "Admin" : "";
 }
 
 <h1 class="mt-4">Vendedores cadastrados</h1>
 
 @if (!Model.Any())
 {
-	<div class="alert alert-info text-center mt-4">
-		Nenhum vendedor cadastrado.
-	</div>
+    <div class="alert alert-info text-center mt-4">
+        Nenhum vendedor cadastrado.
+    </div>
 }
 else
 {
-	<table class="table">
-		<thead>
-			<tr>
+    <table class="table">
+        <thead>
+            <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.UserId)
+                    @Html.DisplayNameFor(model => UserManager.Users.First().Email)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Ativo)
                 </th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-					<td>
-						@Html.DisplayFor(modelItem => item.UserId)
-					</td>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{
+                            var user = UserManager.FindByIdAsync(item.UserId.ToString()).GetAwaiter().GetResult();
+                        }
+                        @(user?.Email ?? "Desconhecido")
+                    </td>
                     <!-- Checkbox para ativar/desativar -->
                     <td>
                         <form asp-action="AtualizaAtivo" method="post">
@@ -43,8 +48,8 @@ else
                                    onchange="this.form.submit()" @(item.Ativo ? "checked" : "") />
                         </form>
                     </td>
-				</tr>
-			}
-		</tbody>
-	</table>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
