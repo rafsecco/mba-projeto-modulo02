@@ -29,8 +29,13 @@ export abstract class BaseService {
     };
   }
 
+  /*
   protected extractData(response: any) {
     return response.data || {};
+  }*/
+
+  protected extractData(response: any) {
+  return response || [];
   }
 
   protected serviceError(error: any): Observable<never> {

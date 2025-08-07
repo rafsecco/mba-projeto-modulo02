@@ -6,11 +6,13 @@ import { Produto } from '../../produto/models/produto';
 import { Favorito } from '../../favorito/models/favorito'; 
 import { ProdutoService } from '../../produto/services/produto-service';
 import { FavoritoService } from '../../favorito/services/favorito-service';
+import { CategoriaService } from '../../categoria/services/categoria.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  //standalone: true,
+  standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,FormsModule],
   templateUrl: './home-component.html',
   providers: [ProdutoService],
 })
@@ -18,10 +20,13 @@ export class HomeComponent implements OnInit {
   public produtos: Produto[] = [];
   public favoritos: Favorito[] = [];
   isFavorited = false;
+  public categorias: any[] = [];
+  public categoriaSelecionada: string = '';
 
   constructor(
     private produtoService: ProdutoService,
-    private clienteService: FavoritoService
+    private clienteService: FavoritoService,
+    private categoriaService: CategoriaService
   ) {}
 
   alternaFavorito(currentProduto: Produto) {
@@ -74,5 +79,30 @@ export class HomeComponent implements OnInit {
         console.error('Erro ao obter favoritos', err);
       },
     });
+
+    this.categoriaService.obterCategorias().subscribe({
+    next: (categorias) => this.categorias = categorias,
+    error: (err) => console.error('Erro ao carregar categorias', err),
+    });
+  }
+
+  filtrarProdutos() 
+  {
+    this.produtos = [];
+    if (!this.categoriaSelecionada) {       
+      this.produtoService.obterProdutos().subscribe({
+        next: (produtos) => this.produtos = produtos.filter(p => p.ativo),
+        error: (err) => console.error('Erro ao carregar todos os produtos', err),
+      });
+    } else {       
+      this.produtoService.obterProdutosPorCategoria(this.categoriaSelecionada).subscribe({
+        next: (produtos) => this.produtos = produtos.filter(p => p.ativo),
+        error: (err) => console.error('Erro ao filtrar produtos por categoria', err),
+      });
+    }
+  }
+
+  trackById(index: number, item: Produto) {
+  return item.id;
   }
 }

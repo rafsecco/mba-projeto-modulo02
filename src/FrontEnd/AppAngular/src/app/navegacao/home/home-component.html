@@ -1,7 +1,24 @@
 <div class="container main-container">
+  <!-- Combo para filtrar por categoria -->
+  <div class="row mb-4">
+    <div class="col-md-4 offset-md-4">
+      <label for="comboCategorias" class="form-label">Filtrar por Categoria:</label>
+      <select
+        id="comboCategorias"
+        class="form-select"
+        [(ngModel)]="categoriaSelecionada"
+        (change)="filtrarProdutos()"
+      >
+        <option value="">Todas as categorias</option>
+        <option *ngFor="let cat of categorias" [value]="cat.id">
+          {{ cat.nome }}
+        </option>
+      </select>
+    </div>
+  </div>
   <div class="row text-center">
     <div
-      *ngFor="let produto of produtos"
+      *ngFor="let produto of produtos; trackBy: trackById"
       class="col-md-4"
       style="padding-bottom: 30px"
     >
