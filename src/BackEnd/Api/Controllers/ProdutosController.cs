@@ -42,7 +42,7 @@ public class ProdutosController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update([FromBody] AtualizaProdutoViewModel atualizaProdutoViewModel,
+    public async Task<IActionResult> Update([FromForm] AtualizaProdutoViewModel atualizaProdutoViewModel,
         CancellationToken cancellationToken)
     {
         try
