@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './navegacao/home/home-component';
 import { DetalheComponent } from './produto/detalhe/detalhe-component';
 import { contaRoutes } from './conta/conta.route';
+import { FavoritoComponent } from './favorito/favorito'; 
 
 export const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -9,6 +10,10 @@ export const routes: Routes = [
   { path: 'produtos/detalhe/:id', component: DetalheComponent },
   {
     path: 'conta',
-    children: contaRoutes 
-  }
+    children: contaRoutes,
+  },
+  {
+    path: 'favoritos',
+    component: FavoritoComponent,
+  },
 ];

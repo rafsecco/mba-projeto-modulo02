@@ -1,18 +1,18 @@
 <div class="container main-container">
   <div class="row text-center">
     <div
-      *ngFor="let produto of produtos"
+      *ngFor="let favorito of favoritos"
       class="col-md-4"
       style="padding-bottom: 30px"
     >
       <div class="card h-100">
         <a
           class="text-decoration-none"
-          [routerLink]="['/produtos/detalhe', produto.id]"
+          [routerLink]="['/produtos/detalhe', favorito.produtoId]"
         >
           <div style="align-content: center">
             <img
-              src="/assets/{{ produto.imagem }}"
+              src="/assets/{{ favorito.produto.imagem }}"
               height="164px"
               width="253px"
               alt=""
@@ -20,33 +20,31 @@
           </div>
         </a>
         <h4 class="card-title">
-          <a [routerLink]="['/produtos/detalhe', produto.id]">{{
-            produto.nome | titlecase
+          <a [routerLink]="['/produtos/detalhe', favorito.produtoId]">{{
+            favorito.produto.nome | titlecase
           }}</a>
         </h4>
 
         <div class="card-body">
-          <p class="card-text">{{ produto.descricao }}</p>
+          <p class="card-text">{{ favorito.produto.descricao }}</p>
           <div>
             <h4>
-              {{ produto.preco | currency : "BRL" : "symbol" : "1.2-2" : "pt" }}
+              {{ favorito.produto.preco | currency : "BRL" : "symbol" : "1.2-2" : "pt" }}
             </h4>
           </div>
           <p class="card-text">
-            Unidades: {{ produto.estoque }} <br />
-            Categoria: {{ produto.categoria.nome }}
+            Unidades: {{ favorito.produto.estoque }} <br />
+            Categoria: {{ favorito.produto.categoria.nome }}
           </p>
         </div>
 
         <div class="card-footer">
           <button
             class="btn btn-light"
-            (click)="alternaFavorito(produto)"
+            (click)="removeFavorito(favorito.produto)"
             aria-label="Favoritar"
-            [ngSwitch]="verificaFavorito(produto.id)"
           >
-            <i class="bi bi-heart-fill text-danger" *ngSwitchCase="true"></i>
-            <i class="bi bi-heart" *ngSwitchCase="false"></i>
+            <i class="bi bi-heart-fill text-danger"></i>
           </button>
           <!-- <a class="btn btn-primary" [routerLink]="['/carrinho',produto.id]">
                         <span class="fa fa-shopping-cart"></span> Comprar
