@@ -22,4 +22,9 @@ export class ProdutoService {
       .get<Produto>(this.UrlServiceV1 + `${id}`);
   }
 
+  obterProdutosPorCategoria(categoriaId: string): Observable<Produto[]> {
+    return this.http
+      .get<Produto[]>(`${this.UrlServiceV1}${categoriaId}/categoriaId`);
+  }
+
 }
