@@ -38,11 +38,12 @@ public class VendedorRepository : Repository<Vendedor>, IVendedorRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-	public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)
-	{
-		var retorno = await _dbContext.Vendedores
-			.Include(v => v.Produtos.Where(p => p.Ativo))
-			.FirstOrDefaultAsync(x => x.UserId == id);
-		return retorno;
-	}
+    public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        var retorno = await _dbContext.Vendedores
+            .Include(v => v.Produtos.Where(p => p.Ativo))
+            .ThenInclude(p => p.Categoria)
+            .FirstOrDefaultAsync(x => x.UserId == id, cancellationToken);
+        return retorno;
+    }
 }
