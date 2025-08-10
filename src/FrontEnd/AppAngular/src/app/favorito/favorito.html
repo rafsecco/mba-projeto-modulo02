@@ -1,5 +1,13 @@
 <div class="container main-container">
-  <div class="row text-center">
+  <!-- Estado vazio -->
+  <div *ngIf="!favoritos || favoritos.length === 0" class="text-center my-5">
+    <h4>Você ainda não tem favoritos</h4>
+    <p>Adicione produtos aos seus favoritos para vê-los aqui.</p>
+    <a routerLink="/home" class="btn btn-primary"> Ver produtos </a>
+  </div>
+
+  <!-- Lista de favoritos -->
+  <div class="row text-center" *ngIf="favoritos && favoritos.length > 0">
     <div
       *ngFor="let favorito of favoritos"
       class="col-md-4"
@@ -29,7 +37,10 @@
           <p class="card-text">{{ favorito.produto.descricao }}</p>
           <div>
             <h4>
-              {{ favorito.produto.preco | currency : "BRL" : "symbol" : "1.2-2" : "pt" }}
+              {{
+                favorito.produto.preco
+                  | currency : "BRL" : "symbol" : "1.2-2" : "pt"
+              }}
             </h4>
           </div>
           <p class="card-text">

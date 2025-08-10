@@ -20,7 +20,11 @@
           <a class="nav-link" [routerLink]="['/home']">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/favoritos']">Favoritos</a>
+          <a
+            class="nav-link"
+            [routerLink]="logado ? ['/favoritos'] : ['/conta/login']"
+            >Favoritos</a
+          >
         </li>
         <!-- <li class="nav-item">
             <a

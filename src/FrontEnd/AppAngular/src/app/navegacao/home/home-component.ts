@@ -1,33 +1,40 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
 import { Produto } from '../../produto/models/produto';
-import { Favorito } from '../../favorito/models/favorito'; 
+import { Favorito } from '../../favorito/models/favorito';
 import { ProdutoService } from '../../produto/services/produto-service';
 import { FavoritoService } from '../../favorito/services/favorito-service';
 import { CategoriaService } from '../../categoria/services/categoria.service';
 import { FormsModule } from '@angular/forms';
+import { LocalStorageUtils } from '../../utils/localstorage';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, RouterLink,FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './home-component.html',
   providers: [ProdutoService],
 })
 export class HomeComponent implements OnInit {
+  private localStorageUtils = new LocalStorageUtils();
   public produtos: Produto[] = [];
   public favoritos: Favorito[] = [];
-  isFavorited = false;
   public categorias: any[] = [];
   public categoriaSelecionada: string = '';
+  logado = false;
 
   constructor(
     private produtoService: ProdutoService,
     private favoritoService: FavoritoService,
-    private categoriaService: CategoriaService
+    private categoriaService: CategoriaService,
+    private router: Router
   ) {}
+
+  redirecionarLogin() {
+    this.router.navigate(['/conta/login']);
+  }
 
   alternaFavorito(currentProduto: Produto) {
     let isfavorito = this.verificaFavorito(currentProduto.id);
@@ -81,28 +88,33 @@ export class HomeComponent implements OnInit {
     });
 
     this.categoriaService.obterCategorias().subscribe({
-    next: (categorias) => this.categorias = categorias,
-    error: (err) => console.error('Erro ao carregar categorias', err),
+      next: (categorias) => (this.categorias = categorias),
+      error: (err) => console.error('Erro ao carregar categorias', err),
     });
+    let token = this.localStorageUtils.obterTokenUsuario();
+    this.logado = token != undefined;
   }
 
-  filtrarProdutos() 
-  {
+  filtrarProdutos() {
     this.produtos = [];
-    if (!this.categoriaSelecionada) {       
+    if (!this.categoriaSelecionada) {
       this.produtoService.obterProdutos().subscribe({
-        next: (produtos) => this.produtos = produtos.filter(p => p.ativo),
-        error: (err) => console.error('Erro ao carregar todos os produtos', err),
+        next: (produtos) => (this.produtos = produtos.filter((p) => p.ativo)),
+        error: (err) =>
+          console.error('Erro ao carregar todos os produtos', err),
       });
-    } else {       
-      this.produtoService.obterProdutosPorCategoria(this.categoriaSelecionada).subscribe({
-        next: (produtos) => this.produtos = produtos.filter(p => p.ativo),
-        error: (err) => console.error('Erro ao filtrar produtos por categoria', err),
-      });
+    } else {
+      this.produtoService
+        .obterProdutosPorCategoria(this.categoriaSelecionada)
+        .subscribe({
+          next: (produtos) => (this.produtos = produtos.filter((p) => p.ativo)),
+          error: (err) =>
+            console.error('Erro ao filtrar produtos por categoria', err),
+        });
     }
   }
 
   trackById(index: number, item: Produto) {
-  return item.id;
+    return item.id;
   }
 }
