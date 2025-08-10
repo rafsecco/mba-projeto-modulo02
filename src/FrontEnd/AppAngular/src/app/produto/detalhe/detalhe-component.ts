@@ -5,8 +5,10 @@ import { switchMap } from 'rxjs/operators';
 
 import { Produto } from '../models/produto';
 import { ProdutoService } from '../services/produto-service';
+import { FavoritoService } from '../../favorito/services/favorito-service';
 import { Vendedor } from '../../vendedor/models/vendedor';
 import { VendedorService } from '../../vendedor/services/vendedor-service';
+import { Favorito } from '../../favorito/models/favorito';
 
 @Component({
   selector: 'app-detalhe',
@@ -19,14 +21,49 @@ export class DetalheComponent implements OnInit {
   //imagens: string = environment.imagensUrl;
   public produto: Produto | undefined;
   public vendedor: Vendedor | undefined;
+  public favoritos: Favorito[] = [];
   public id: string = '';
 
   constructor(
     private route: ActivatedRoute,
     private produtoService: ProdutoService,
-    private vendedorService: VendedorService
+    private vendedorService: VendedorService,
+    private favoritoService: FavoritoService
   ) {
     this.id = route.snapshot.paramMap.get('id') || '';
+  }
+
+  alternaFavorito(currentProduto: Produto) {
+    let isfavorito = this.verificaFavorito(currentProduto.id);
+
+    if (isfavorito) {
+      this.favoritoService.removerFavorito(currentProduto.id).subscribe({
+        next: () => {
+          this.favoritos = this.favoritos.filter(
+            (f) => f.produtoId !== currentProduto.id
+          );
+          console.log('Favorito removido');
+        },
+        error: (err) => console.error('Erro ao remover favorito:', err),
+      });
+      return;
+    }
+
+    this.favoritoService.adicionarFavorito(currentProduto.id).subscribe({
+      next: (novoFavorito) => {
+        this.favoritos.push(novoFavorito);
+        console.log('Favorito adicionado');
+      },
+      error: (err) => console.error('Erro ao adicionar favorito:', err),
+    });
+  }
+
+  verificaFavorito(currentProdutoId: string) {
+    debugger;
+    let isfavorito = this.favoritos.some(
+      (f) => f.produtoId == currentProdutoId
+    );
+    return isfavorito;
   }
 
   ngOnInit(): void {
@@ -43,11 +80,21 @@ export class DetalheComponent implements OnInit {
       )
       .subscribe({
         next: (vendedor) => {
+          debugger;
           this.vendedor = vendedor;
         },
         error: (err) => {
           console.error('Erro ao obter produtos', err);
         },
       });
+
+    this.favoritoService.obterFavoritos().subscribe({
+      next: (favoritos) => {
+        this.favoritos = favoritos;
+      },
+      error: (err) => {
+        console.error('Erro ao obter favoritos', err);
+      },
+    });
   }
 }
