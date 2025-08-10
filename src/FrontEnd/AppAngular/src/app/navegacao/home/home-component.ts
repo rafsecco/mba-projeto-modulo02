@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private produtoService: ProdutoService,
-    private clienteService: FavoritoService,
+    private favoritoService: FavoritoService,
     private categoriaService: CategoriaService
   ) {}
 
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
     let isfavorito = this.verificaFavorito(currentProduto.id);
 
     if (isfavorito) {
-      this.clienteService.removerFavorito(currentProduto.id).subscribe({
+      this.favoritoService.removerFavorito(currentProduto.id).subscribe({
         next: () => {
           this.favoritos = this.favoritos.filter(
             (f) => f.produtoId !== currentProduto.id
@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
       return;
     }
 
-    this.clienteService.adicionarFavorito(currentProduto.id).subscribe({
+    this.favoritoService.adicionarFavorito(currentProduto.id).subscribe({
       next: (novoFavorito) => {
         this.favoritos.push(novoFavorito);
         console.log('Favorito adicionado');
@@ -71,7 +71,7 @@ export class HomeComponent implements OnInit {
       },
     });
 
-    this.clienteService.obterFavoritos().subscribe({
+    this.favoritoService.obterFavoritos().subscribe({
       next: (favoritos) => {
         this.favoritos = favoritos;
       },
