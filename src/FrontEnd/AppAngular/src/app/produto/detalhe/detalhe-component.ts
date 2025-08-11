@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 
 import { Produto } from '../models/produto';
@@ -9,6 +9,7 @@ import { FavoritoService } from '../../favorito/services/favorito-service';
 import { Vendedor } from '../../vendedor/models/vendedor';
 import { VendedorService } from '../../vendedor/services/vendedor-service';
 import { Favorito } from '../../favorito/models/favorito';
+import { LocalStorageUtils } from '../../utils/localstorage';
 
 @Component({
   selector: 'app-detalhe',
@@ -23,14 +24,21 @@ export class DetalheComponent implements OnInit {
   public vendedor: Vendedor | undefined;
   public favoritos: Favorito[] = [];
   public id: string = '';
+  logado = false;
+  private localStorageUtils = new LocalStorageUtils();
 
   constructor(
     private route: ActivatedRoute,
     private produtoService: ProdutoService,
     private vendedorService: VendedorService,
-    private favoritoService: FavoritoService
+    private favoritoService: FavoritoService,
+    private router: Router
   ) {
     this.id = route.snapshot.paramMap.get('id') || '';
+  }
+
+  redirecionarLogin() {
+    this.router.navigate(['/conta/login']);
   }
 
   alternaFavorito(currentProduto: Produto) {
@@ -59,7 +67,6 @@ export class DetalheComponent implements OnInit {
   }
 
   verificaFavorito(currentProdutoId: string) {
-    debugger;
     let isfavorito = this.favoritos.some(
       (f) => f.produtoId == currentProdutoId
     );
@@ -80,7 +87,6 @@ export class DetalheComponent implements OnInit {
       )
       .subscribe({
         next: (vendedor) => {
-          debugger;
           this.vendedor = vendedor;
         },
         error: (err) => {
@@ -96,5 +102,8 @@ export class DetalheComponent implements OnInit {
         console.error('Erro ao obter favoritos', err);
       },
     });
+
+    let token = this.localStorageUtils.obterTokenUsuario();
+    this.logado = token != undefined;
   }
 }

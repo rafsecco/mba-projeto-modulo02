@@ -100,7 +100,7 @@
             <div class="card-footer">
               <button
                 class="btn btn-light"
-                (click)="alternaFavorito(produto)"
+                (click)="logado? alternaFavorito(produto):redirecionarLogin()"
                 aria-label="Favoritar"
                 [ngSwitch]="verificaFavorito(produto.id)"
               >

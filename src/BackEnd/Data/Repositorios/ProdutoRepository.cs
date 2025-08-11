@@ -22,7 +22,8 @@ public class ProdutoRepository : Repository<Produto>, IProdutoRepository
     {
         return await _dbContext.Produtos
             .Include(p => p.Categoria)
-            .Where(p => p.CategoriaId == categoriaId)
+            .Include(p => p.Vendedor)
+            .Where(p => p.CategoriaId == categoriaId && p.Ativo && p.Vendedor.Ativo)
             .ToListAsync(cancellationToken);
     }
 
