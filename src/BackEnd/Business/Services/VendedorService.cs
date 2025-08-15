@@ -7,12 +7,10 @@ namespace Business.Services;
 public class VendedorService : IVendedorService
 {
     private readonly IVendedorRepository _vendedorRepository;
-    private readonly IUserService _userService;
 
-    public VendedorService(IVendedorRepository vendedorRepository, IUserService userService)
+    public VendedorService(IVendedorRepository vendedorRepository)
     {
         _vendedorRepository = vendedorRepository;
-        _userService = userService;
     }
 
     public async Task<List<Vendedor>> GetAsync(CancellationToken cancellationToken)
@@ -29,9 +27,8 @@ public class VendedorService : IVendedorService
 
     public async Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
     {
-       var userId = _userService.RegisterAsync(userViewModel, "Vendedor", cancellationToken);
-       await _vendedorRepository.CreateAsync(userId.Result.Value, cancellationToken);
-       return userId.Result.Value;
+       await _vendedorRepository.CreateAsync(userViewModel.UserId, cancellationToken);
+       return userViewModel.UserId;
     }
 
 	public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)

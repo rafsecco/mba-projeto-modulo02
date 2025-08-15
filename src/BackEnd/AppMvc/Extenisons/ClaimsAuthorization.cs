@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Routing;
 using System.Security.Claims;
 
-namespace Business.Extensions;
+namespace AppMvc.Extensions;
 
 public class CustomAuthorization
 {

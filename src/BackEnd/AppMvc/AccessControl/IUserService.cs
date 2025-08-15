@@ -1,6 +1,6 @@
-﻿using Business.ViewModels;
+using Business.ViewModels;
 
-namespace Business.Interfaces;
+namespace AppMvc.Interfaces;
 
 public interface IUserService
 {

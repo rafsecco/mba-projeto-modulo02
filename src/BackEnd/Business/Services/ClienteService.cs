@@ -1,4 +1,4 @@
-﻿using Business.Interfaces;
+using Business.Interfaces;
 using Business.Models;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Http;
@@ -9,14 +9,12 @@ namespace Business.Services
     public class ClienteService : IClienteService
     {
         private readonly IClienteRepository _clienteRepository;
-        private readonly IUserService _userService;
         private readonly Guid _currentUserId;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClienteService(IClienteRepository clienteRepository, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public ClienteService(IClienteRepository clienteRepository, IHttpContextAccessor httpContextAccessor)
         {
             _clienteRepository = clienteRepository;
-            _userService = userService;
             _httpContextAccessor = httpContextAccessor;
 
             _currentUserId = GetCurrentUserId();
@@ -29,10 +27,9 @@ namespace Business.Services
 
         public async Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
         {
-            var userId = _userService.RegisterAsync(userViewModel, "cliente", cancellationToken);
-            Cliente cliente = new Cliente { Ativo = true, Id = Guid.NewGuid(), UserId = userId.Result.Value };
+            Cliente cliente = new Cliente { Ativo = true, Id = Guid.NewGuid(), UserId = userViewModel.UserId };
             await _clienteRepository.CreateAsync(cliente, cancellationToken);
-            return userId.Result.Value;
+            return userViewModel.UserId;
         }
 
         public async Task<List<Cliente>> GetAsync(CancellationToken cancellationToken)
