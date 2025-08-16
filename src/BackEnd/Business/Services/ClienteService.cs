@@ -25,11 +25,11 @@ namespace Business.Services
             await _clienteRepository.AtualizaAtivoAsync(id, ativo, cancellationToken);
         }
 
-        public async Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
+        public async Task<Guid?> CriaAsync(UserViewModel userViewModel, Guid identityId, CancellationToken cancellationToken)
         {
-            Cliente cliente = new Cliente { Ativo = true, Id = Guid.NewGuid(), UserId = userViewModel.UserId };
-            await _clienteRepository.CreateAsync(cliente, cancellationToken);
-            return userViewModel.UserId;
+            Cliente cliente = new Cliente { Ativo = true, Id = identityId, UserId = identityId };
+            var clienteId = await _clienteRepository.CreateAsync(cliente, cancellationToken);
+            return clienteId;
         }
 
         public async Task<List<Cliente>> GetAsync(CancellationToken cancellationToken)

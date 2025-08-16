@@ -1,3 +1,5 @@
+using AppMvc.Interfaces;
+using AppMvc.Services;
 using Business;
 using Data;
 using Data.Configuration;
@@ -7,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.AddApplicationServices();
 builder.AddDataServices();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
@@ -32,11 +35,11 @@ app.UseRouting();//pedindo para o ASP.NET usar rotas
 
 app.UseAuthorization();
 
-//cria um grande dicion·rio de rotas utilizadndo os atributos de rotas tambÈm
-//essas rotam ficam na memÛria da aplicaÁ„o
+//cria um grande dicion√°rio de rotas utilizadndo os atributos de rotas tamb√©m
+//essas rotam ficam na mem√≥ria da aplica√ß√£o
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");//padr„o de navegaÁ„o
+    pattern: "{controller=Home}/{action=Index}/{id?}");//padr√£o de navega√ß√£o
 app.MapRazorPages();
 
 app.Run();

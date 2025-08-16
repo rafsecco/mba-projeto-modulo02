@@ -1,4 +1,4 @@
-﻿using Business.Models;
+using Business.Models;
 using Business.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,7 @@ namespace Business.Interfaces
 
         Task AtualizaAtivoAsync(Guid id, bool ativo, CancellationToken cancellationToken);
 
-        Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken);
+        Task<Guid?> CriaAsync(UserViewModel userViewModel, Guid identityId, CancellationToken cancellationToken);
 
         Task<Favorito> AddFavoritoAsync(Guid produtoId, CancellationToken cancellationToken);
 

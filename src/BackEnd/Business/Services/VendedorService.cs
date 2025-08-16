@@ -1,6 +1,5 @@
 using Business.Interfaces;
 using Business.Models;
-using Business.ViewModels;
 
 namespace Business.Services;
 
@@ -25,10 +24,10 @@ public class VendedorService : IVendedorService
         await _vendedorRepository.AtualizaAtivoAsync(id, ativo, cancellationToken);
     }
 
-    public async Task<Guid?> CriaAsync(UserViewModel userViewModel, CancellationToken cancellationToken)
+    public async Task<Guid?> CriaAsync(Guid id, CancellationToken cancellationToken)
     {
-       await _vendedorRepository.CreateAsync(userViewModel.UserId, cancellationToken);
-       return userViewModel.UserId;
+		await _vendedorRepository.CreateAsync(id, cancellationToken);
+       return id;
     }
 
 	public async Task<Vendedor> ObterVendedorPorIdAsync(Guid id, CancellationToken cancellationToken)

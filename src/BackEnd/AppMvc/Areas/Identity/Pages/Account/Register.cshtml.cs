@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.ComponentModel.DataAnnotations;
+using System.Threading;
 
 namespace AppMvc.Areas.Identity.Pages.Account
 {
@@ -108,7 +109,8 @@ namespace AppMvc.Areas.Identity.Pages.Account
                     Email = Input.Email,
                     Password = Input.Password
                 };
-                var result = await _vendedorService.CriaAsync(userViewModel, CancellationToken.None);
+				var userId = await _userService.RegisterAsync(userViewModel, "Vendedor", CancellationToken.None);
+				var result = await _vendedorService.CriaAsync((Guid)userId, CancellationToken.None);
 
                 if (result.HasValue)
                 {
