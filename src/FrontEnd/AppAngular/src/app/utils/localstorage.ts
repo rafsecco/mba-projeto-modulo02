@@ -5,10 +5,10 @@ export class LocalStorageUtils {
         return usuario ? JSON.parse(usuario) : null;
   }
 
-  public salvarDadosLocaisUsuario(response: any) {
-    this.salvarTokenUsuario(response.accessToken);
-    this.salvarUsuario(response.userToken);
-  }
+  public salvarDadosLocaisUsuario(response: { token: string; email: string }) {
+  this.salvarTokenUsuario(response.token);
+  this.salvarUsuario({ email: response.email });
+}
 
   public limparDadosLocaisUsuario() {
     localStorage.removeItem('miniloja.token');
@@ -27,7 +27,8 @@ export class LocalStorageUtils {
   }
 }
 
-  public salvarUsuario(usuario: string) {
+  public salvarUsuario(usuario: { email: string }) 
+  {
     localStorage.setItem('miniloja.user', JSON.stringify(usuario));
   }
 }
