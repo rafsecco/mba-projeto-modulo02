@@ -30,7 +30,12 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Login([FromBody] UserViewModel userViewModel, CancellationToken cancellationToken)
     {
         var userId = await _userService.LoginAsync(userViewModel, cancellationToken);
-        if (userId.HasValue) return Ok(new { token = GeneratesJwt(userId.Value) });
+        if (userId.HasValue)
+            return Ok(new
+            {
+                token = GeneratesJwt(userId.Value),
+                email = userViewModel.Email
+            });
         return Problem("Email ou senha incorretos");
     }
 
