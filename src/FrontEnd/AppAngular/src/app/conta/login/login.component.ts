@@ -52,27 +52,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    if (this.loginForm.dirty && this.loginForm.valid) {
-      const usuario = Object.assign({}, this.loginForm.value);
+  if (this.loginForm.dirty && this.loginForm.valid) {
+    const usuario = Object.assign({}, this.loginForm.value);
 
-      this.contaService.login(usuario).subscribe({
-        next: (response) => {
-          this.localStorageUtils.salvarTokenUsuario(response.token);
-
-          this.contaService.getCliente().subscribe({
-            next: (usuario) => {
-              this.localStorageUtils.salvarUsuario(usuario);
-              this.router.navigate(['/home']);
-            },
-            error: () => {
-              this.errors.push('Erro ao carregar os dados do usuário.');
-            }
-          });
-        },
-        error: () => {
-          this.errors.push('Usuário ou senha incorretos.');
-        }
-      });
-    }
+    this.contaService.login(usuario).subscribe({
+      next: (response) => {
+        
+        this.localStorageUtils.salvarDadosLocaisUsuario(response);
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.errors.push('Usuário ou senha incorretos.');
+      }
+    });
   }
+}
+
 }
