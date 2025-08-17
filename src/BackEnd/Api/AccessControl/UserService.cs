@@ -1,9 +1,7 @@
-﻿using Business.Interfaces;
-using Business.Models;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Identity;
 
-namespace Business.Services;
+namespace Api.AccessControl;
 
 public class UserService : IUserService
 {

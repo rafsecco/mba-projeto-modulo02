@@ -1,3 +1,4 @@
+using Api.AccessControl;
 using Business.Interfaces;
 using Business.Models;
 using Business.ViewModels;
@@ -12,11 +13,13 @@ namespace Api.Controllers;
 public class ClientesController : ControllerBase
 {
     private readonly IClienteService _clienteService;
+	private readonly IUserService _userService;
 
-    public ClientesController(IClienteService clienteService)
+	public ClientesController(IClienteService clienteService, IUserService userService)
     {
         _clienteService = clienteService;
-    }
+		_userService = userService;
+	}
 
     [HttpPost]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
@@ -26,8 +29,8 @@ public class ClientesController : ControllerBase
     public async Task<IActionResult> Register([FromBody] UserViewModel userViewModel,
         CancellationToken cancellationToken)
     {
-        var userId = await _clienteService.CriaAsync(userViewModel, cancellationToken);
-
+		var identityId = await _userService.RegisterAsync(userViewModel, "Cliente", cancellationToken);
+        var userId = await _clienteService.CriaAsync(userViewModel, (Guid)identityId, cancellationToken);
         if (userId.HasValue)
             return StatusCode(StatusCodes.Status201Created, userId);
 

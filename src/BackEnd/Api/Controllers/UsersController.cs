@@ -1,5 +1,5 @@
 using Api.Models;
-using Business.Interfaces;
+using Api.AccessControl;
 using Business.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -20,7 +20,6 @@ public class UsersController : ControllerBase
     public UsersController(IOptions<JwtSettings> jwtSettings, IUserService userService)
     {
         _userService = userService;
-
         _jwtSettings = jwtSettings.Value;
     }
 
