@@ -54,6 +54,7 @@ public class ClienteRepository : Repository<Cliente>, IClienteRepository
         return _dbContext.Favoritos
             .AsNoTrackingWithIdentityResolution()
             .Include(e => e.Produto)
+            .ThenInclude(p => p.Categoria)
             .Where(f => f.ClienteId == clienteId)
             .ToListAsync(cancellationToken);
     }

@@ -1,18 +1,9 @@
 <div class="container main-container">
-  <!-- Estado vazio -->
-  <div *ngIf="!favoritos || favoritos.length === 0" class="text-center my-5">
-    <h4>Você ainda não tem favoritos</h4>
-    <p>Adicione produtos aos seus favoritos para vê-los aqui.</p>
-    <a routerLink="/home" class="btn btn-primary"> Ver produtos </a>
-  </div>
-
   <!-- Lista de favoritos -->
-  <div class="row text-center" *ngIf="favoritos && favoritos.length > 0">
-    <div
-      *ngFor="let favorito of favoritos"
-      class="col-md-4"
-      style="padding-bottom: 30px"
-    >
+  @if(favoritos && favoritos.length > 0){
+  <div class="row text-center">
+    @for (favorito of favoritos; track $index) {
+    <div class="col-md-4" style="padding-bottom: 30px">
       <div class="card h-100">
         <a
           class="text-decoration-none"
@@ -20,7 +11,7 @@
         >
           <div style="align-content: center">
             <img
-              src="/assets/{{ favorito.produto.imagem }}"
+              src="/assets/{{ favorito?.produto?.imagem }}"
               height="164px"
               width="253px"
               alt=""
@@ -29,12 +20,12 @@
         </a>
         <h4 class="card-title">
           <a [routerLink]="['/produtos/detalhe', favorito.produtoId]">{{
-            favorito.produto.nome | titlecase
+            favorito?.produto?.nome | titlecase
           }}</a>
         </h4>
 
         <div class="card-body">
-          <p class="card-text">{{ favorito.produto.descricao }}</p>
+          <p class="card-text">{{ favorito?.produto?.descricao }}</p>
           <div>
             <h4>
               {{
@@ -44,8 +35,8 @@
             </h4>
           </div>
           <p class="card-text">
-            Unidades: {{ favorito.produto.estoque }} <br />
-            Categoria: {{ favorito.produto.categoria.nome }}
+            Unidades: {{ favorito?.produto?.estoque }} <br />
+            Categoria: {{ favorito?.produto?.categoria?.nome }}
           </p>
         </div>
 
@@ -63,5 +54,15 @@
         </div>
       </div>
     </div>
+    }
   </div>
+
+  }@else {
+  <!-- Estado vazio -->
+  <div class="text-center my-5">
+    <h4>Você ainda não tem favoritos</h4>
+    <p>Adicione produtos aos seus favoritos para vê-los aqui.</p>
+    <a routerLink="/home" class="btn btn-primary"> Ver produtos </a>
+  </div>
+  }
 </div>
