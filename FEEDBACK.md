@@ -24,7 +24,7 @@ Considere clareza, organização e uso de padrões de codificação.
 
 ### Business
 * A classe `Entity` deve ser abstrata.
-* Quando se tem uma pasta chamada `Util`, quer dizer que tudo fora dela é `Unútil`. Evite essas generecidades.
+* Quando se tem uma pasta chamada `Util`, quer dizer que tudo fora dela é `Inútil`. Evite essas generecidades.
 * A classe `Upload` poderia ser um `FileManagementService` ou algo do tipo, e ser hospedada em `Services`.
 * Em `ClienteService` foi adicionada uma dependencia à camanda de `AspNetCore` ao injetar `IHttpContextAccessor`. A intenção é boa, mas existe melhores maneiras de saber o usuario logado sem essa super acoplagem.
 * Em `VendedorService` o método `GetBeVendedorId()` não espera um `Id` como parametro, fazendo o nome ser confuso.
@@ -57,8 +57,7 @@ Verifique a qualidade e completude da documentação, incluindo README.md.
 ## Resolução de Feedbacks 10%
 
 Avalie a resolução dos problemas apontados na primeira avaliação de frontend
-* Alguns comentários não foram endereçados:
-  - Ambas as aplicações (API e MVC) devem criar o vendedor no momento do registro do usuário.
+* Todos os pontos negativos foram endereçados.
 
 
 ## Notas
@@ -70,5 +69,5 @@ Avalie a resolução dos problemas apontados na primeira avaliação de frontend
 | Eficiência e Desempenho      | 20%  |    9 |            1.8 |
 | Inovação e Diferenciais      | 10%  |    9 |            0.9 |
 | Documentação e Organização   | 10%  |    7 |            0.7 |
-| Resolução de Feedbacks       | 10%  |    5 |            0.5 |
-| **Total**                    |      |      |        **7.9** |
+| Resolução de Feedbacks       | 10%  |   10 |            1.0 |
+| **Total**                    |      |      |        **8.4** |
